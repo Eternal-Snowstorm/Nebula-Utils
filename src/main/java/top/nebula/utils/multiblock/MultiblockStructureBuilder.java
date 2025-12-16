@@ -38,31 +38,31 @@ public class MultiblockStructureBuilder {
 	 *              - IStateMatcher: 状态匹配器
 	 * @return 构建器自身
 	 */
-	public MultiblockStructureBuilder where(char pos, Block block) {
+	public MultiblockStructureBuilder define(char pos, Block block) {
 		matchers.add(pos);
 		matchers.add(block);
 		return this;
 	}
 
-	public MultiblockStructureBuilder where(char pos, TagKey<Block> tag) {
+	public MultiblockStructureBuilder define(char pos, TagKey<Block> tag) {
 		matchers.add(pos);
 		matchers.add(tag);
 		return this;
 	}
 
-	public MultiblockStructureBuilder where(char pos, IStateMatcher matcher) {
+	public MultiblockStructureBuilder define(char pos, IStateMatcher matcher) {
 		matchers.add(pos);
 		matchers.add(matcher);
 		return this;
 	}
 
-	public MultiblockStructureBuilder where(char pos, Block block, Predicate<BlockState> predicate) {
+	public MultiblockStructureBuilder define(char pos, Block block, Predicate<BlockState> predicate) {
 		matchers.add(pos);
 		matchers.add(PatchouliAPI.get().predicateMatcher(block, predicate));
 		return this;
 	}
 
-	public MultiblockStructureBuilder where(char pos, Block block, ImmutableMap<Property<?>, ? extends Comparable<?>> stateMatcher) {
+	public MultiblockStructureBuilder define(char pos, Block block, ImmutableMap<Property<?>, ? extends Comparable<?>> stateMatcher) {
 		matchers.add(pos);
 		BlockState state = block.defaultBlockState();
 		for (Map.Entry<Property<?>, ? extends Comparable<?>> entry : stateMatcher.entrySet()) {
