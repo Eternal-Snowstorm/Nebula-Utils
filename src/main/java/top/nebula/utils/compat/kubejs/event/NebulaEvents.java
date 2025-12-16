@@ -5,8 +5,8 @@ import dev.latvian.mods.kubejs.event.EventHandler;
 import top.nebula.utils.compat.kubejs.event.function.FluidTooltipEventJS;
 
 public interface NebulaEvents {
-	EventGroup INSTANCE = EventGroup.of("NebulaEvents");
-	EventHandler FLUID_TOOLTIP = INSTANCE.client("fluidTooltip", () -> {
+	EventGroup GROUP = EventGroup.of("NebulaEvents");
+	EventHandler FLUID_TOOLTIP = GROUP.client("fluidTooltip", () -> {
 		return FluidTooltipEventJS.class;
 	});
 }

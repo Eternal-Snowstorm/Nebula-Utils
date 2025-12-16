@@ -12,7 +12,8 @@ import java.time.LocalDateTime;
 public class ModKubeJSPlugin extends KubeJSPlugin {
 	public void registerEvents() {
 		super.registerEvents();
-		NebulaEvents.INSTANCE.register();
+
+		NebulaEvents.GROUP.register();
 	}
 
 	public void registerBindings(BindingsEvent event) {
