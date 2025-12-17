@@ -6,6 +6,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderTooltipEvent;
@@ -22,17 +23,20 @@ public class FluidTooltipHandler {
 	@SubscribeEvent
 	public static void onGatherTooltip(RenderTooltipEvent.GatherComponents event) {
 		ItemStack item = event.getItemStack();
+		List<Either<FormattedText, TooltipComponent>> elements = event.getTooltipElements();
+
 		if (!item.isEmpty()) {
 			return;
 		}
-		if (event.getTooltipElements().size() < 2) {
+		if (elements.size() < 2) {
 			return;
 		}
 
-		FormattedText text = event.getTooltipElements()
+		FormattedText text = elements
 				.get(1)
 				.left()
 				.orElse(null);
+
 		if (text == null) {
 			return;
 		}
@@ -53,10 +57,9 @@ public class FluidTooltipHandler {
 		NebulaEvents.FLUID_TOOLTIP.post(jsEvent);
 		jsEvent.apply();
 
-		int insertIndex = Math.min(1, event.getTooltipElements().size());
+		int insertIndex = Math.min(1, elements.size());
 		for (Component component : additions) {
-			event.getTooltipElements()
-					.add(insertIndex, Either.left(component));
+			elements.add(insertIndex, Either.left(component));
 			insertIndex++;
 		}
 	}
