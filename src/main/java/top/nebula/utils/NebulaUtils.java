@@ -25,11 +25,11 @@ public class NebulaUtils {
 	 * <p>
 	 * Use Totem Animation
 	 *
-	 * @param stack 传入物品
+	 * @param item 传入物品
 	 */
 	@Info("Use Totem Animation\n\n调用图腾动画")
-	public static void useTotemAnimation(ItemStack stack) {
-		Minecraft.getInstance().gameRenderer.displayItemActivation(stack);
+	public static void useTotemAnimation(ItemStack item) {
+		Minecraft.getInstance().gameRenderer.displayItemActivation(item);
 	}
 
 	/**
@@ -38,7 +38,7 @@ public class NebulaUtils {
 	 * Celsius to Fahrenheit
 	 *
 	 * @param celsius 摄氏度
-	 * @return
+	 * @return 转换的后得到的华氏度
 	 */
 	@Info("Celsius to Fahrenheit\n\n摄氏度转到华氏度")
 	public static double toFahrenheit(double celsius) {
@@ -51,7 +51,7 @@ public class NebulaUtils {
 	 * Fahrenheit to Celsius
 	 *
 	 * @param fahrenheit 华氏度
-	 * @return
+	 * @return 转换的后得到的摄氏度
 	 */
 	@Info("Fahrenheit to Celsius\n\n华氏度转到摄氏度")
 	public static double toCelsius(double fahrenheit) {
