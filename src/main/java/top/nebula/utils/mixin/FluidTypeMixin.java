@@ -22,7 +22,9 @@ public abstract class FluidTypeMixin {
 	/**
 	 * 判断当前 FluidState 是否在 burningFluids 配置中
 	 * 支持：
+	 * <p>
 	 * - "modid:fluid"
+	 * <p>
 	 * - "#namespace:tag"
 	 */
 	@Unique
