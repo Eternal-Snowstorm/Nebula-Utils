@@ -16,11 +16,18 @@ public class NebulaUtils {
 	public static final String NAME = "Team Nebula Utils";
 	private static final Logger LOGGER = LogManager.getLogger("Nebula");
 
+	public NebulaUtils(FMLJavaModLoadingContext context) {
+		context.registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC, "nebula/common.toml");
+	}
+
 	/**
 	 * 使用图腾动画
+	 * <p>
+	 * Use Totem Animation
 	 *
 	 * @param stack 传入物品
 	 */
+	@Info("Use Totem Animation\n\n调用图腾动画")
 	public static void useTotemAnimation(ItemStack stack) {
 		Minecraft.getInstance().gameRenderer.displayItemActivation(stack);
 	}
@@ -49,9 +56,5 @@ public class NebulaUtils {
 	@Info("Fahrenheit to Celsius\n\n华氏度转到摄氏度")
 	public static double toCelsius(double fahrenheit) {
 		return (fahrenheit - 32.0) * 5.0 / 9.0;
-	}
-
-	public NebulaUtils(FMLJavaModLoadingContext context) {
-		context.registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC, "nebula/common.toml");
 	}
 }
