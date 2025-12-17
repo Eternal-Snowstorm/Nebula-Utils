@@ -23,19 +23,26 @@ public class FluidTooltipEventJS extends EventJS {
 	}
 
 	/**
+	 *
+	 * <pre><code>
 	 * event.add(Fluid.of("minecraft:lava"), (tooltip) => {
 	 *     tooltip.add(Component.xxxx("aaa"))
 	 * })
 	 *
-	 * @param fluid 传入流体
-	 * @param hanlder 处理器
+	 * event.add("minecraft:lava", (tooltip) => {
+	 *     tooltip.add(Component.xxxx("aaaa"))
+	 * })
+	 * </code></pre>
+	 *
+	 * @param fluid   传入流体
+	 * @param handler 处理器
 	 */
-	public void add(FluidStackJS fluid, Consumer<List<Component>> hanlder) {
+	public void add(FluidStackJS fluid, Consumer<List<Component>> handler) {
 		if (fluid == null || fluidId == null) {
 			return;
 		}
 		if (fluidId.equals(fluid)) {
-			queuedAdds.add(hanlder);
+			queuedAdds.add(handler);
 		}
 	}
 
