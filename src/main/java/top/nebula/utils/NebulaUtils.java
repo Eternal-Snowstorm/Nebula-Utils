@@ -2,15 +2,20 @@ package top.nebula.utils;
 
 import dev.latvian.mods.kubejs.typings.Info;
 import net.minecraft.client.Minecraft;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import top.nebula.utils.config.CommonConfig;
 
 @Mod(NebulaUtils.MODID)
+@Mod.EventBusSubscriber(modid = NebulaUtils.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class NebulaUtils {
 	public static final String MODID = "nebula_utils";
 	public static final String NAME = "Team Nebula Utils";
@@ -18,6 +23,16 @@ public class NebulaUtils {
 
 	public NebulaUtils(FMLJavaModLoadingContext context) {
 		context.registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC, "nebula/common.toml");
+	}
+
+	/**
+	 * 加载ResourceLocation资源
+	 *
+	 * @param path
+	 * @return
+	 */
+	public static ResourceLocation loadResource(String path) {
+		return ResourceLocation.fromNamespaceAndPath(MODID, path);
 	}
 
 	/**
@@ -72,5 +87,12 @@ public class NebulaUtils {
 		}
 
 		return Double.NaN;
+	}
+
+	@SubscribeEvent
+	public static void onClientSetup(FMLClientSetupEvent event) {
+		event.enqueueWork(() -> {
+			LOGGER.debug("7f8f7032d4b1f5f2b67f0b1260b5c5f3f187503a75b309ad1c6a163e7ec7f993");
+		});
 	}
 }
