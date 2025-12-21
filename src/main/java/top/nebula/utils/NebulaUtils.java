@@ -64,7 +64,7 @@ public class NebulaUtils {
 		}
 	}
 
-	/**
+	/**D
 	 * 华氏度转到摄氏度
 	 * <p>
 	 * Fahrenheit to Celsius
