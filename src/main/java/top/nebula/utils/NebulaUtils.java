@@ -62,7 +62,7 @@ public class NebulaUtils {
 		}
 
 		if (celsius instanceof Number number) {
-			return number.doubleValue() * 9.0 / 5.0 + 32.0;
+			return Math.floor(number.doubleValue() * 9.0 / 5.0 + 32.0);
 		}
 
 		return Double.NaN;
