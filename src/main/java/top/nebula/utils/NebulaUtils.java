@@ -64,7 +64,8 @@ public class NebulaUtils {
 		}
 	}
 
-	/**D
+	/**
+	 * D
 	 * 华氏度转到摄氏度
 	 * <p>
 	 * Fahrenheit to Celsius
@@ -73,16 +74,12 @@ public class NebulaUtils {
 	 * @return 转换的后得到的摄氏度
 	 */
 	@Info("Fahrenheit to Celsius\n\n华氏度转到摄氏度")
-	public static double toCelsius(Object fahrenheit) {
+	public static int toCelsius(Double fahrenheit) {
 		if (fahrenheit == null) {
-			return Double.NaN;
+			return 0;
+		} else {
+			return (int) ((fahrenheit - 32.0) * 5.0 / 9.0);
 		}
-
-		if (fahrenheit instanceof Number number) {
-			return (number.doubleValue() - 32.0) * 5.0 / 9.0;
-		}
-
-		return Double.NaN;
 	}
 
 	@SubscribeEvent
