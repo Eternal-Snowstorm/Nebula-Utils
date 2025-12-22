@@ -1,7 +1,9 @@
 package top.nebula.utils.compat.kubejs;
 
+import com.simibubi.create.AllSoundEvents;
 import dev.latvian.mods.kubejs.KubeJSPlugin;
 import dev.latvian.mods.kubejs.script.BindingsEvent;
+import net.minecraft.world.item.Rarity;
 import top.nebula.utils.NebulaUtils;
 import top.nebula.utils.compat.kubejs.event.NebulaEvents;
 import top.nebula.utils.multiblock.MultiblockStructureBuilder;
@@ -20,8 +22,14 @@ public class ModKubeJSPlugin extends KubeJSPlugin {
 		super.registerBindings(event);
 
 		event.add("NebulaUtils", NebulaUtils.class);
+
 		event.add("MultiblockStructureBuilder", MultiblockStructureBuilder.class);
 		event.add("PropertyImmutableMap", PropertyImmutableMap.class);
+
 		event.add("LocalDateTime", LocalDateTime.class);
+
+		event.add("Rarity", Rarity.class);
+
+		event.add("AllSoundEvents", AllSoundEvents.class);
 	}
 }
