@@ -16,6 +16,7 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 import top.nebula.utils.NebulaUtils;
 import top.nebula.utils.compat.kubejs.event.NebulaEvents;
+import top.nebula.utils.multiblock.DefineBlockBuilder;
 import top.nebula.utils.multiblock.MultiblockStructureBuilder;
 import top.nebula.utils.multiblock.PropertyImmutableMap;
 
@@ -33,6 +34,7 @@ public class ModKubeJSPlugin extends KubeJSPlugin {
 
 		event.add("NebulaUtils", NebulaUtils.class);
 		event.add("MultiblockStructureBuilder", MultiblockStructureBuilder.class);
+		event.add("DefineBlockBuilder", DefineBlockBuilder.class);
 		event.add("PropertyImmutableMap", PropertyImmutableMap.class);
 		event.add("RegistryInfo", RegistryInfo.class);
 		event.add("LocalDateTime", LocalDateTime.class);
