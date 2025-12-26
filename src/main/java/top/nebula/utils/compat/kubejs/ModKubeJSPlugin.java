@@ -41,6 +41,9 @@ public class ModKubeJSPlugin extends KubeJSPlugin {
 		event.add("BlockTags", BlockTags.class);
 		event.add("FluidTags", FluidTags.class);
 		event.add("ForgeTags", Tags.class);
+		event.add("ForgeTags$Items", Tags.Items.class);
+		event.add("ForgeTags$Blocks", Tags.Blocks.class);
+		event.add("ForgeTags$Fluids", Tags.Fluids.class);
 		event.add("ChatFormatting", ChatFormatting.class);
 		event.add("ForgeRegistries", ForgeRegistries.class);
 		event.add("BuiltInRegistries", BuiltInRegistries.class);
