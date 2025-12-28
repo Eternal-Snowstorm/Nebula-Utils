@@ -19,7 +19,7 @@ import top.nebula.utils.config.CommonConfig;
 public class NebulaUtils {
 	public static final String MODID = "nebula_utils";
 	public static final String NAME = "Team Nebula Utils";
-	private static final Logger LOGGER = LogManager.getLogger("Nebula");
+	public static final Logger LOGGER = LogManager.getLogger("Nebula");
 
 	public NebulaUtils(FMLJavaModLoadingContext context) {
 		context.registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC, "nebula/common.toml");

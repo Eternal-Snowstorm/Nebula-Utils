@@ -17,9 +17,37 @@ mandatory = true
 versionRange = "${forge_version_range}"
 ordering = "NONE"
 side = "BOTH"
+
 [[dependencies."${mod_id}"]]
 modId = "minecraft"
 mandatory = true
 versionRange = "${minecraft_version_range}"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies."${mod_id}"]]
+modId = "patchouli"
+mandatory = true
+versionRange = "[1.20.1-84.1-FORGE,)"
+
+[[dependencies."${mod_id}"]]
+modId = "kubejs"
+mandatory = true
+versionRange = "[2001.6.5-build.16,)"
+
+[[dependencies."${mod_id}"]]
+modId = "jei"
+mandatory = true
+versionRange = "[15,)"
+
+[[dependencies."${mod_id}"]]
+modId = "rhino"
+mandatory = true
+versionRange = "[2001.2.3-build.10,)"
+
+[[dependencies."${mod_id}"]]
+modId = "create"
+mandatory = true
+versionRange = "[0.5.1.j,6)"
 ordering = "NONE"
 side = "BOTH"
