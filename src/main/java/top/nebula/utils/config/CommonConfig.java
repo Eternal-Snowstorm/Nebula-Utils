@@ -21,8 +21,8 @@ public class CommonConfig {
 
 		ENABLE_LARGE_SPRUCE_PODZOL_CONVERSION = BUILDER
 				.comment("Whether to enable the feature that converts surrounding dirt to podzol when large spruce trees grow")
-				.comment("Default value: true")
-				.define("enableLargeSprucePodzolConversion", true);
+				.comment("Default value: false")
+				.define("enableLargeSprucePodzolConversion", false);
 	}
 
 	public static final ForgeConfigSpec SPEC = BUILDER.build();
