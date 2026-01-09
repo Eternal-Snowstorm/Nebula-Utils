@@ -108,14 +108,24 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    // TCon
+    compileOnly fg.deobf("curse.maven:tinkers-construct-74072:6266282")
+    runtimeOnly fg.deobf("curse.maven:tinkers-construct-74072:6266282")
+    // Mantle
+    compileOnly fg.deobf("curse.maven:mantle-74924:7414488")
+    runtimeOnly fg.deobf("curse.maven:mantle-74924:7414488")
     // Create
-    implementation fg.deobf("curse.maven:create-328085:5838779")
+    compileOnly fg.deobf("curse.maven:create-328085:5838779")
+    runtimeOnly fg.deobf("curse.maven:create-328085:5838779")
     // KubeJS
-    implementation fg.deobf("curse.maven:kubejs-238086:5853326")
+    compileOnly fg.deobf("curse.maven:kubejs-238086:5853326")
+    runtimeOnly fg.deobf("curse.maven:kubejs-238086:5853326")
     // Rhino
-    implementation fg.deobf("curse.maven:rhino-416294:6186971")
+    compileOnly fg.deobf("curse.maven:rhino-416294:6186971")
+    runtimeOnly fg.deobf("curse.maven:rhino-416294:6186971")
     // Jade
-    implementation fg.deobf("curse.maven:jade-324717:6106101")
+    compileOnly fg.deobf("curse.maven:jade-324717:6106101")
+    runtimeOnly fg.deobf("curse.maven:jade-324717:6106101")
     // Patchouli
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.20.1-84.1-FORGE:api")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.20.1-84.1-FORGE")
