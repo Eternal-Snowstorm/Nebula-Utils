@@ -55,8 +55,8 @@ public class SimpleTConUtils {
 	}
 
 	public static List<Modifier> getModifiersFromTag(String tag) {
-		ResourceLocation resourceLocation = ResourceLocation.parse(tag);
-		TagKey<Modifier> tagKey = TagKey.create(ModifierManager.REGISTRY_KEY, resourceLocation);
+		ResourceLocation resource = ResourceLocation.parse(tag);
+		TagKey<Modifier> tagKey = TagKey.create(ModifierManager.REGISTRY_KEY, resource);
 		return ModifierManager.getTagValues(tagKey);
 	}
 
