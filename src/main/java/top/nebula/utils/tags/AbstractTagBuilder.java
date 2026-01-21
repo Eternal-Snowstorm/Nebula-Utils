@@ -11,7 +11,7 @@ public abstract class AbstractTagBuilder<T> {
 		this.name = name;
 	}
 
-	public AbstractTagBuilder<T> namespace(String namespace) {
+	private AbstractTagBuilder<T> namespace(String namespace) {
 		this.namespace = namespace;
 		return this;
 	}
@@ -24,7 +24,7 @@ public abstract class AbstractTagBuilder<T> {
 		return namespace("forge");
 	}
 
-	public AbstractTagBuilder<T> mod(String modid) {
+	public AbstractTagBuilder<T> custom(String modid) {
 		return namespace(modid);
 	}
 
