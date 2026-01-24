@@ -4,6 +4,7 @@ import dev.latvian.mods.kubejs.event.EventJS;
 import dev.latvian.mods.kubejs.fluid.FluidStackJS;
 import dev.latvian.mods.kubejs.typings.Info;
 import net.minecraft.network.chat.Component;
+import top.nebula.libs.compat.ModDetector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,9 @@ public class FluidTooltipEventJS extends EventJS {
 	 */
 	@Info("Add tooltips to fluids in JEI or GUI\n\n为JEI和GUI中的流体添加Tooltip")
 	public void add(FluidStackJS fluid, Consumer<List<Component>> handler) {
+		if (!ModDetector.KJS) {
+			return;
+		}
 		if (fluid == null || fluidId == null) {
 			return;
 		}
@@ -50,6 +54,9 @@ public class FluidTooltipEventJS extends EventJS {
 	}
 
 	public void apply() {
+		if (!ModDetector.KJS) {
+			return;
+		}
 		for (Consumer<List<Component>> consumer : queuedAdds) {
 			consumer.accept(tooltip);
 		}

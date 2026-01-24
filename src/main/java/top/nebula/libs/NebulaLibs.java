@@ -1,6 +1,5 @@
 package top.nebula.libs;
 
-import dev.latvian.mods.kubejs.typings.Info;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -42,7 +41,6 @@ public class NebulaLibs {
 	 *
 	 * @param item 传入物品
 	 */
-	@Info("Use Totem Animation\n\n调用图腾动画")
 	public static void useTotemAnimation(ItemStack item) {
 		Minecraft.getInstance().gameRenderer.displayItemActivation(item);
 	}
@@ -55,7 +53,6 @@ public class NebulaLibs {
 	 * @param celsius 摄氏度
 	 * @return 转换的后得到的华氏度
 	 */
-	@Info("Celsius to Fahrenheit\n\n摄氏度转到华氏度")
 	public static int toFahrenheit(Double celsius) {
 		if (celsius == null) {
 			return 0;
@@ -73,7 +70,6 @@ public class NebulaLibs {
 	 * @param fahrenheit 华氏度
 	 * @return 转换的后得到的摄氏度
 	 */
-	@Info("Fahrenheit to Celsius\n\n华氏度转到摄氏度")
 	public static int toCelsius(Double fahrenheit) {
 		if (fahrenheit == null) {
 			return 0;
