@@ -2,8 +2,8 @@
 	"required": true,
 	"minVersion": "0.8",
 	"package": "top.nebula.libs.mixin",
-	"compatibilityLevel": "JAVA_8",
-	"refmap": "nebula_utils.refmap.json",
+	"compatibilityLevel": "JAVA_17",
+	"refmap": "nebula_libs.refmap.json",
 	"mixins": [
 		"AlterGroundDecoratorMixin",
 		"FluidTypeMixin"
