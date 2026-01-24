@@ -1,1 +1,1 @@
-top.nebula.utils.compat.kubejs.ModKubeJSPlugin
+top.nebula.libs.compat.kubejs.ModKubeJSPlugin

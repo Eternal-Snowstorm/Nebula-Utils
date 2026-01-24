@@ -190,7 +190,7 @@ publishing {
             artifact jar
 
             groupId = "top.nebula"
-            artifactId = "nebula_utils"
+            artifactId = "nebula_libs"
             version = "1.5.0"
         }
     }
