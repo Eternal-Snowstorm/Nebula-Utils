@@ -1,6 +1,7 @@
 package top.nebula.libs.compat.kubejs.event;
 
 import dev.latvian.mods.kubejs.event.EventJS;
+import dev.latvian.mods.kubejs.fluid.FluidStackJS;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import top.nebula.libs.event.FluidTooltipHandler;
@@ -25,11 +26,12 @@ public class FluidTooltipEventJS extends EventJS {
 	 * @param fluid   传入流体
 	 * @param handler 处理器
 	 */
-	public void add(String fluid, Consumer<List<Component>> handler) {
-		if (fluid.startsWith("#")) {
-			FluidTooltipHandler.registerTag(ResourceLocation.parse(fluid.substring(1)), handler);
+	public void add(FluidStackJS fluid, Consumer<List<Component>> handler) {
+		String fluidString = fluid.toString();
+		if (fluidString.startsWith("#")) {
+			FluidTooltipHandler.registerTag(ResourceLocation.parse(fluidString.substring(1)), handler);
 		} else {
-			FluidTooltipHandler.registerFluid(ResourceLocation.parse(fluid), handler);
+			FluidTooltipHandler.registerFluid(ResourceLocation.parse(fluidString), handler);
 		}
 	}
 }
