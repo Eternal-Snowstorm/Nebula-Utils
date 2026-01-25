@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public final class FluidTooltipHandler {
-
 	private static final Map<ResourceLocation, List<Consumer<List<Component>>>> FLUID_HANDLERS = new HashMap<>();
 	private static final Map<ResourceLocation, List<Consumer<List<Component>>>> TAG_HANDLERS = new HashMap<>();
 
@@ -20,29 +19,44 @@ public final class FluidTooltipHandler {
 	}
 
 	public static void registerFluid(ResourceLocation id, Consumer<List<Component>> handler) {
-		FLUID_HANDLERS.computeIfAbsent(id, k -> new ArrayList<>()).add(handler);
+		FLUID_HANDLERS.computeIfAbsent(id, (location) -> {
+			return new ArrayList<>();
+		}).add(handler);
 	}
 
 	public static void registerTag(ResourceLocation tag, Consumer<List<Component>> handler) {
-		TAG_HANDLERS.computeIfAbsent(tag, k -> new ArrayList<>()).add(handler);
+		TAG_HANDLERS.computeIfAbsent(tag, (location) -> {
+			return new ArrayList<>();
+		}).add(handler);
 	}
 
 	public static void fire(FluidStack fluid, List<Component> tooltip) {
-		if (fluid.isEmpty()) return;
-
-		var fluidId = ForgeRegistries.FLUIDS.getKey(fluid.getFluid());
-		if (fluidId == null) return;
-
-		var list = FLUID_HANDLERS.get(fluidId);
-		if (list != null) {
-			list.forEach(h -> h.accept(tooltip));
+		if (fluid.isEmpty()) {
+			return;
 		}
 
-		fluid.getFluid().builtInRegistryHolder().tags().forEach(tag -> {
-			var handlers = TAG_HANDLERS.get(tag.location());
-			if (handlers != null) {
-				handlers.forEach(h -> h.accept(tooltip));
-			}
-		});
+		ResourceLocation fluidId = ForgeRegistries.FLUIDS.getKey(fluid.getFluid());
+		if (fluidId == null) {
+			return;
+		}
+
+		List<Consumer<List<Component>>> list = FLUID_HANDLERS.get(fluidId);
+		if (list != null) {
+			list.forEach((handler) -> {
+				handler.accept(tooltip);
+			});
+		}
+
+		fluid.getFluid()
+				.builtInRegistryHolder()
+				.tags()
+				.forEach((tag) -> {
+					List<Consumer<List<Component>>> handlers = TAG_HANDLERS.get(tag.location());
+					if (handlers != null) {
+						handlers.forEach((handler) -> {
+							handler.accept(tooltip);
+						});
+					}
+				});
 	}
 }

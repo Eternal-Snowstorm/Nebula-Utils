@@ -18,6 +18,7 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.ForgeRegistries;
 import top.nebula.libs.NebulaLibs;
+import top.nebula.libs.compat.ICheckModLoaded;
 import top.nebula.libs.compat.kubejs.event.NebulaEvents;
 import top.nebula.libs.compat.patchouli.multiblock.DefineBlockBuilder;
 import top.nebula.libs.compat.patchouli.multiblock.MultiblockStructureBuilder;
@@ -34,6 +35,7 @@ public class ModKubeJSPlugin extends KubeJSPlugin {
 
 	public void registerBindings(BindingsEvent event) {
 		super.registerBindings(event);
+
 		event.add("NebulaLibs", NebulaLibs.class);
 		event.add("MultiblockStructureBuilder", MultiblockStructureBuilder.class);
 		event.add("DefineBlockBuilder", DefineBlockBuilder.class);
@@ -54,11 +56,10 @@ public class ModKubeJSPlugin extends KubeJSPlugin {
 		event.add("ForgeRegistries", ForgeRegistries.class);
 		event.add("BuiltInRegistries", BuiltInRegistries.class);
 		event.add("ParticleTypes", ParticleTypes.class);
-		if (ModList.get().isLoaded("create")) {
+
+		if (ICheckModLoaded.hasCreate()) {
 			event.add("AllSoundEvents", AllSoundEvents.class);
 			event.add("AllParticleTypes", AllParticleTypes.class);
 		}
 	}
-
-
 }

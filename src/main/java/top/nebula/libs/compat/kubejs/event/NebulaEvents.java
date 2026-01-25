@@ -7,8 +7,7 @@ public interface NebulaEvents {
 
 	EventGroup GROUP = EventGroup.of("NebulaEvents");
 
-	EventHandler FLUID_TOOLTIP = GROUP.client(
-			"fluidTooltip",
-			() -> FluidTooltipEventJS.class
-	);
+	EventHandler FLUID_TOOLTIP = GROUP.client("fluidTooltip", () -> {
+		return FluidTooltipEventJS.class;
+	});
 }

@@ -9,23 +9,27 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class FluidTooltipEventJS extends EventJS {
-
 	/**
-	 * JS:
-	 * event.add("minecraft:lava", tooltip => {})
-	 * event.add("#minecraft:water", tooltip => {})
+	 *
+	 * <pre><code>
+	 * // Only Component!
+	 * event.add(Fluid.of("minecraft:lava"), (tooltip) => {
+	 *     tooltip.add(Component.xxxx("aaa"))
+	 * })
+	 *
+	 * event.add("minecraft:lava", (tooltip) => {
+	 *     tooltip.add(Component.xxxx("aaa"))
+	 * })
+	 * </code></pre>
+	 *
+	 * @param fluid   传入流体
+	 * @param handler 处理器
 	 */
-	public void add(String id, Consumer<List<Component>> tooltipHandler) {
-		if (id.startsWith("#")) {
-			FluidTooltipHandler.registerTag(
-					new ResourceLocation(id.substring(1)),
-					tooltipHandler
-			);
+	public void add(String fluid, Consumer<List<Component>> handler) {
+		if (fluid.startsWith("#")) {
+			FluidTooltipHandler.registerTag(ResourceLocation.parse(fluid.substring(1)), handler);
 		} else {
-			FluidTooltipHandler.registerFluid(
-					new ResourceLocation(id),
-					tooltipHandler
-			);
+			FluidTooltipHandler.registerFluid(ResourceLocation.parse(fluid), handler);
 		}
 	}
 }
