@@ -2,7 +2,6 @@ package top.nebula.libs.compat.kubejs.event;
 
 import dev.latvian.mods.kubejs.event.EventGroup;
 import dev.latvian.mods.kubejs.event.EventHandler;
-import top.nebula.libs.compat.kubejs.event.function.FluidTooltipEventJS;
 
 public interface NebulaEvents {
 	EventGroup GROUP = EventGroup.of("NebulaEvents");

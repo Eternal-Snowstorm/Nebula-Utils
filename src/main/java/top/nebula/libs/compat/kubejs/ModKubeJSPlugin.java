@@ -17,7 +17,6 @@ import net.minecraft.world.item.Rarity;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 import top.nebula.libs.NebulaLibs;
-import top.nebula.libs.compat.ModDetector;
 import top.nebula.libs.compat.kubejs.event.NebulaEvents;
 import top.nebula.libs.compat.patchouli.multiblock.DefineBlockBuilder;
 import top.nebula.libs.compat.patchouli.multiblock.MultiblockStructureBuilder;
@@ -27,20 +26,14 @@ import java.time.LocalDateTime;
 
 public class ModKubeJSPlugin extends KubeJSPlugin {
 	public void registerEvents() {
-		if (!ModDetector.KJS) {
-			return;
-		}
-		super.registerEvents();
+			super.registerEvents();
 
 		NebulaEvents.GROUP.register();
 	}
 
 	public void registerBindings(BindingsEvent event) {
 		super.registerBindings(event);
-		if (!ModDetector.KJS) {
-			return;
-		}
-		event.add("NebulaLibs", NebulaLibs.class);
+			event.add("NebulaLibs", NebulaLibs.class);
 		event.add("MultiblockStructureBuilder", MultiblockStructureBuilder.class);
 		event.add("DefineBlockBuilder", DefineBlockBuilder.class);
 		event.add("PropertyImmutableMap", PropertyImmutableMap.class);

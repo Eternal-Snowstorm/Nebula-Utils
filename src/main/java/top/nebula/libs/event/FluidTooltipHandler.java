@@ -1,4 +1,4 @@
-package top.nebula.libs.compat.kubejs.event.handler;
+package top.nebula.libs.event;
 
 import com.mojang.datafixers.util.Either;
 import dev.latvian.mods.kubejs.fluid.FluidStackJS;
@@ -12,9 +12,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import top.nebula.libs.compat.ModDetector;
 import top.nebula.libs.compat.kubejs.event.NebulaEvents;
-import top.nebula.libs.compat.kubejs.event.function.FluidTooltipEventJS;
+import top.nebula.libs.compat.kubejs.event.FluidTooltipEventJS;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +22,7 @@ import java.util.List;
 public class FluidTooltipHandler {
 	@SubscribeEvent
 	public static void onGatherTooltip(RenderTooltipEvent.GatherComponents event) {
-		if (!ModDetector.KJS) {
-			return;
-		}
-		ItemStack item = event.getItemStack();
+			ItemStack item = event.getItemStack();
 		List<Either<FormattedText, TooltipComponent>> elements = event.getTooltipElements();
 
 		if (!item.isEmpty()) {
