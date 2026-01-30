@@ -15,7 +15,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Rarity;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.ForgeRegistries;
 import top.nebula.libs.NebulaLibs;
 import top.nebula.libs.compat.ICheckModLoaded;
