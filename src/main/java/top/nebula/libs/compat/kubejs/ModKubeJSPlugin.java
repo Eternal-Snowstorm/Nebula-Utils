@@ -18,9 +18,11 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 import top.nebula.libs.NebulaLibs;
 import top.nebula.libs.compat.ICheckModLoaded;
+import top.nebula.libs.compat.curios.CuriosUtils;
 import top.nebula.libs.compat.patchouli.multiblock.DefineBlockBuilder;
 import top.nebula.libs.compat.patchouli.multiblock.MultiblockStructureBuilder;
 import top.nebula.libs.compat.patchouli.multiblock.PropertyImmutableMap;
+import top.theillusivec4.curios.api.CuriosApi;
 
 import java.time.LocalDateTime;
 
@@ -56,6 +58,11 @@ public class ModKubeJSPlugin extends KubeJSPlugin {
 		if (ICheckModLoaded.hasCreate()) {
 			event.add("AllSoundEvents", AllSoundEvents.class);
 			event.add("AllParticleTypes", AllParticleTypes.class);
+		}
+
+		if (ICheckModLoaded.hasCurios()) {
+			event.add("CuriosUtils", CuriosUtils.class);
+			event.add("CuriosApi", CuriosApi.class);
 		}
 	}
 }

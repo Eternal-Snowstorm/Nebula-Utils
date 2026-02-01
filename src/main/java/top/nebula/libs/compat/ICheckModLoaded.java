@@ -26,4 +26,8 @@ public interface ICheckModLoaded {
 	static boolean hasJei() {
 		return hasMod("jei");
 	}
+
+	static boolean hasCurios() {
+		return hasMod("curios");
+	}
 }

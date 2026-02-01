@@ -129,6 +129,9 @@ dependencies {
     // Patchouli
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.20.1-84.1-FORGE:api")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.20.1-84.1-FORGE")
+    // Curios
+    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:5.14.1+1.20.1")
+    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:5.14.1+1.20.1")
     // Jei
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:15.0.0.12")
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:15.0.0.12")
