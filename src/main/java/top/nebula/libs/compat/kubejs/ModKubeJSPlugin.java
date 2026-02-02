@@ -2,6 +2,8 @@ package top.nebula.libs.compat.kubejs;
 
 import com.simibubi.create.AllParticleTypes;
 import com.simibubi.create.AllSoundEvents;
+import com.simibubi.create.foundation.item.TooltipHelper;
+import com.simibubi.create.foundation.utility.Lang;
 import dev.latvian.mods.kubejs.KubeJSPlugin;
 import dev.latvian.mods.kubejs.registry.RegistryInfo;
 import dev.latvian.mods.kubejs.script.BindingsEvent;
@@ -58,6 +60,8 @@ public class ModKubeJSPlugin extends KubeJSPlugin {
 		if (ICheckModLoaded.hasCreate()) {
 			event.add("AllSoundEvents", AllSoundEvents.class);
 			event.add("AllParticleTypes", AllParticleTypes.class);
+			event.add("TooltipHelper", TooltipHelper.class);
+			event.add("CreateLang", Lang.class);
 		}
 
 		if (ICheckModLoaded.hasCurios()) {
