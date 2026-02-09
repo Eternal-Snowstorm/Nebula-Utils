@@ -1,5 +1,6 @@
 package top.nebula.libs.compat.jei.categoty;
 
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
@@ -112,6 +113,9 @@ public class SimpleJeiCategory<T> implements IRecipeCategory<T> {
 		private int width = 0;
 		private int height = 0;
 
+		private Integer backgroundWidth;
+		private Integer backgroundHeight;
+
 		private TriConsumer<IRecipeLayoutBuilder, T, IFocusGroup> recipeHandler;
 		private IDrawHandler<T> drawHandler;
 		private ITooltipHandler<T> tooltipHandler;
@@ -143,12 +147,8 @@ public class SimpleJeiCategory<T> implements IRecipeCategory<T> {
 		}
 
 		public Builder<T> setBackground(int width, int height) {
-			if (helper == null) {
-				throw new IllegalStateException("SimpleJeiCategory.Builder#setBackground(width, height) requires IGuiHelper");
-			}
-			this.background = helper.createBlankDrawable(width, height);
-			this.width = width;
-			this.height = height;
+			this.backgroundWidth = width;
+			this.backgroundHeight = height;
 			return this;
 		}
 
@@ -157,12 +157,13 @@ public class SimpleJeiCategory<T> implements IRecipeCategory<T> {
 			return this;
 		}
 
-		public Builder<T> setIcon(ItemStack icon) {
+		public Builder<T> setIcon(ItemStack stack) {
+			if (helper == null) {
+				String exceptionMessage = "setIcon(ItemStack) requires builder(type, IGuiHelper)";
+				throw new IllegalStateException(exceptionMessage);
+			}
 			this.iconSupplier = () -> {
-				if (helper != null) {
-					return helper.createDrawableItemStack(icon);
-				}
-				return null;
+				return helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, stack);
 			};
 			return this;
 		}
@@ -183,6 +184,29 @@ public class SimpleJeiCategory<T> implements IRecipeCategory<T> {
 		}
 
 		public SimpleJeiCategory<T> build() {
+			if (width <= 0 || height <= 0) {
+				String exceptionMessage = "JEI Category requires setSize(width, height) with values > 0";
+				throw new IllegalStateException(exceptionMessage);
+			}
+
+			if (background == null && helper != null) {
+				int bgW = backgroundWidth != null && backgroundWidth > 0
+						? backgroundWidth
+						: width;
+
+				int bgH = backgroundHeight != null && backgroundHeight > 0
+						? backgroundHeight
+						: height;
+
+				background = helper.createBlankDrawable(bgW, bgH);
+			}
+
+			if (iconSupplier == null && helper != null) {
+				iconSupplier = () -> {
+					return helper.createBlankDrawable(16, 16);
+				};
+			}
+
 			return new SimpleJeiCategory<>(this);
 		}
 	}
