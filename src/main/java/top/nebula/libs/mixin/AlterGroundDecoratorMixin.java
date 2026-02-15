@@ -26,7 +26,7 @@ public abstract class AlterGroundDecoratorMixin {
 			cancellable = true
 	)
 	private void onPlaceBlockAt(TreeDecorator.Context context, BlockPos pos, CallbackInfo info) {
-		if (!CommonConfig.isLargeSprucePodzolConversionEnabled()) {
+		if (!CommonConfig.ENABLE_LARGE_SPRUCE_PODZOL_CONVERSION.get()) {
 			BlockState state = this.provider.getState(context.random(), pos);
 			if (state.is(Blocks.PODZOL)) {
 				info.cancel();
