@@ -6,7 +6,7 @@ import net.minecraft.tags.TagKey;
 /**
  * <p>
  * AbstractTagBuilder 是一个通用的 TagKey 构建抽象基类,
- * 用于统一生成不同注册类型的标签.
+ * 用于统一生成同 id 不同 namespace 的标签.
  * </p>
  *
  * <p>
@@ -41,7 +41,7 @@ import net.minecraft.tags.TagKey;
  * </p>
  *
  * <pre>{@code
- * // 构建 forge:steam 流体标签
+ * // 构建 forge:steam 和 ccb:steam 流体标签
  * TagKey<Fluid> steam = TagsBuilder.fluid("steam")
  *                 .forge()
  *                 .custom("ccb")
@@ -73,7 +73,7 @@ import net.minecraft.tags.TagKey;
  *     <li>若未指定 namespace 调用 build(), 将抛出 IllegalStateException</li>
  * </ul>
  *
- * @param <T> Tag 所属注册类型, 例如 Item, Block, Fluid 等
+ * @param <T> Tag 所属注册类型, 例如 Item, Block, Fluid 和
  */
 public abstract class AbstractTagBuilder<T> {
 	protected final String name;
