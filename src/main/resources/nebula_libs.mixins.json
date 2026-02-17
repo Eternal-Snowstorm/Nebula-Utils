@@ -1,12 +1,12 @@
 {
 	"required": true,
 	"minVersion": "0.8",
-	"package": "top.nebula.libs.mixin",
+	"package": "dev.celestiacraft.libs.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"refmap": "nebula_libs.refmap.json",
 	"mixins": [
-		"dev.nebula.libs.mixin.AlterGroundDecoratorMixin",
-		"dev.nebula.libs.mixin.FluidTypeMixin"
+		"AlterGroundDecoratorMixin",
+		"FluidTypeMixin"
 	],
 	"client": [
 	],

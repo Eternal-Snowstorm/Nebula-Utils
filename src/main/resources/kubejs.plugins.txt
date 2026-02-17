@@ -1,1 +1,1 @@
-top.nebula.libs.compat.kubejs.ModKubeJSPlugin
+dev.celestiacraft.libs.compat.kubejs.ModKubeJSPlugin
