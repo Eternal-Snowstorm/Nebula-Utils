@@ -7,7 +7,7 @@ import net.minecraft.tags.TagKey;
  * <h2>AbstractTagBuilder</h2>
  *
  * <p>
- * 一个通用的 {@link TagKey} 构建抽象基类, 
+ * 一个通用的 {@link TagKey} 构建抽象基类,
  * 用于为不同注册类型(如 Item, Block, Fluid, EntityType)
  * 提供统一, 简洁且语义清晰的标签创建 API.
  * </p>
@@ -18,8 +18,8 @@ import net.minecraft.tags.TagKey;
  *
  * <p>
  * 在 Minecraft 原生 API 中, 创建一个 TagKey 通常需要显式构造
- * {@link ResourceLocation}, 
- * 并调用对应类型的 create 方法, 例如: 
+ * {@link ResourceLocation},
+ * 并调用对应类型的 create 方法, 例如:
  * </p>
  *
  * <pre>{@code
@@ -29,14 +29,14 @@ import net.minecraft.tags.TagKey;
  * }</pre>
  *
  * <p>
- * 该写法虽然明确, 但在大量标签定义场景下会显得重复, 冗长, 
+ * 该写法虽然明确, 但在大量标签定义场景下会显得重复, 冗长,
  * 且 namespace 与 path 需要手动拼接, 降低可读性.
  * </p>
  *
  * <p>
- * 本抽象类的目标是: 
- * 将 "标签路径" 与 "命名空间选择" 拆分为两个明确阶段, 
- * 并通过终态 namespace 方法直接返回最终 {@link TagKey}, 
+ * 本抽象类的目标是:
+ * 将 "标签路径" 与 "命名空间选择" 拆分为两个明确阶段,
+ * 并通过终态 namespace 方法直接返回最终 {@link TagKey},
  * 使 API 语义与 Minecraft 标签结构完全对齐.
  * </p>
  *
@@ -53,7 +53,7 @@ import net.minecraft.tags.TagKey;
  *
  * <p>
  * 每个 namespace 方法(如 {@code forge()}, {@code vanilla()} 等)
- * 都会立即构造并返回一个 {@link TagKey}, 
+ * 都会立即构造并返回一个 {@link TagKey},
  * 而不会修改当前 Builder 的内部状态.
  * </p>
  *
@@ -76,7 +76,7 @@ import net.minecraft.tags.TagKey;
  * }</pre>
  *
  * <p>
- * 上述写法读作: 
+ * 上述写法读作:
  * "路径为 stone 的标签, 位于 forge 命名空间".
  * </p>
  *
@@ -91,7 +91,7 @@ import net.minecraft.tags.TagKey;
  * </ul>
  *
  * <p>
- * 这是一个"终态构建模型": 
+ * 这是一个"终态构建模型":
  * namespace 选择即构建行为本身.
  * </p>
  *
@@ -100,12 +100,12 @@ import net.minecraft.tags.TagKey;
  * <h3>扩展说明</h3>
  *
  * <p>
- * 子类仅需实现 {@code build(ResourceLocation id)}, 
+ * 子类仅需实现 {@code build(ResourceLocation id)},
  * 用于指定不同注册类型的 TagKey 创建逻辑.
  * </p>
  *
  * <p>
- * 例如: 
+ * 例如:
  * </p>
  *
  * <ul>
@@ -127,41 +127,44 @@ public abstract class AbstractTagBuilder<T> {
 	}
 
 	public TagKey<T> vanilla() {
-		return create("minecraft");
+		return namespace("minecraft");
 	}
 
 	public TagKey<T> forge() {
-		return create("forge");
+		return namespace("forge");
 	}
 
 	public TagKey<T> cmi() {
-		return create("cmi");
+		return namespace("cmi");
 	}
 
 	public TagKey<T> nebulaTinker() {
-		return create("nebula_tinker");
+		return namespace("nebula_tinker");
 	}
 
 	public TagKey<T> industrialPlatform() {
-		return create("industrial_platform");
+		return namespace("industrial_platform");
 	}
 
 	public TagKey<T> tconstruct() {
-		return create("tconstruct");
+		return namespace("tconstruct");
 	}
 
 	public TagKey<T> create() {
-		return create("create");
+		return namespace("create");
 	}
 
-	public TagKey<T> custom(String namespace) {
-		return create(namespace);
+	public TagKey<T> namespace(String namespace) {
+		if (namespace == null || namespace.isBlank()) {
+			throw new IllegalArgumentException("Tag namespace cannot be null for tag: " + name
+			);
+		}
+
+		ResourceLocation id =
+				ResourceLocation.fromNamespaceAndPath(namespace, name);
+
+		return create(id);
 	}
 
-	private TagKey<T> create(String namespace) {
-		ResourceLocation id = ResourceLocation.fromNamespaceAndPath(namespace, name);
-		return build(id);
-	}
-
-	protected abstract TagKey<T> build(ResourceLocation id);
+	protected abstract TagKey<T> create(ResourceLocation id);
 }

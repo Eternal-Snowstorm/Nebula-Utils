@@ -5,6 +5,10 @@ import dev.celestiacraft.libs.tags.type.EntityTypeTag;
 import dev.celestiacraft.libs.tags.type.FluidTag;
 import dev.celestiacraft.libs.tags.type.ItemTag;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Fluid;
 
 /**
  * <h2>TagsBuilder</h2>
@@ -91,11 +95,27 @@ public class TagsBuilder {
 		return new ItemTag(name);
 	}
 
-	public static FluidTag fluid    (String name) {
+	public static FluidTag fluid(String name) {
 		return new FluidTag(name);
 	}
 
 	public static EntityTypeTag entity(String name) {
 		return new EntityTypeTag(name);
+	}
+
+	public static TagKey<Block> block(String name, String namespace) {
+		return new BlockTag(name).namespace(namespace);
+	}
+
+	public static TagKey<Item> item(String name, String namespace) {
+		return new ItemTag(name).namespace(namespace);
+	}
+
+	public static TagKey<Fluid> fluid(String name, String namespace) {
+		return new FluidTag(name).namespace(namespace);
+	}
+
+	public static TagKey<EntityType<?>> entity(String name, String namespace) {
+		return new EntityTypeTag(name).namespace(namespace);
 	}
 }

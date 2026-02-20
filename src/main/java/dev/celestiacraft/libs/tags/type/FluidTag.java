@@ -12,7 +12,7 @@ public class FluidTag extends AbstractTagBuilder<Fluid> {
 	}
 
 	@Override
-	protected TagKey<Fluid> build(ResourceLocation id) {
+	protected TagKey<Fluid> create(ResourceLocation id) {
 		return FluidTags.create(id);
 	}
 }

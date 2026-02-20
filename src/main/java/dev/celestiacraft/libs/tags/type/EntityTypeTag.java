@@ -12,7 +12,7 @@ public class EntityTypeTag extends AbstractTagBuilder<EntityType<?>> {
 	}
 
 	@Override
-	protected TagKey<EntityType<?>> build(ResourceLocation id) {
+	protected TagKey<EntityType<?>> create(ResourceLocation id) {
 		return TagKey.create(Registries.ENTITY_TYPE, id);
 	}
 }

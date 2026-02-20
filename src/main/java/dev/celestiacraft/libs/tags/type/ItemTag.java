@@ -12,7 +12,7 @@ public class ItemTag extends AbstractTagBuilder<Item> {
 	}
 
 	@Override
-	protected TagKey<Item> build(ResourceLocation id) {
+	protected TagKey<Item> create(ResourceLocation id) {
 		return ItemTags.create(id);
 	}
 }

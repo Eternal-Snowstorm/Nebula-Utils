@@ -12,7 +12,7 @@ public class BlockTag extends AbstractTagBuilder<Block> {
 	}
 
 	@Override
-	protected TagKey<Block> build(ResourceLocation id) {
+	protected TagKey<Block> create(ResourceLocation id) {
 		return BlockTags.create(id);
 	}
 }
