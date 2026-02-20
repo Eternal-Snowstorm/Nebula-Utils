@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -11,6 +12,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import dev.celestiacraft.libs.client.tooltip.InlineItemClientTooltipComponent;
+import dev.celestiacraft.libs.client.tooltip.InlineItemTooltipComponent;
 import dev.celestiacraft.libs.config.CommonConfig;
 
 @Mod(NebulaLibs.MODID)
@@ -75,6 +78,11 @@ public class NebulaLibs {
 		} else {
 			return (int) ((fahrenheit - 32.0) * 5.0 / 9.0);
 		}
+	}
+
+	@SubscribeEvent
+	public static void onRegisterTooltipFactories(RegisterClientTooltipComponentFactoriesEvent event) {
+		event.register(InlineItemTooltipComponent.class, InlineItemClientTooltipComponent::new);
 	}
 
 	@SubscribeEvent
