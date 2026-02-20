@@ -4,6 +4,7 @@ import com.simibubi.create.AllParticleTypes;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.utility.Lang;
+import dev.celestiacraft.libs.compat.jade.CommonJadeTipProvider;
 import dev.latvian.mods.kubejs.KubeJSPlugin;
 import dev.latvian.mods.kubejs.registry.RegistryInfo;
 import dev.latvian.mods.kubejs.script.BindingsEvent;
@@ -64,6 +65,10 @@ public class ModKubeJSPlugin extends KubeJSPlugin {
 			event.add("AllParticleTypes", AllParticleTypes.class);
 			event.add("TooltipHelper", TooltipHelper.class);
 			event.add("CreateLang", Lang.class);
+		}
+
+		if (ICheckModLoaded.hasJade()) {
+			event.add("CommonJadeTipProvider", CommonJadeTipProvider.class);
 		}
 
 		if (ICheckModLoaded.hasCurios()) {
