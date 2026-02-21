@@ -5,7 +5,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -32,6 +34,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Jade tooltip 后处理器, 自动扫描所有 tooltip 文本中的 {@code {modid:itemid}} 标记,
@@ -39,6 +42,13 @@ import java.util.regex.Pattern;
  * <p>
  * 支持自定义图标缩放: {@code {modid:itemid,scale}}, 例如 {@code {minecraft:stone,1.0}}.
  * 逗号后可带空格: {@code {minecraft:stone, 0.75}}. 不指定 scale 时默认 0.5.
+ * <p>
+ * 支持轮播动画:
+ * <ul>
+ *   <li>数组轮播: {@code {[minecraft:stone,minecraft:dirt],0.5,20}} — 在列出的物品间循环</li>
+ *   <li>标签轮播: {@code {#forge:ingots,0.5,20}} — 在标签内所有物品间循环</li>
+ * </ul>
+ * 第三个参数 speed 为切换间隔 (tick), 默认 20 (1秒/物品).
  *
  * <h2>通过 lang 使用 (推荐)</h2>
  * <p>直接在 KubeJS lang 翻译值中写入标记, 无需额外 API 调用:</p>
@@ -56,8 +66,9 @@ import java.util.regex.Pattern;
 public class CommonJadeTipProvider {
 	private static final Map<ResourceLocation, List<String>> TIPS = new HashMap<>();
 	private static final float DEFAULT_SCALE = 0.5F;
+	private static final float DEFAULT_SPEED = 20F;
 	private static final Pattern ITEM_PATTERN = Pattern.compile(
-			"\\{([a-z_][a-z0-9_.\\-]*:[a-z_][a-z0-9_.\\-/]*)(?:,\\s*(\\d+(?:\\.\\d+)?))?}"
+			"\\{((?:\\[[^\\]]+\\])|(?:#[a-z_][a-z0-9_.\\-]*:[a-z_][a-z0-9_.\\-/]*)|(?:[a-z_][a-z0-9_.\\-]*:[a-z_][a-z0-9_.\\-/]*))(?:,\\s*(\\d+(?:\\.\\d+)?))?(?:,\\s*(\\d+(?:\\.\\d+)?))?}"
 	);
 
 	public static void addCommonJadeTipLang(String blockId, String tipText) {
@@ -215,7 +226,7 @@ public class CommonJadeTipProvider {
 				elements.add(helper.text(Component.literal(seg).withStyle(style)));
 			}
 			pastFirstItem = true;
-			addItemIcon(elements, helper, matcher.group(1), matcher.group(2));
+			addIconElements(elements, helper, matcher.group(1), matcher.group(2), matcher.group(3));
 			lastEnd = matcher.end();
 		}
 		if (lastEnd < text.length()) {
@@ -229,20 +240,76 @@ public class CommonJadeTipProvider {
 	}
 
 	/**
-	 * 解析物品 ID 并添加图标元素, 无效物品静默跳过.
+	 * 解析标识符并添加图标元素. 支持单物品、数组轮播、标签轮播三种格式.
 	 */
-	private static void addItemIcon(List<IElement> elements, IElementHelper helper, String itemId, String scaleStr) {
+	private static void addIconElements(List<IElement> elements, IElementHelper helper,
+										String identifier, String scaleStr, String speedStr) {
 		float scale = (scaleStr != null) ? Float.parseFloat(scaleStr) : DEFAULT_SCALE;
-		Item item = ForgeRegistries.ITEMS.getValue(ResourceLocation.parse(itemId));
-		if (item == null || item == Items.AIR) {
-			return;
+		float speed = (speedStr != null) ? Float.parseFloat(speedStr) : DEFAULT_SPEED;
+
+		Item item;
+		if (identifier.startsWith("[")) {
+			List<Item> items = parseItemArray(identifier);
+			if (items.isEmpty()) return;
+			item = pickCarouselItem(items, speed);
+		} else if (identifier.startsWith("#")) {
+			List<Item> items = resolveTagItems(identifier.substring(1));
+			if (items.isEmpty()) return;
+			item = pickCarouselItem(items, speed);
+		} else {
+			item = ForgeRegistries.ITEMS.getValue(ResourceLocation.parse(identifier));
+			if (item == null || item == Items.AIR) return;
 		}
+
 		int pixelSize = (int) (16 * scale) + 2;
 		elements.add(helper.item(new ItemStack(item), scale)
 				.size(new Vec2(pixelSize, pixelSize))
 				.translate(new Vec2(0, -1))
 				.message(null));
 		elements.add(helper.spacer(1, 0));
+	}
+
+	/**
+	 * 根据 tick 计数从物品列表中选取当前轮播物品.
+	 */
+	private static Item pickCarouselItem(List<Item> items, float speed) {
+		long tickCounter = System.currentTimeMillis() / 50;
+		int interval = Math.max(1, (int) speed);
+		int index = (int) ((tickCounter / interval) % items.size());
+		return items.get(index);
+	}
+
+	/**
+	 * 解析数组格式 {@code [modid:item1,#modid:tag,...]} 为物品列表.
+	 * 数组内条目以 {@code #} 开头时视为标签, 展开为该标签下所有物品.
+	 */
+	private static List<Item> parseItemArray(String arrayContent) {
+		String inner = arrayContent.substring(1, arrayContent.length() - 1);
+		List<Item> items = new ArrayList<>();
+		for (String entry : inner.split(",")) {
+			String trimmed = entry.trim();
+			if (trimmed.isEmpty()) continue;
+			if (trimmed.startsWith("#")) {
+				items.addAll(resolveTagItems(trimmed.substring(1)));
+			} else {
+				Item item = ForgeRegistries.ITEMS.getValue(ResourceLocation.parse(trimmed));
+				if (item != null && item != Items.AIR) {
+					items.add(item);
+				}
+			}
+		}
+		return items;
+	}
+
+	/**
+	 * 将标签 ID 解析为物品列表.
+	 */
+	private static List<Item> resolveTagItems(String tagId) {
+		TagKey<Item> tagKey = TagKey.create(Registries.ITEM, ResourceLocation.parse(tagId));
+		var tagManager = ForgeRegistries.ITEMS.tags();
+		if (tagManager == null) return List.of();
+		return tagManager.getTag(tagKey).stream()
+				.collect(Collectors.toList());
 	}
 
 	private static Component stripColor(Component line) {

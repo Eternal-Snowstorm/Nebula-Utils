@@ -10,7 +10,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -26,6 +28,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Forge 事件处理器: 扫描所有普通 tooltip 文本中的 {@code {modid:itemid}} 或 {@code {modid:itemid,scale}} 标记,
@@ -34,15 +37,23 @@ import java.util.regex.Pattern;
  * 支持自定义缩放: {@code {minecraft:stone,1.0}} 或 {@code {minecraft:stone, 0.75}}.
  * 不指定 scale 时默认 0.5.
  * <p>
+ * 支持轮播动画:
+ * <ul>
+ *   <li>数组轮播: {@code {[minecraft:stone,minecraft:dirt],0.5,20}} — 在列出的物品间循环</li>
+ *   <li>标签轮播: {@code {#forge:ingots,0.5,20}} — 在标签内所有物品间循环</li>
+ * </ul>
+ * 第三个参数 speed 为切换间隔 (tick), 默认 20 (1秒/物品).
+ * <p>
  * 适用于物品 tooltip, JEI 信息, 以及所有经过 {@code GuiGraphics.renderTooltip} 的 tooltip.
  */
 @Mod.EventBusSubscriber(modid = NebulaLibs.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class InlineItemTooltipHandler {
 
 	private static final float DEFAULT_SCALE = 0.5F;
+	private static final float DEFAULT_SPEED = 20F;
 
 	private static final Pattern ITEM_PATTERN = Pattern.compile(
-			"\\{([a-z_][a-z0-9_.\\-]*:[a-z_][a-z0-9_.\\-/]*)(?:,\\s*(\\d+(?:\\.\\d+)?))?}"
+			"\\{((?:\\[[^\\]]+\\])|(?:#[a-z_][a-z0-9_.\\-]*:[a-z_][a-z0-9_.\\-/]*)|(?:[a-z_][a-z0-9_.\\-]*:[a-z_][a-z0-9_.\\-/]*))(?:,\\s*(\\d+(?:\\.\\d+)?))?(?:,\\s*(\\d+(?:\\.\\d+)?))?}"
 	);
 
 	@SubscribeEvent
@@ -103,14 +114,36 @@ public class InlineItemTooltipHandler {
 			}
 			pastFirstSegment = true;
 
-			String itemId = matcher.group(1);
+			String identifier = matcher.group(1);
 			String scaleStr = matcher.group(2);
+			String speedStr = matcher.group(3);
 			float scale = (scaleStr != null) ? Float.parseFloat(scaleStr) : DEFAULT_SCALE;
-			ResourceLocation itemRL = ResourceLocation.parse(itemId);
-			Item item = ForgeRegistries.ITEMS.getValue(itemRL);
-			if (item != null && item != Items.AIR) {
-				segments.add(new ItemSegment(new ItemStack(item), scale));
+			float speed = (speedStr != null) ? Float.parseFloat(speedStr) : DEFAULT_SPEED;
+
+			Item item;
+			if (identifier.startsWith("[")) {
+				List<Item> items = parseItemArray(identifier);
+				if (items.isEmpty()) {
+					lastEnd = matcher.end();
+					continue;
+				}
+				item = pickCarouselItem(items, speed);
+			} else if (identifier.startsWith("#")) {
+				List<Item> items = resolveTagItems(identifier.substring(1));
+				if (items.isEmpty()) {
+					lastEnd = matcher.end();
+					continue;
+				}
+				item = pickCarouselItem(items, speed);
+			} else {
+				ResourceLocation itemRL = ResourceLocation.parse(identifier);
+				item = ForgeRegistries.ITEMS.getValue(itemRL);
+				if (item == null || item == Items.AIR) {
+					lastEnd = matcher.end();
+					continue;
+				}
 			}
+			segments.add(new ItemSegment(new ItemStack(item), scale));
 
 			lastEnd = matcher.end();
 		}
@@ -157,5 +190,48 @@ public class InlineItemTooltipHandler {
 			}
 		}
 		return "";
+	}
+
+	/**
+	 * 根据 tick 计数从物品列表中选取当前轮播物品.
+	 */
+	private static Item pickCarouselItem(List<Item> items, float speed) {
+		long tickCounter = System.currentTimeMillis() / 50;
+		int interval = Math.max(1, (int) speed);
+		int index = (int) ((tickCounter / interval) % items.size());
+		return items.get(index);
+	}
+
+	/**
+	 * 解析数组格式 {@code [modid:item1,#modid:tag,...]} 为物品列表.
+	 * 数组内条目以 {@code #} 开头时视为标签, 展开为该标签下所有物品.
+	 */
+	private static List<Item> parseItemArray(String arrayContent) {
+		String inner = arrayContent.substring(1, arrayContent.length() - 1);
+		List<Item> items = new ArrayList<>();
+		for (String entry : inner.split(",")) {
+			String trimmed = entry.trim();
+			if (trimmed.isEmpty()) continue;
+			if (trimmed.startsWith("#")) {
+				items.addAll(resolveTagItems(trimmed.substring(1)));
+			} else {
+				Item item = ForgeRegistries.ITEMS.getValue(ResourceLocation.parse(trimmed));
+				if (item != null && item != Items.AIR) {
+					items.add(item);
+				}
+			}
+		}
+		return items;
+	}
+
+	/**
+	 * 将标签 ID 解析为物品列表.
+	 */
+	private static List<Item> resolveTagItems(String tagId) {
+		TagKey<Item> tagKey = TagKey.create(Registries.ITEM, ResourceLocation.parse(tagId));
+		var tagManager = ForgeRegistries.ITEMS.tags();
+		if (tagManager == null) return List.of();
+		return tagManager.getTag(tagKey).stream()
+				.collect(Collectors.toList());
 	}
 }
