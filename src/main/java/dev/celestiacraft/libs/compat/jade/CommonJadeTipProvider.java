@@ -250,9 +250,9 @@ public class CommonJadeTipProvider {
 		return line;
 	}
 
-    /**
-     * 提取 '§' 符号
-     */
+	/**
+	 * 提取 '§' 符号
+	 */
 	private static String extractLeadingFormatCodes(String text) {
 		int i = 0;
 		while (i + 1 < text.length() && text.charAt(i) == '§') {
