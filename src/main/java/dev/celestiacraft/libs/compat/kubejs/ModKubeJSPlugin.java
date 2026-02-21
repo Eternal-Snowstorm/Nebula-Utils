@@ -5,6 +5,7 @@ import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.utility.Lang;
 import dev.celestiacraft.libs.compat.jade.CommonJadeTipProvider;
+import dev.celestiacraft.libs.compat.tconstruct.util.SimpleTConUtils;
 import dev.latvian.mods.kubejs.KubeJSPlugin;
 import dev.latvian.mods.kubejs.registry.RegistryInfo;
 import dev.latvian.mods.kubejs.script.BindingsEvent;
@@ -16,7 +17,11 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 import dev.celestiacraft.libs.NebulaLibs;
@@ -26,6 +31,8 @@ import dev.celestiacraft.libs.compat.patchouli.multiblock.DefineBlockBuilder;
 import dev.celestiacraft.libs.compat.patchouli.multiblock.MultiblockStructureBuilder;
 import dev.celestiacraft.libs.compat.patchouli.multiblock.PropertyImmutableMap;
 import dev.celestiacraft.libs.tags.TagsBuilder;
+import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
+import slimeknights.tconstruct.library.tools.item.ModifiableItem;
 import top.theillusivec4.curios.api.CuriosApi;
 
 import java.time.LocalDateTime;
@@ -59,6 +66,11 @@ public class ModKubeJSPlugin extends KubeJSPlugin {
 		event.add("BuiltInRegistries", BuiltInRegistries.class);
 		event.add("ParticleTypes", ParticleTypes.class);
 		event.add("TagsBuidlder", TagsBuilder.class);
+		event.add("ItemClass", Item.class);
+		event.add("BlockClass", Block.class);
+		event.add("FluidClass", Fluid.class);
+		event.add("Item$Properties", Item.Properties.class);
+		event.add("BlockBehaviour$Properties", BlockBehaviour.Properties.class);
 
 		if (ICheckModLoaded.hasCreate()) {
 			event.add("AllSoundEvents", AllSoundEvents.class);
@@ -74,6 +86,12 @@ public class ModKubeJSPlugin extends KubeJSPlugin {
 		if (ICheckModLoaded.hasCurios()) {
 			event.add("CuriosUtils", CuriosUtils.class);
 			event.add("CuriosApi", CuriosApi.class);
+		}
+
+		if (ICheckModLoaded.hasTCon()) {
+			event.add("SimpleTConUtils", SimpleTConUtils.class);
+			event.add("ToolDefinition", ToolDefinition.class);
+			event.add("ModifiableItem", ModifiableItem.class);
 		}
 	}
 }
