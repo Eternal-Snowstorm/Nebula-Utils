@@ -2,25 +2,34 @@ package dev.celestiacraft.libs.compat.jade;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.phys.Vec2;
 import net.minecraftforge.registries.ForgeRegistries;
 import snownee.jade.api.Accessor;
 import snownee.jade.api.BlockAccessor;
+import snownee.jade.api.EntityAccessor;
 import snownee.jade.api.ITooltip;
+import snownee.jade.api.Identifiers;
 import snownee.jade.api.ui.IElement;
 import snownee.jade.api.ui.IElement.Align;
 import snownee.jade.api.ui.IElementHelper;
 import snownee.jade.impl.ui.TextElement;
+import snownee.jade.util.ModIdentification;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,11 +43,9 @@ import java.util.regex.Pattern;
  * <h2>通过 lang 使用 (推荐)</h2>
  * <p>直接在 KubeJS lang 翻译值中写入标记, 无需额外 API 调用:</p>
  * <pre>{@code
- * // KubeJS lang script
  * addCommonJadeTipLang("immersiveindustry:crucible",
  *     "自身最多提供 1000°C, 使用{immersiveengineering:blastfurnace_preheater,0.75}预热器升温")
  * }</pre>
- * <p>渲染效果: {@code "自身最多提供 1000°C, 使用 [图标] 预热器升温"}</p>
  *
  * <h2>通过 Java API 使用</h2>
  * <pre>{@code
@@ -48,23 +55,13 @@ import java.util.regex.Pattern;
  */
 public class CommonJadeTipProvider {
 	private static final Map<ResourceLocation, List<String>> TIPS = new HashMap<>();
-
 	private static final float DEFAULT_SCALE = 0.5F;
-
 	private static final Pattern ITEM_PATTERN = Pattern.compile(
 			"\\{([a-z_][a-z0-9_.\\-]*:[a-z_][a-z0-9_.\\-/]*)(?:,\\s*(\\d+(?:\\.\\d+)?))?}"
 	);
 
-	/**
-	 * (可选) 通过 Java API 直接注册 Jade 提示, 支持 {@code {modid:itemid}} 内联图标.
-	 *
-	 * @param blockId 方块注册名, 例如 {@code "immersiveindustry:crucible"}
-	 * @param tipText 提示文本, 可包含 {@code {modid:itemid}} 标记
-	 */
 	public static void addCommonJadeTipLang(String blockId, String tipText) {
-		TIPS.computeIfAbsent(ResourceLocation.parse(blockId), (location) -> {
-			return new ArrayList<>();
-		}).add(tipText);
+		TIPS.computeIfAbsent(ResourceLocation.parse(blockId), k -> new ArrayList<>()).add(tipText);
 	}
 
 	public static void removeTips(String blockId) {
@@ -76,114 +73,191 @@ public class CommonJadeTipProvider {
 	}
 
 	static void onTooltipCollected(ITooltip tooltip, Accessor<?> accessor) {
-		// 添加通过 Java API 直接注册的提示
-		if (accessor instanceof BlockAccessor blockAccessor) {
-			ResourceLocation blockId = ForgeRegistries.BLOCKS.getKey(blockAccessor.getBlock());
-			if (blockId != null) {
-				List<String> tips = TIPS.get(blockId);
-				if (tips != null) {
-					IElementHelper helper = IElementHelper.get();
-					for (String tipText : tips) {
-						List<IElement> elements = parseElements(tipText, helper, Style.EMPTY.withColor(ChatFormatting.AQUA));
-						if (!elements.isEmpty()) {
-							tooltip.add(elements);
-						}
-					}
-				}
-			}
+		if (accessor instanceof EntityAccessor ea && ea.getEntity() instanceof ItemEntity ie) {
+			rebuildItemEntityTooltip(tooltip, ie);
 		}
-
-		// 自动扫描所有已有 tooltip 行, 替换 {modid:itemid} 标记为物品图标
+		addRegisteredTips(tooltip, accessor);
 		processInlineItemMarkup(tooltip);
 	}
 
 	/**
-	 * 扫描 tooltip 中所有行, 如果某个文本元素包含 {@code {modid:itemid}} 或 {@code {modid:itemid,scale}} 标记,
-	 * 则将该元素拆分为: 文本 + 物品图标 + 文本, 保留原始文本样式.
+	 * 移除 Jade 内置 ItemTooltipProvider 的截断行, 用完整原文重新解析 (避免 {} 标记被截断).
 	 */
+	private static void rebuildItemEntityTooltip(ITooltip tooltip, ItemEntity itemEntity) {
+		if (tooltip.get(Identifiers.MC_ITEM_TOOLTIP).isEmpty()) {
+			return;
+		}
+		tooltip.remove(Identifiers.MC_ITEM_TOOLTIP);
+		ItemStack stack = itemEntity.getItem();
+		List<Component> lines;
+		try {
+			lines = stack.getTooltipLines(null, TooltipFlag.Default.NORMAL);
+		} catch (Throwable e) {
+			return;
+		}
+		String modName = ModIdentification.getModName(stack);
+		IElementHelper helper = IElementHelper.get();
+		for (int i = 1; i < lines.size(); i++) {
+			Component line = stripColor(lines.get(i));
+			String text = line.getString();
+			if (Objects.equals(ChatFormatting.stripFormatting(text), modName)) {
+				continue;
+			}
+			addLineOrParsed(tooltip, helper, text, line.getStyle());
+		}
+	}
+
+	private static void addRegisteredTips(ITooltip tooltip, Accessor<?> accessor) {
+		ResourceLocation tipKey = resolveTipKey(accessor);
+		if (tipKey == null) {
+			return;
+		}
+		List<String> tips = TIPS.get(tipKey);
+		if (tips == null) {
+			return;
+		}
+		IElementHelper helper = IElementHelper.get();
+		Style aqua = Style.EMPTY.withColor(ChatFormatting.AQUA);
+		for (String tipText : tips) {
+			List<IElement> elements = parseElements(tipText, helper, aqua);
+			if (!elements.isEmpty()) {
+				tooltip.add(elements);
+			}
+		}
+	}
+
+	private static ResourceLocation resolveTipKey(Accessor<?> accessor) {
+		if (accessor instanceof BlockAccessor ba) {
+			return ForgeRegistries.BLOCKS.getKey(ba.getBlock());
+		}
+		if (!(accessor instanceof EntityAccessor ea) || !(ea.getEntity() instanceof ItemEntity ie)) {
+			return null;
+		}
+		Item item = ie.getItem().getItem();
+		if (item instanceof BlockItem bi) {
+			ResourceLocation blockKey = ForgeRegistries.BLOCKS.getKey(bi.getBlock());
+			if (blockKey != null && TIPS.containsKey(blockKey)) {
+				return blockKey;
+			}
+		}
+		return ForgeRegistries.ITEMS.getKey(item);
+	}
+
 	private static void processInlineItemMarkup(ITooltip tooltip) {
 		IElementHelper helper = IElementHelper.get();
-
 		for (int i = 0; i < tooltip.size(); i++) {
-			List<IElement> elements = tooltip.get(i, Align.LEFT);
-
-			// 快速检查: 这一行是否有需要处理的标记
-			boolean needsRebuild = false;
-			for (IElement element : elements) {
-				String msg = element.getCachedMessage();
-				if (msg != null && ITEM_PATTERN.matcher(msg).find()) {
-					needsRebuild = true;
-					break;
-				}
+			List<IElement> row = tooltip.get(i, Align.LEFT);
+			List<IElement> rebuilt = rebuildRow(row, helper);
+			if (rebuilt != null) {
+				row.clear();
+				row.addAll(rebuilt);
 			}
-			if (!needsRebuild) continue;
-
-			// 重建这一行的元素列表
-			List<IElement> newElements = new ArrayList<>();
-			for (IElement element : elements) {
-				String msg = element.getCachedMessage();
-				if (msg == null || !ITEM_PATTERN.matcher(msg).find()) {
-					// 没有标记, 保留原样
-					newElements.add(element);
-					continue;
-				}
-
-				// 从原始 Component 中提取样式 (颜色等)
-				Style style = extractStyle(element);
-				newElements.addAll(parseElements(msg, helper, style));
-			}
-
-			// 直接替换行内元素 (get 返回的是可变的内部列表)
-			elements.clear();
-			elements.addAll(newElements);
 		}
 	}
 
 	/**
-	 * 尝试从 IElement 中提取原始 Component 的 Style.
-	 * 如果无法提取, 返回空样式.
+	 * 如果行中有元素包含 {} 标记则返回重建后的列表, 否则返回 null (无需修改).
 	 */
-	private static Style extractStyle(IElement element) {
-		if (element instanceof TextElement te && te.text instanceof Component comp) {
-			return comp.getStyle();
+	private static List<IElement> rebuildRow(List<IElement> row, IElementHelper helper) {
+		List<IElement> result = null;
+		for (int j = 0; j < row.size(); j++) {
+			IElement element = row.get(j);
+			String msg = element.getCachedMessage();
+			boolean hasPattern = msg != null && msg.indexOf('{') >= 0 && ITEM_PATTERN.matcher(msg).find();
+			if (hasPattern && result == null) {
+				result = new ArrayList<>(row.subList(0, j));
+			}
+			if (result != null) {
+				if (hasPattern) {
+					Style style = (element instanceof TextElement te && te.text instanceof Component c)
+							? c.getStyle() : Style.EMPTY;
+					result.addAll(parseElements(msg, helper, style));
+				} else {
+					result.add(element);
+				}
+			}
 		}
-		return Style.EMPTY;
+		return result;
 	}
 
 	/**
-	 * 将包含 {@code {modid:itemid}} 或 {@code {modid:itemid,scale}} 标记的文本解析为 IElement 列表.
-	 * <p>
-	 * 纯文本部分使用指定的 Style 渲染, 标记部分替换为物品图标.
-	 * 可通过 {@code ,scale} 后缀自定义图标大小, 例如 {@code {minecraft:stone,1.0}}.
+	 * 如果文本含 {} 标记则解析为图标元素行添加, 否则直接添加文本.
 	 */
-	private static List<IElement> parseElements(String tipText, IElementHelper helper, Style style) {
+	private static void addLineOrParsed(ITooltip tooltip, IElementHelper helper, String text, Style style) {
+		if (text.indexOf('{') >= 0 && ITEM_PATTERN.matcher(text).find()) {
+			List<IElement> elements = parseElements(text, helper, style);
+			if (!elements.isEmpty()) {
+				tooltip.add(elements);
+			}
+		} else {
+			tooltip.add(helper.text(Component.literal(text).withStyle(style)));
+		}
+	}
+
+	/**
+	 * 将含 {@code {modid:itemid}} 标记的文本解析为 IElement 列表.
+	 * 自动将文本开头的 § 格式码传播到 {} 标记后的文本段.
+	 */
+	private static List<IElement> parseElements(String text, IElementHelper helper, Style style) {
+		String leadingCodes = extractLeadingFormatCodes(text);
 		List<IElement> elements = new ArrayList<>();
-		Matcher matcher = ITEM_PATTERN.matcher(tipText);
+		Matcher matcher = ITEM_PATTERN.matcher(text);
 		int lastEnd = 0;
+		boolean pastFirstItem = false;
 		while (matcher.find()) {
 			if (matcher.start() > lastEnd) {
-				String before = tipText.substring(lastEnd, matcher.start());
-				elements.add(helper.text(Component.literal(before).withStyle(style)));
+				String seg = text.substring(lastEnd, matcher.start());
+				if (pastFirstItem && !leadingCodes.isEmpty()) {
+					seg = leadingCodes + seg;
+				}
+				elements.add(helper.text(Component.literal(seg).withStyle(style)));
 			}
-			String itemId = matcher.group(1);
-			String scaleStr = matcher.group(2);
-			float scale = (scaleStr != null) ? Float.parseFloat(scaleStr) : DEFAULT_SCALE;
-			ResourceLocation itemRL = ResourceLocation.parse(itemId);
-			Item item = ForgeRegistries.ITEMS.getValue(itemRL);
-			if (item != null && item != Items.AIR) {
-				int pixelSize = (int) (16 * scale) + 2;
-				elements.add(helper.item(new ItemStack(item), scale)
-						.size(new Vec2(pixelSize, pixelSize))
-						.translate(new Vec2(0, -1))
-						.message(null));
-				elements.add(helper.spacer(1, 0));
-			}
+			pastFirstItem = true;
+			addItemIcon(elements, helper, matcher.group(1), matcher.group(2));
 			lastEnd = matcher.end();
 		}
-		if (lastEnd < tipText.length()) {
-			String remaining = tipText.substring(lastEnd);
-			elements.add(helper.text(Component.literal(remaining).withStyle(style)));
+		if (lastEnd < text.length()) {
+			String seg = text.substring(lastEnd);
+			if (pastFirstItem && !leadingCodes.isEmpty()) {
+				seg = leadingCodes + seg;
+			}
+			elements.add(helper.text(Component.literal(seg).withStyle(style)));
 		}
 		return elements;
+	}
+
+	/**
+	 * 解析物品 ID 并添加图标元素, 无效物品静默跳过.
+	 */
+	private static void addItemIcon(List<IElement> elements, IElementHelper helper, String itemId, String scaleStr) {
+		float scale = (scaleStr != null) ? Float.parseFloat(scaleStr) : DEFAULT_SCALE;
+		Item item = ForgeRegistries.ITEMS.getValue(ResourceLocation.parse(itemId));
+		if (item == null || item == Items.AIR) {
+			return;
+		}
+		int pixelSize = (int) (16 * scale) + 2;
+		elements.add(helper.item(new ItemStack(item), scale)
+				.size(new Vec2(pixelSize, pixelSize))
+				.translate(new Vec2(0, -1))
+				.message(null));
+		elements.add(helper.spacer(1, 0));
+	}
+
+	private static Component stripColor(Component line) {
+		if (line instanceof MutableComponent mc && mc.getStyle().getColor() != null) {
+			mc.setStyle(mc.getStyle().withColor((TextColor) null));
+		}
+		return line;
+	}
+
+    /**
+     * 提取 '§' 符号
+     */
+	private static String extractLeadingFormatCodes(String text) {
+		int i = 0;
+		while (i + 1 < text.length() && text.charAt(i) == '§') {
+			i += 2;
+		}
+		return i > 0 ? text.substring(0, i) : "";
 	}
 }
