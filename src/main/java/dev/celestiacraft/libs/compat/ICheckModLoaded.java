@@ -6,13 +6,13 @@ import net.minecraftforge.fml.ModList;
  * 用于检测指定模组是否已加载的工具接口.
  *
  * <p>
- * 该接口基于 {@link ModList} 提供的查询能力, 
- * 对常用模组的加载状态进行了简单封装, 
+ * 该接口基于 {@link ModList} 提供的查询能力,
+ * 对常用模组的加载状态进行了简单封装,
  * 便于在运行时进行条件逻辑判断或兼容分支控制.
  * </p>
  *
  * <p>
- * 所有方法均为 static, 
+ * 所有方法均为 static,
  * 无需实例化即可直接调用.
  * </p>
  *
@@ -36,7 +36,7 @@ import net.minecraftforge.fml.ModList;
  * }</pre>
  *
  * <p>
- * 注意: 本工具仅用于检测模组是否存在, 
+ * 注意: 本工具仅用于检测模组是否存在,
  * 不保证其 API 或相关类在当前环境中一定安全可访问.
  * 在进行类引用时仍需确保使用安全的延迟加载或条件注册机制.
  * </p>
@@ -92,5 +92,12 @@ public interface ICheckModLoaded {
 	 */
 	static boolean hasCurios() {
 		return hasMod("curios");
+	}
+
+	/**
+	 * @return 是否已加载 Patchouli 模组
+	 */
+	static boolean hasPatchouli() {
+		return hasMod("patchouli");
 	}
 }

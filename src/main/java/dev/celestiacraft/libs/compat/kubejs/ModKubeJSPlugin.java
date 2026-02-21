@@ -46,9 +46,6 @@ public class ModKubeJSPlugin extends KubeJSPlugin {
 		super.registerBindings(event);
 
 		event.add("NebulaLibs", NebulaLibs.class);
-		event.add("MultiblockStructureBuilder", MultiblockStructureBuilder.class);
-		event.add("DefineBlockBuilder", DefineBlockBuilder.class);
-		event.add("PropertyImmutableMap", PropertyImmutableMap.class);
 		event.add("RegistryInfo", RegistryInfo.class);
 		event.add("LocalDateTime", LocalDateTime.class);
 		event.add("Player", Player.class);
@@ -92,6 +89,12 @@ public class ModKubeJSPlugin extends KubeJSPlugin {
 			event.add("SimpleTConUtils", SimpleTConUtils.class);
 			event.add("ToolDefinition", ToolDefinition.class);
 			event.add("ModifiableItem", ModifiableItem.class);
+		}
+
+		if (ICheckModLoaded.hasPatchouli()) {
+			event.add("MultiblockStructureBuilder", MultiblockStructureBuilder.class);
+			event.add("DefineBlockBuilder", DefineBlockBuilder.class);
+			event.add("PropertyImmutableMap", PropertyImmutableMap.class);
 		}
 	}
 }
