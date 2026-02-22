@@ -22,6 +22,7 @@ import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.tags.ITagManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -229,9 +230,11 @@ public class InlineItemTooltipHandler {
 	 */
 	private static List<Item> resolveTagItems(String tagId) {
 		TagKey<Item> tagKey = TagKey.create(Registries.ITEM, ResourceLocation.parse(tagId));
-		var tagManager = ForgeRegistries.ITEMS.tags();
+		ITagManager<Item> tagManager = ForgeRegistries.ITEMS.tags();
 		if (tagManager == null) return List.of();
-		return tagManager.getTag(tagKey).stream()
+
+		return tagManager.getTag(tagKey)
+				.stream()
 				.collect(Collectors.toList());
 	}
 }

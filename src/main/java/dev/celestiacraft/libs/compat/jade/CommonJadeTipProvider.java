@@ -16,6 +16,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.phys.Vec2;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.tags.ITagManager;
 import snownee.jade.api.Accessor;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.EntityAccessor;
@@ -103,6 +104,7 @@ public class CommonJadeTipProvider {
 		tooltip.remove(Identifiers.MC_ITEM_TOOLTIP);
 		ItemStack stack = itemEntity.getItem();
 		List<Component> lines;
+
 		try {
 			lines = stack.getTooltipLines(null, TooltipFlag.Default.NORMAL);
 		} catch (Throwable e) {
@@ -158,6 +160,7 @@ public class CommonJadeTipProvider {
 
 	private static void processInlineItemMarkup(ITooltip tooltip) {
 		IElementHelper helper = IElementHelper.get();
+
 		for (int i = 0; i < tooltip.size(); i++) {
 			List<IElement> row = tooltip.get(i, Align.LEFT);
 			List<IElement> rebuilt = rebuildRow(row, helper);
@@ -217,6 +220,7 @@ public class CommonJadeTipProvider {
 		Matcher matcher = ITEM_PATTERN.matcher(text);
 		int lastEnd = 0;
 		boolean pastFirstItem = false;
+
 		while (matcher.find()) {
 			if (matcher.start() > lastEnd) {
 				String seg = text.substring(lastEnd, matcher.start());
@@ -242,12 +246,11 @@ public class CommonJadeTipProvider {
 	/**
 	 * 解析标识符并添加图标元素. 支持单物品、数组轮播、标签轮播三种格式.
 	 */
-	private static void addIconElements(List<IElement> elements, IElementHelper helper,
-										String identifier, String scaleStr, String speedStr) {
+	private static void addIconElements(List<IElement> elements, IElementHelper helper, String identifier, String scaleStr, String speedStr) {
 		float scale = (scaleStr != null) ? Float.parseFloat(scaleStr) : DEFAULT_SCALE;
 		float speed = (speedStr != null) ? Float.parseFloat(speedStr) : DEFAULT_SPEED;
-
 		Item item;
+
 		if (identifier.startsWith("[")) {
 			List<Item> items = parseItemArray(identifier);
 			if (items.isEmpty()) return;
@@ -262,7 +265,7 @@ public class CommonJadeTipProvider {
 		}
 
 		int pixelSize = (int) (16 * scale) + 2;
-		elements.add(helper.item(new ItemStack(item), scale)
+		elements.add(helper.item(item.getDefaultInstance(), scale)
 				.size(new Vec2(pixelSize, pixelSize))
 				.translate(new Vec2(0, -1))
 				.message(null));
@@ -286,9 +289,13 @@ public class CommonJadeTipProvider {
 	private static List<Item> parseItemArray(String arrayContent) {
 		String inner = arrayContent.substring(1, arrayContent.length() - 1);
 		List<Item> items = new ArrayList<>();
+
 		for (String entry : inner.split(",")) {
 			String trimmed = entry.trim();
-			if (trimmed.isEmpty()) continue;
+
+			if (trimmed.isEmpty()) {
+				continue;
+			}
 			if (trimmed.startsWith("#")) {
 				items.addAll(resolveTagItems(trimmed.substring(1)));
 			} else {
@@ -306,9 +313,14 @@ public class CommonJadeTipProvider {
 	 */
 	private static List<Item> resolveTagItems(String tagId) {
 		TagKey<Item> tagKey = TagKey.create(Registries.ITEM, ResourceLocation.parse(tagId));
-		var tagManager = ForgeRegistries.ITEMS.tags();
-		if (tagManager == null) return List.of();
-		return tagManager.getTag(tagKey).stream()
+		ITagManager<Item> tagManager = ForgeRegistries.ITEMS.tags();
+
+		if (tagManager == null) {
+			return List.of();
+		}
+
+		return tagManager.getTag(tagKey)
+				.stream()
 				.collect(Collectors.toList());
 	}
 
@@ -324,6 +336,7 @@ public class CommonJadeTipProvider {
 	 */
 	private static String extractLeadingFormatCodes(String text) {
 		int i = 0;
+
 		while (i + 1 < text.length() && text.charAt(i) == '§') {
 			i += 2;
 		}
