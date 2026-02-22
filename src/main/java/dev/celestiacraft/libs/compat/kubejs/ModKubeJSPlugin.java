@@ -105,7 +105,4 @@ public class ModKubeJSPlugin extends KubeJSPlugin {
 			event.add("PropertyImmutableMap", PropertyImmutableMap.class);
 		}
 	}
-
-	private class GsonBuildConfigc {
-	}
 }
