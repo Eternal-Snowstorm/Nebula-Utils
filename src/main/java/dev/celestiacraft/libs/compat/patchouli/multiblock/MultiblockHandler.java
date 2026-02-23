@@ -27,34 +27,66 @@ import java.util.function.Supplier;
  * </p>
  *
  * <ul>
- *     <li>不强制继承 — 通过组合持有，不限制 BlockEntity 的父类</li>
- *     <li>Tick 缓存 — 默认 20 tick(1秒)刷新一次，大幅减少冗余 validate 调用</li>
- *     <li>一行切换 — toggleVisualization() 自动处理状态判断和 Patchouli API 调用</li>
- *     <li>Builder 配置 — 翻译 key、渲染偏移、缓存间隔均可自定义</li>
+ *     <li>不强制继承 - 通过组合持有，不限制 BlockEntity 的父类</li>
+ *     <li>Tick 缓存 - 默认 20 tick(1秒)刷新一次，大幅减少冗余 validate 调用</li>
+ *     <li>一行切换 - toggleVisualization() 自动处理状态判断和 Patchouli API 调用</li>
+ *     <li>Builder 配置 - 翻译 key、渲染偏移、缓存间隔均可自定义</li>
  * </ul>
  *
  * <h2>典型用法</h2>
+ *
+ * <h3>1. BlockEntity 持有 Handler</h3>
  * <pre>{@code
- * public class MyMachineBlockEntity extends BlockEntity {
+ * public class MyMachineBlockEntity extends BlockEntity
+ *         implements IMultiblockProvider {
+ *
  *     private static final Lazy<IMultiblock> STRUCTURE = Lazy.of(() -> {
  *         return new MultiblockStructureBuilder(...)
  *             .define(...)
  *             .build();
  *     });
  *
- *     private final MultiblockHandler multiblock = MultiblockHandler
- *         .builder(this, STRUCTURE)
- *         .translationKey("multiblock.building.mymod.my_machine")
- *         .renderOffset(0, -1, 0)
- *         .cacheTicks(20)
- *         .build();
+ *     private final MultiblockHandler multiblock =
+ *         MultiblockHandler.builder(this, STRUCTURE)
+ *             .translationKey("multiblock.building.mymod.my_machine")
+ *             .renderOffset(0, -1, 0)
+ *             .cacheTicks(20)
+ *             .build();
  *
- *     public boolean isStructureValid() {
- *         return multiblock.isValid();
+ *     @Override
+ *     public MultiblockHandler getMultiblockHandler() {
+ *         return multiblock;
+ *     }
+ * }
+ * }</pre>
+ *
+ * <h3>2. Block 触发全息预览示例</h3>
+ * <pre>{@code
+ * @Mod.EventBusSubscriber(modid = MyMod.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+ * public class MyMachineBlock extends Block {
+ *     public MyMachineBlock(Properties properties) {
+ *         super(properties);
  *     }
  *
- *     public void showMultiblock() {
- *         multiblock.toggleVisualization();
+ *     @SubscribeEvent
+ *     public static void onRightClick(PlayerInteractEvent.RightClickBlock event) {
+ *         Level level = event.getLevel();
+ *
+ *         if (!level.isClientSide()) {
+ *             return;
+ *         }
+ *
+ *         BlockPos pos = event.getPos();
+ *         Player player = event.getEntity();
+ *
+ *         if (level.getBlockState(pos).getBlock() instanceof MyMachineBlock) {
+ *             BlockEntity be = level.getBlockEntity(pos);
+ *
+ *             if (be instanceof IMultiblockProvider provider) {
+ *                 provider.showMultiblock();
+ *                 player.swing(event.getHand());
+ *             }
+ *         }
  *     }
  * }
  * }</pre>
