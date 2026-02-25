@@ -281,14 +281,14 @@ public class MultiblockHandler {
 	 * </p>
 	 */
 	public static class Builder {
-		private final BlockEntity owner;
+		private final BlockEntity block;
 		private final Supplier<IMultiblock> structure;
 		private String tranKey = null;
 		private BlockPos renderOffset = BlockPos.ZERO;
 		private int cacheTicks = 20;
 
-		private Builder(BlockEntity owner, Supplier<IMultiblock> structure) {
-			this.owner = owner;
+		private Builder(BlockEntity entity, Supplier<IMultiblock> structure) {
+			this.block = entity;
 			this.structure = structure;
 		}
 
@@ -300,12 +300,12 @@ public class MultiblockHandler {
 		 * {@code multiblock.building.<namespace>.<path>}
 		 * </p>
 		 *
-		 * @param key 翻译 key
+		 * @param tranKey 翻译 key
 		 * @return Builder 自身
 		 */
 		@Info("Sets the translation key for the visualization display name\n\n设置全息预览显示的翻译 key")
-		public Builder translationKey(String key) {
-			this.tranKey = key;
+		public Builder translationKey(String tranKey) {
+			this.tranKey = tranKey;
 			return this;
 		}
 
@@ -367,12 +367,12 @@ public class MultiblockHandler {
 			String resolvedKey = this.tranKey;
 
 			if (resolvedKey == null) {
-				ResourceLocation blockKey = ForgeRegistries.BLOCKS.getKey(owner.getBlockState().getBlock());
+				ResourceLocation blockKey = ForgeRegistries.BLOCKS.getKey(block.getBlockState().getBlock());
 				if (blockKey != null) {
 					resolvedKey = String.format("multiblock.building.%s.%s", blockKey.getNamespace(), blockKey.getPath());
 				}
 			}
-			return new MultiblockHandler(owner, structure, resolvedKey, renderOffset, cacheTicks);
+			return new MultiblockHandler(block, structure, resolvedKey, renderOffset, cacheTicks);
 		}
 	}
 }
