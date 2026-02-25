@@ -2,12 +2,12 @@ package dev.celestiacraft.libs.compat.patchouli.multiblock;
 
 import dev.latvian.mods.kubejs.typings.Info;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.registries.ForgeRegistries;
 import vazkii.patchouli.api.IMultiblock;
 import vazkii.patchouli.api.PatchouliAPI;
 
@@ -92,9 +92,9 @@ import java.util.function.Supplier;
  * }</pre>
  */
 public class MultiblockHandler {
-	private final BlockEntity owner;
+	private final BlockEntity entity;
 	private final Supplier<IMultiblock> structure;
-	private final String translationKey;
+	private final String tranKey;
 	private final BlockPos renderOffset;
 	private final int cacheTicks;
 
@@ -103,10 +103,10 @@ public class MultiblockHandler {
 
 	private boolean isShowingVisualization = false;
 
-	private MultiblockHandler(BlockEntity owner, Supplier<IMultiblock> structure, String translationKey, BlockPos renderOffset, int cacheTicks) {
-		this.owner = owner;
+	private MultiblockHandler(BlockEntity owner, Supplier<IMultiblock> structure, String tranKey, BlockPos renderOffset, int cacheTicks) {
+		this.entity = owner;
 		this.structure = structure;
-		this.translationKey = translationKey;
+		this.tranKey = tranKey;
 		this.renderOffset = renderOffset;
 		this.cacheTicks = cacheTicks;
 	}
@@ -123,7 +123,7 @@ public class MultiblockHandler {
 	 */
 	@Info("Checks if the multiblock structure is valid (with tick-based caching)\n\n判断多方块结构是否完整(带 tick 缓存)")
 	public boolean isValid() {
-		Level level = owner.getLevel();
+		Level level = entity.getLevel();
 
 		if (level == null) {
 			return false;
@@ -133,7 +133,7 @@ public class MultiblockHandler {
 		if (lastValidationTick >= 0 && (currentTick - lastValidationTick) < cacheTicks) {
 			return cachedValid;
 		}
-		cachedValid = structure.get().validate(level, owner.getBlockPos()) != null;
+		cachedValid = structure.get().validate(level, entity.getBlockPos()) != null;
 		lastValidationTick = currentTick;
 		return cachedValid;
 	}
@@ -150,11 +150,11 @@ public class MultiblockHandler {
 	 */
 	@Info("Forces immediate re-validation, ignoring cache\n\n强制立即重新验证，忽略缓存")
 	public boolean forceValidate() {
-		Level level = owner.getLevel();
+		Level level = entity.getLevel();
 		if (level == null) {
 			return false;
 		}
-		cachedValid = structure.get().validate(level, owner.getBlockPos()) != null;
+		cachedValid = structure.get().validate(level, entity.getBlockPos()) != null;
 		lastValidationTick = level.getGameTime();
 		return cachedValid;
 	}
@@ -182,9 +182,9 @@ public class MultiblockHandler {
 	 */
 	@Info("Toggles the multiblock holographic preview on/off\n\n切换多方块全息预览的显示/隐藏")
 	public void toggleVisualization() {
-		Level level = owner.getLevel();
+		Level level = entity.getLevel();
 
-		if (level == null || !level.isClientSide) {
+		if (level == null || !level.isClientSide()) {
 			return;
 		}
 
@@ -207,7 +207,7 @@ public class MultiblockHandler {
 	 */
 	@Info("Shows the multiblock holographic preview\n\n显示多方块全息预览")
 	public void showVisualization() {
-		Level level = owner.getLevel();
+		Level level = entity.getLevel();
 
 		if (level == null || !level.isClientSide) {
 			return;
@@ -215,8 +215,8 @@ public class MultiblockHandler {
 
 		PatchouliAPI.get().showMultiblock(
 				structure.get(),
-				Component.translatable(translationKey),
-				owner.getBlockPos().offset(renderOffset),
+				Component.translatable(tranKey),
+				entity.getBlockPos().offset(renderOffset),
 				Rotation.NONE
 		);
 		isShowingVisualization = true;
@@ -227,7 +227,7 @@ public class MultiblockHandler {
 	 */
 	@Info("Hides the multiblock holographic preview\n\n隐藏多方块全息预览")
 	public void hideVisualization() {
-		Level level = owner.getLevel();
+		Level level = entity.getLevel();
 
 		if (level == null || !level.isClientSide) {
 			return;
@@ -256,20 +256,20 @@ public class MultiblockHandler {
 	/**
 	 * 获取所属的 BlockEntity.
 	 */
-	public BlockEntity getOwner() {
-		return owner;
+	public BlockEntity getBlockEntity() {
+		return entity;
 	}
 
 	/**
 	 * 创建 MultiblockHandler 构建器.
 	 *
-	 * @param owner     持有此 Handler 的 BlockEntity
+	 * @param entity    持有此 Handler 的 BlockEntity
 	 * @param structure 多方块结构的懒加载供应器
 	 * @return Builder 实例
 	 */
 	@Info("Creates a MultiblockHandler builder\n\n创建 MultiblockHandler 构建器")
-	public static Builder builder(BlockEntity owner, Supplier<IMultiblock> structure) {
-		return new Builder(owner, structure);
+	public static Builder builder(BlockEntity entity, Supplier<IMultiblock> structure) {
+		return new Builder(entity, structure);
 	}
 
 	/**
@@ -283,7 +283,7 @@ public class MultiblockHandler {
 	public static class Builder {
 		private final BlockEntity owner;
 		private final Supplier<IMultiblock> structure;
-		private String translationKey = null;
+		private String tranKey = null;
 		private BlockPos renderOffset = BlockPos.ZERO;
 		private int cacheTicks = 20;
 
@@ -305,7 +305,7 @@ public class MultiblockHandler {
 		 */
 		@Info("Sets the translation key for the visualization display name\n\n设置全息预览显示的翻译 key")
 		public Builder translationKey(String key) {
-			this.translationKey = key;
+			this.tranKey = key;
 			return this;
 		}
 
@@ -364,11 +364,13 @@ public class MultiblockHandler {
 		 */
 		@Info("Builds the MultiblockHandler instance\n\n构建 MultiblockHandler 实例")
 		public MultiblockHandler build() {
-			String resolvedKey = this.translationKey;
+			String resolvedKey = this.tranKey;
 
 			if (resolvedKey == null) {
-				ResourceLocation blockKey = BuiltInRegistries.BLOCK.getKey(owner.getBlockState().getBlock());
-				resolvedKey = String.format("multiblock.building.%s.%s", blockKey.getNamespace(), blockKey.getPath());
+				ResourceLocation blockKey = ForgeRegistries.BLOCKS.getKey(owner.getBlockState().getBlock());
+				if (blockKey != null) {
+					resolvedKey = String.format("multiblock.building.%s.%s", blockKey.getNamespace(), blockKey.getPath());
+				}
 			}
 			return new MultiblockHandler(owner, structure, resolvedKey, renderOffset, cacheTicks);
 		}
