@@ -177,18 +177,23 @@ tasks.named('jar', Jar).configure {
 tasks.register('devJar', Jar) {
     from sourceSets.main.output
     archiveClassifier.set('dev')
+
     manifest {
         attributes([
                 "Specification-Title"     : mod_id,
                 "Specification-Vendor"    : mod_authors,
                 "Specification-Version"   : "1",
                 "Implementation-Title"    : project.name,
-                "Implementation-Version"  : project.jar.archiveVersion,
+                "Implementation-Version"  : project.version,
                 "Implementation-Vendor"   : mod_authors,
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
-    // 不做 reobfJar，保留 Parchment 映射名
+}
+
+// 让 build 自动执行 devJar
+tasks.build {
+    dependsOn tasks.named("devJar")
 }
 
 tasks.withType(JavaCompile).configureEach {
