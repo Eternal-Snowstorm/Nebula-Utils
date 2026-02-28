@@ -114,6 +114,10 @@ dependencies {
     // Mantle
     compileOnly fg.deobf("curse.maven:mantle-74924:7414488")
     runtimeOnly fg.deobf("curse.maven:mantle-74924:7414488")
+    // IE
+    implementation fg.deobf("curse.maven:immersive-engineering-231951:6206989")
+    // Mekanism
+    implementation fg.deobf("mekanism:Mekanism:1.20.1-10.4.15.75")
     // Create
     compileOnly fg.deobf("curse.maven:create-328085:5838779")
     runtimeOnly fg.deobf("curse.maven:create-328085:5838779")
@@ -136,6 +140,9 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:15.0.0.12")
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:15.0.0.12")
     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:15.0.0.12")
+    // Lomkok
+    compileOnly 'org.projectlombok:lombok:1.18.28'
+    annotationProcessor 'org.projectlombok:lombok:1.18.28'
 }
 tasks.named('processResources', ProcessResources).configure {
     var replaceProperties = [
