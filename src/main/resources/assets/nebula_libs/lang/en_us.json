@@ -1,0 +1,11 @@
+{
+	"nebula_libs.export.load": "Load",
+	"nebula_libs.export.save": "Export",
+	"nebula_libs.export.resolution": "Resolution",
+	"nebula_libs.export.no_structure": "No structure loaded",
+	"nebula_libs.export.success": "Exported to %s",
+	"nebula_libs.export.lock": "Lock",
+	"nebula_libs.export.unlock": "Unlock",
+	"nebula_libs.export.rotate": "Rotate 90",
+	"nebula_libs.export.save_config": "Save Angle"
+}

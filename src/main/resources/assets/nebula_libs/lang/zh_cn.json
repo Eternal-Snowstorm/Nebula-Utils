@@ -1,0 +1,12 @@
+{
+	"nebula_libs.screen.structure_export": "结构导出",
+	"nebula_libs.export.load": "加载",
+	"nebula_libs.export.save": "导出",
+	"nebula_libs.export.resolution": "分辨率",
+	"nebula_libs.export.no_structure": "未加载结构",
+	"nebula_libs.export.success": "已导出至 %s",
+	"nebula_libs.export.lock": "锁定",
+	"nebula_libs.export.unlock": "解锁",
+	"nebula_libs.export.rotate": "旋转90°",
+	"nebula_libs.export.save_config": "保存角度"
+}
