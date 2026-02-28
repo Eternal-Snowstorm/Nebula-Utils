@@ -285,7 +285,7 @@ public class StructureRenderer {
 			BlockPos pos = entry.getKey();
 			BlockState state = entry.getValue();
 
-			if (state.getRenderShape() == RenderShape.INVISIBLE) {
+			if (state.getRenderShape() != RenderShape.MODEL) {
 				continue;
 			}
 
