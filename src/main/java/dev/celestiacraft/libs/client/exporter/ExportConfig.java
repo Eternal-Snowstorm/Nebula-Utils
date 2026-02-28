@@ -12,8 +12,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class ExportConfig {
-	public float rotationX = -30f;
-	public float rotationY = 45f;
+	public float rotationX = 30f;
+	public float rotationY = 150f;
 	public boolean angleLocked = false;
 	public float zoom = 1.0f;
 

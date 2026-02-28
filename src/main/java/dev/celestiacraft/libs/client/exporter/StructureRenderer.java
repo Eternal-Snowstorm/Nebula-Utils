@@ -366,20 +366,23 @@ public class StructureRenderer {
 				continue;
 			}
 
-			stack.pushPose();
-			stack.translate(pos.getX(), pos.getY(), pos.getZ());
-
 			VertexConsumer fluidBuffer = source.getBuffer(RenderType.translucent());
+
+			int chunkBaseX = pos.getX() & ~15;
+			int chunkBaseY = pos.getY() & ~15;
+			int chunkBaseZ = pos.getZ() & ~15;
+
+			VertexConsumer offsetBuffer = (chunkBaseX | chunkBaseY | chunkBaseZ) == 0
+					? fluidBuffer
+					: new OffsetVertexConsumer(fluidBuffer, chunkBaseX, chunkBaseY, chunkBaseZ);
 
 			dispatcher.renderLiquid(
 					pos,
 					virtualLevel,
-					fluidBuffer,
+					offsetBuffer,
 					state,
 					fluidState
 			);
-
-			stack.popPose();
 		}
 
 		source.endBatch(RenderType.translucent());
