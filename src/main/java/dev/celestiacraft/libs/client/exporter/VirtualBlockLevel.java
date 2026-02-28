@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -49,6 +50,11 @@ public class VirtualBlockLevel extends WrappedWorld {
 	@Override
 	public @NotNull FluidState getFluidState(@NotNull BlockPos pos) {
 		return getBlockState(pos).getFluidState();
+	}
+
+	@Override
+	public int getBrightness(@NotNull LightLayer lightType, @NotNull BlockPos pos) {
+		return 15;
 	}
 
 	@Nullable

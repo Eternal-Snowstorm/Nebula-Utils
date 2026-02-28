@@ -329,28 +329,25 @@ public class StructureRenderer {
 
 		source.endBatch();
 
-		// 液体处理
 		for (BlockEntity blockEntity : virtualLevel.getRenderedBlockEntities()) {
 			BlockEntityRenderer<BlockEntity> renderer = mc.getBlockEntityRenderDispatcher().getRenderer(blockEntity);
 			if (renderer != null) {
 				BlockPos pos = blockEntity.getBlockPos();
 
-				stack.pushPose();
-				stack.translate(pos.getX(), pos.getY(), pos.getZ());
+				PoseStack entityPose = new PoseStack();
+				entityPose.translate(pos.getX(), pos.getY(), pos.getZ());
 
 				try {
 					renderer.render(
 							blockEntity,
 							0f,
-							stack,
+							entityPose,
 							source,
 							LightTexture.FULL_BRIGHT,
 							OverlayTexture.NO_OVERLAY
 					);
 				} catch (Exception ignored) {
 				}
-
-				stack.popPose();
 			}
 		}
 
