@@ -1,16 +1,23 @@
 package dev.celestiacraft.libs.compat.patchouli.multiblock;
 
+import com.mojang.datafixers.util.Pair;
 import dev.latvian.mods.kubejs.typings.Info;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 import vazkii.patchouli.api.IMultiblock;
 import vazkii.patchouli.api.PatchouliAPI;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
@@ -89,6 +96,21 @@ import java.util.function.Supplier;
  *         }
  *     }
  * }
+ * }</pre>
+ *
+ * <h3>3. 结构内方块检测</h3>
+ * <pre>{@code
+ * // 检测结构中是否包含某个方块
+ * boolean hasDiamond = multiblock.containsBlock(Blocks.DIAMOND_BLOCK);
+ *
+ * // 按标签检测(例如所有原木类方块)
+ * boolean hasLogs = multiblock.containsBlock(state -> state.is(BlockTags.LOGS));
+ *
+ * // 查找结构中所有铁块的位置
+ * List<BlockPos> ironPositions = multiblock.findBlock(Blocks.IRON_BLOCK);
+ *
+ * // 统计结构中金块的数量
+ * int goldCount = multiblock.countBlock(Blocks.GOLD_BLOCK);
  * }</pre>
  */
 public class MultiblockHandler {
@@ -258,6 +280,112 @@ public class MultiblockHandler {
 	 */
 	public BlockEntity getBlockEntity() {
 		return entity;
+	}
+
+	/**
+	 * 检测已成型的多方块结构中是否包含指定方块.
+	 *
+	 * <p>
+	 * 先通过 validate 获取成型旋转方向，再通过 simulate 遍历所有位置，
+	 * 检查世界中对应坐标的方块是否与目标匹配.
+	 * </p>
+	 *
+	 * @param block 要检测的方块
+	 * @return true 如果结构中存在该方块
+	 */
+	@Info("Checks if the formed multiblock contains a specific block\n\n检测已成型的多方块结构中是否包含指定方块")
+	public boolean containsBlock(Block block) {
+		return containsBlock(state -> state.is(block));
+	}
+
+	/**
+	 * 检测已成型的多方块结构中是否包含满足条件的方块.
+	 *
+	 * <p>
+	 * 使用自定义谓词检查结构中每个位置的 BlockState.
+	 * 适用于按标签、属性等复杂条件匹配的场景.
+	 * </p>
+	 *
+	 * @param predicate BlockState 匹配条件
+	 * @return true 如果结构中存在满足条件的方块
+	 */
+	@Info("Checks if the formed multiblock contains a block matching the predicate\n\n检测已成型的多方块结构中是否包含满足条件的方块")
+	public boolean containsBlock(Predicate<BlockState> predicate) {
+		Level level = entity.getLevel();
+		if (level == null) {
+			return false;
+		}
+
+		IMultiblock mb = structure.get();
+		Rotation rotation = mb.validate(level, entity.getBlockPos());
+		if (rotation == null) {
+			return false;
+		}
+
+		Pair<BlockPos, Collection<IMultiblock.SimulateResult>> result =
+				mb.simulate(level, entity.getBlockPos(), rotation, false);
+
+		for (IMultiblock.SimulateResult sr : result.getSecond()) {
+			BlockState worldState = level.getBlockState(sr.getWorldPosition());
+			if (predicate.test(worldState)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * 查找已成型的多方块结构中所有指定方块的位置.
+	 *
+	 * @param block 要查找的方块
+	 * @return 匹配位置列表，结构未成型时返回空列表
+	 */
+	@Info("Finds all positions of a specific block within the formed multiblock\n\n查找已成型的多方块结构中所有指定方块的位置")
+	public List<BlockPos> findBlock(Block block) {
+		return findBlock(state -> state.is(block));
+	}
+
+	/**
+	 * 查找已成型的多方块结构中所有满足条件的方块位置.
+	 *
+	 * @param predicate BlockState 匹配条件
+	 * @return 匹配位置列表，结构未成型时返回空列表
+	 */
+	@Info("Finds all positions matching the predicate within the formed multiblock\n\n查找已成型的多方块结构中所有满足条件的方块位置")
+	public List<BlockPos> findBlock(Predicate<BlockState> predicate) {
+		List<BlockPos> positions = new ArrayList<>();
+		Level level = entity.getLevel();
+		if (level == null) {
+			return positions;
+		}
+
+		IMultiblock mb = structure.get();
+		Rotation rotation = mb.validate(level, entity.getBlockPos());
+		if (rotation == null) {
+			return positions;
+		}
+
+		Pair<BlockPos, Collection<IMultiblock.SimulateResult>> result =
+				mb.simulate(level, entity.getBlockPos(), rotation, false);
+
+		for (IMultiblock.SimulateResult sr : result.getSecond()) {
+			BlockState worldState = level.getBlockState(sr.getWorldPosition());
+			if (predicate.test(worldState)) {
+				positions.add(sr.getWorldPosition());
+			}
+		}
+		return positions;
+	}
+
+	/**
+	 * 统计已成型的多方块结构中指定方块的数量.
+	 *
+	 * @param block 要统计的方块
+	 * @return 匹配数量，结构未成型时返回 0
+	 */
+	@Info("Counts occurrences of a specific block within the formed multiblock\n\n统计已成型的多方块结构中指定方块的数量")
+	public int countBlock(Block block) {
+		return findBlock(block).size();
 	}
 
 	/**
