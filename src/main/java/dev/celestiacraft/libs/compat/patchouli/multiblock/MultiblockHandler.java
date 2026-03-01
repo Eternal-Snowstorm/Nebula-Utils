@@ -282,8 +282,6 @@ public class MultiblockHandler {
 		return entity;
 	}
 
-	// ────────────────── 结构内方块检测 ──────────────────
-
 	/**
 	 * 检测已成型的多方块结构中是否包含指定方块.
 	 *
