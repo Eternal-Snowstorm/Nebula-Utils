@@ -38,7 +38,7 @@ public class StructureExportScreen extends Screen {
 	private boolean angleLocked = false;
 	private Checkbox saveConfigCheckbox;
 
-	private final int SELECTED_RESOLUTION = 2048;
+	private static final int SELECTED_RESOLUTION = 2048;
 	private boolean pendingExport = false;
 	private final String initialPath;
 
@@ -78,9 +78,7 @@ public class StructureExportScreen extends Screen {
 		);
 		pathInput.setMaxLength(512);
 		pathInput.setHint(Component.literal("filename.nbt"));
-		pathInput.setResponder((text) -> {
-			refreshSuggestions();
-		});
+		pathInput.setResponder(text -> refreshSuggestions());
 		if (initialPath != null) {
 			pathInput.setValue(initialPath);
 		}
@@ -88,9 +86,7 @@ public class StructureExportScreen extends Screen {
 
 		addRenderableWidget(Button.builder(
 				NebulaLang.translateDirect("export.load"),
-				(button) -> {
-					loadStructure();
-				}
+				button -> loadStructure()
 		).bounds(centerX + 65, 10, 50, 20).build());
 
 		resolutionInput = new EditBox(
@@ -104,16 +100,12 @@ public class StructureExportScreen extends Screen {
 		resolutionInput.setMaxLength(5);
 		resolutionInput.setValue(String.valueOf(SELECTED_RESOLUTION));
 		resolutionInput.setHint(Component.literal("2048"));
-		resolutionInput.setFilter((string) -> {
-			return string.isEmpty() || string.matches("\\d+");
-		});
+		resolutionInput.setFilter(s -> s.isEmpty() || s.matches("\\d+"));
 		addRenderableWidget(resolutionInput);
 
 		addRenderableWidget(
 				Button.builder(NebulaLang.translateDirect("export.save"),
-						(button) -> {
-							pendingExport = true;
-						}
+						button -> pendingExport = true
 				).bounds(centerX + 5, this.height - 30, 110, 20).build());
 
 		// 角度控制行
@@ -148,9 +140,7 @@ public class StructureExportScreen extends Screen {
 		);
 		rotYInput.setMaxLength(7);
 		rotYInput.setValue(String.format("%.1f", rotationY));
-		rotYInput.setFilter((string) -> {
-			return string.isEmpty() || string.equals("-") || string.matches("-?\\d*\\.?\\d*");
-		});
+		rotYInput.setFilter(s -> s.isEmpty() || s.equals("-") || s.matches("-?\\d*\\.?\\d*"));
 		rotYInput.setResponder((text) -> {
 			try {
 				rotationY = Float.parseFloat(text);
@@ -162,7 +152,7 @@ public class StructureExportScreen extends Screen {
 		Button lockButton = Button.builder(angleLocked
 								? NebulaLang.translateDirect("export.unlock")
 								: NebulaLang.translateDirect("export.lock"),
-						(button) -> {
+						button -> {
 							angleLocked = !angleLocked;
 							button.setMessage(angleLocked
 									? NebulaLang.translateDirect("export.unlock")
@@ -174,7 +164,7 @@ public class StructureExportScreen extends Screen {
 		addRenderableWidget(
 				Button.builder(
 						NebulaLang.translateDirect("export.rotate"),
-						(button) -> {
+						button -> {
 							rotationY += 90f;
 							if (rotationY >= 360f) rotationY -= 360f;
 							syncAngleInputs();
@@ -247,6 +237,9 @@ public class StructureExportScreen extends Screen {
 			}
 
 			if (minecraft.level != null) {
+				if (renderer != null) {
+					renderer.close();
+				}
 				renderer = new StructureRenderer(scene, minecraft.level);
 			}
 		} catch (IOException exception) {
@@ -281,15 +274,9 @@ public class StructureExportScreen extends Screen {
 
 		if (Files.isDirectory(schematicsDir)) {
 			try (Stream<Path> stream = Files.list(schematicsDir)) {
-				stream.filter((Path path) -> {
-							return path.toString().endsWith(".nbt");
-						})
-						.map((Path path) -> {
-							return path.getFileName().toString();
-						})
-						.filter((String name) -> {
-							return name.toLowerCase().startsWith(input);
-						})
+				stream.filter(path -> path.toString().endsWith(".nbt"))
+						.map(path -> path.getFileName().toString())
+						.filter(name -> name.toLowerCase().startsWith(input))
 						.sorted()
 						.forEach(TAB_COMPLETION_LIST::add);
 			} catch (Exception ignored) {
@@ -561,6 +548,9 @@ public class StructureExportScreen extends Screen {
 
 	@Override
 	public void onClose() {
+		if (renderer != null) {
+			renderer.close();
+		}
 		if (saveConfigCheckbox != null && saveConfigCheckbox.selected()) {
 			ExportConfig cfg = new ExportConfig();
 			cfg.rotationX = rotationX;
