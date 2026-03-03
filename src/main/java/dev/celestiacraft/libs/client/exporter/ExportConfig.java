@@ -38,12 +38,7 @@ public class ExportConfig {
 
 		try (Reader reader = Files.newBufferedReader(path)) {
 			ExportConfig config = GSON.fromJson(reader, ExportConfig.class);
-
-			if (config != null) {
-				return config;
-			} else {
-				return new ExportConfig();
-			}
+			return config != null ? config : new ExportConfig();
 		} catch (Exception exception) {
 			NebulaLibs.LOGGER.warn(
 					"Failed to load export config, using defaults",

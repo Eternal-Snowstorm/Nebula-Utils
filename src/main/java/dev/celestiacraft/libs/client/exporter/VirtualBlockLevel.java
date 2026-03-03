@@ -77,12 +77,9 @@ public class VirtualBlockLevel extends WrappedWorld {
 				blockEntities.put(pos, blockEntity);
 				renderedBlockEntities.add(blockEntity);
 
-				if (blockEntityNbt.containsKey(pos)) {
-					try {
-						blockEntity.load(blockEntityNbt.get(pos));
-					} catch (Exception exception) {
-						throw new RuntimeException(exception);
-					}
+				CompoundTag nbt = blockEntityNbt.get(pos);
+				if (nbt != null) {
+					blockEntity.load(nbt);
 				}
 			}
 			return blockEntity;

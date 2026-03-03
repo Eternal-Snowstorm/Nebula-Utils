@@ -5,6 +5,7 @@ import dev.latvian.mods.kubejs.typings.Info;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
@@ -346,6 +347,17 @@ public class MultiblockHandler {
 	}
 
 	/**
+	 * 查找已成型的多方块结构中所有属于指定标签的方块位置.
+	 *
+	 * @param tag 要查找的方块标签
+	 * @return 匹配位置列表，结构未成型时返回空列表
+	 */
+	@Info("Finds all positions of blocks matching a tag within the formed multiblock\n\n查找已成型的多方块结构中所有属于指定标签的方块位置")
+	public List<BlockPos> findBlock(TagKey<Block> tag) {
+		return findBlock(state -> state.is(tag));
+	}
+
+	/**
 	 * 查找已成型的多方块结构中所有满足条件的方块位置.
 	 *
 	 * @param predicate BlockState 匹配条件
@@ -386,6 +398,17 @@ public class MultiblockHandler {
 	@Info("Counts occurrences of a specific block within the formed multiblock\n\n统计已成型的多方块结构中指定方块的数量")
 	public int countBlock(Block block) {
 		return findBlock(block).size();
+	}
+
+	/**
+	 * 统计已成型的多方块结构中属于指定标签的方块数量.
+	 *
+	 * @param tag 要统计的方块标签
+	 * @return 匹配数量，结构未成型时返回 0
+	 */
+	@Info("Counts occurrences of blocks matching a tag within the formed multiblock\n\n统计已成型的多方块结构中属于指定标签的方块数量")
+	public int countBlock(TagKey<Block> tag) {
+		return findBlock(tag).size();
 	}
 
 	/**

@@ -11,10 +11,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Getter
 public class StructureScene {
@@ -24,7 +21,7 @@ public class StructureScene {
 	private final Map<BlockPos, BlockState> blocks = new HashMap<>();
 	private final Map<BlockPos, CompoundTag> blockEntityNbt = new HashMap<>();
 	private final List<EntityInfo> entities = new ArrayList<>();
-	private final List<String> missingBlocks = new ArrayList<>();
+	private final Set<String> missingBlocks = new LinkedHashSet<>();
 
 	private int sizeX;
 	private int sizeY;
@@ -65,10 +62,7 @@ public class StructureScene {
 
 			if (!BuiltInRegistries.BLOCK.containsKey(blockId)) {
 				palette[index] = Blocks.AIR.defaultBlockState();
-
-				if (!missingBlocks.contains(blockName)) {
-					missingBlocks.add(blockName);
-				}
+				missingBlocks.add(blockName);
 			} else {
 				palette[index] = NbtUtils.readBlockState(
 						BuiltInRegistries.BLOCK.asLookup(),
