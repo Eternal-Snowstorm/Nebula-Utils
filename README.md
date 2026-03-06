@@ -4,7 +4,7 @@
  - TagsBuilder封装
  - 帕秋莉手册多方块API调用封装
  - 可配置的灼热流体(兼Tag)
- - 无法徒手挖掘的方块可配置(兼Tag)
+ - 可配置的无法徒手挖掘的方块(兼Tag)
  - Record Item的简易封装
  - Tooltip渲染物品模型函数封装
  - BlockTag轮播渲染动画
