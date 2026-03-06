@@ -9,6 +9,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
@@ -113,6 +114,12 @@ public class VirtualBlockLevel extends WrappedWorld {
 									loadedEntity.getXRot()
 							);
 							loadedEntity.setDeltaMovement(Vec3.ZERO);
+							if (loadedEntity instanceof LivingEntity living) {
+								living.yBodyRot = living.getYRot();
+								living.yBodyRotO = living.yBodyRot;
+								living.yHeadRot = living.getYRot();
+								living.yHeadRotO = living.yHeadRot;
+							}
 							return loadedEntity;
 						}
 				);
