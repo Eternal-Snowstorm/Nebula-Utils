@@ -83,7 +83,7 @@ public class DebugTools {
 				break;
 
 			case "-efc":
-				CommandUtils.runCommand(player, "effect clear @s");
+				player.removeAllEffects();
 				event.setCanceled(true);
 				break;
 
