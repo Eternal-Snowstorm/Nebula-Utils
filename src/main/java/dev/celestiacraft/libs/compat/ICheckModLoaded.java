@@ -114,4 +114,11 @@ public interface ICheckModLoaded {
 	static boolean hasMekanism() {
 		return hasMod("mekanism");
 	}
+
+	/**
+	 * @return 是否已加载 Ad Astra 模组
+	 */
+	static boolean hasAdAstra() {
+		return hasMod("ad_astra");
+	}
 }
