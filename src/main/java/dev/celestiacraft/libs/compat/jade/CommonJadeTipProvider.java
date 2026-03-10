@@ -1,22 +1,19 @@
 package dev.celestiacraft.libs.compat.jade;
 
+import dev.celestiacraft.libs.client.tooltip.InlineItemPatternParser;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.phys.Vec2;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.tags.ITagManager;
 import snownee.jade.api.Accessor;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.EntityAccessor;
@@ -34,8 +31,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 /**
  * Jade tooltip 后处理器, 自动扫描所有 tooltip 文本中的 {@code {modid:itemid}} 标记,
@@ -66,11 +61,6 @@ import java.util.stream.Collectors;
  */
 public class CommonJadeTipProvider {
 	private static final Map<ResourceLocation, List<String>> TIPS = new HashMap<>();
-	private static final float DEFAULT_SCALE = 0.5F;
-	private static final float DEFAULT_SPEED = 20F;
-	private static final Pattern ITEM_PATTERN = Pattern.compile(
-			"\\{((?:\\[[^\\]]+\\])|(?:#[a-z_][a-z0-9_.\\-]*:[a-z_][a-z0-9_.\\-/]*)|(?:[a-z_][a-z0-9_.\\-]*:[a-z_][a-z0-9_.\\-/]*))(?:,\\s*(\\d+(?:\\.\\d+)?))?(?:,\\s*(\\d+(?:\\.\\d+)?))?}"
-	);
 
 	public static void addCommonJadeTipLang(String blockId, String tipText) {
 		TIPS.computeIfAbsent(ResourceLocation.parse(blockId), (location) -> {
@@ -179,7 +169,7 @@ public class CommonJadeTipProvider {
 		for (int j = 0; j < row.size(); j++) {
 			IElement element = row.get(j);
 			String msg = element.getCachedMessage();
-			boolean hasPattern = msg != null && msg.indexOf('{') >= 0 && ITEM_PATTERN.matcher(msg).find();
+			boolean hasPattern = msg != null && InlineItemPatternParser.hasPattern(msg);
 			if (hasPattern && result == null) {
 				result = new ArrayList<>(row.subList(0, j));
 			}
@@ -200,7 +190,7 @@ public class CommonJadeTipProvider {
 	 * 如果文本含 {} 标记则解析为图标元素行添加, 否则直接添加文本.
 	 */
 	private static void addLineOrParsed(ITooltip tooltip, IElementHelper helper, String text, Style style) {
-		if (text.indexOf('{') >= 0 && ITEM_PATTERN.matcher(text).find()) {
+		if (InlineItemPatternParser.hasPattern(text)) {
 			List<IElement> elements = parseElements(text, helper, style);
 			if (!elements.isEmpty()) {
 				tooltip.add(elements);
@@ -212,12 +202,12 @@ public class CommonJadeTipProvider {
 
 	/**
 	 * 将含 {@code {modid:itemid}} 标记的文本解析为 IElement 列表.
-	 * 自动将文本开头的 § 格式码传播到 {} 标记后的文本段.
+	 * 自动将文本开头的 section 格式码传播到 {} 标记后的文本段.
 	 */
 	private static List<IElement> parseElements(String text, IElementHelper helper, Style style) {
-		String leadingCodes = extractLeadingFormatCodes(text);
+		String leadingCodes = InlineItemPatternParser.extractLeadingFormatCodes(text);
 		List<IElement> elements = new ArrayList<>();
-		Matcher matcher = ITEM_PATTERN.matcher(text);
+		Matcher matcher = InlineItemPatternParser.ITEM_PATTERN.matcher(text);
 		int lastEnd = 0;
 		boolean pastFirstItem = false;
 
@@ -247,22 +237,11 @@ public class CommonJadeTipProvider {
 	 * 解析标识符并添加图标元素. 支持单物品、数组轮播、标签轮播三种格式.
 	 */
 	private static void addIconElements(List<IElement> elements, IElementHelper helper, String identifier, String scaleStr, String speedStr) {
-		float scale = (scaleStr != null) ? Float.parseFloat(scaleStr) : DEFAULT_SCALE;
-		float speed = (speedStr != null) ? Float.parseFloat(speedStr) : DEFAULT_SPEED;
-		Item item;
+		float scale = (scaleStr != null) ? Float.parseFloat(scaleStr) : InlineItemPatternParser.DEFAULT_SCALE;
+		float speed = (speedStr != null) ? Float.parseFloat(speedStr) : InlineItemPatternParser.DEFAULT_SPEED;
 
-		if (identifier.startsWith("[")) {
-			List<Item> items = parseItemArray(identifier);
-			if (items.isEmpty()) return;
-			item = pickCarouselItem(items, speed);
-		} else if (identifier.startsWith("#")) {
-			List<Item> items = resolveTagItems(identifier.substring(1));
-			if (items.isEmpty()) return;
-			item = pickCarouselItem(items, speed);
-		} else {
-			item = ForgeRegistries.ITEMS.getValue(ResourceLocation.parse(identifier));
-			if (item == null || item == Items.AIR) return;
-		}
+		Item item = InlineItemPatternParser.resolvePatternItem(identifier, speed);
+		if (item == null) return;
 
 		int pixelSize = (int) (16 * scale) + 2;
 		elements.add(helper.item(item.getDefaultInstance(), scale)
@@ -272,74 +251,10 @@ public class CommonJadeTipProvider {
 		elements.add(helper.spacer(1, 0));
 	}
 
-	/**
-	 * 根据 tick 计数从物品列表中选取当前轮播物品.
-	 */
-	private static Item pickCarouselItem(List<Item> items, float speed) {
-		long tickCounter = System.currentTimeMillis() / 50;
-		int interval = Math.max(1, (int) speed);
-		int index = (int) ((tickCounter / interval) % items.size());
-		return items.get(index);
-	}
-
-	/**
-	 * 解析数组格式 {@code [modid:item1,#modid:tag,...]} 为物品列表.
-	 * 数组内条目以 {@code #} 开头时视为标签, 展开为该标签下所有物品.
-	 */
-	private static List<Item> parseItemArray(String arrayContent) {
-		String inner = arrayContent.substring(1, arrayContent.length() - 1);
-		List<Item> items = new ArrayList<>();
-
-		for (String entry : inner.split(",")) {
-			String trimmed = entry.trim();
-
-			if (trimmed.isEmpty()) {
-				continue;
-			}
-			if (trimmed.startsWith("#")) {
-				items.addAll(resolveTagItems(trimmed.substring(1)));
-			} else {
-				Item item = ForgeRegistries.ITEMS.getValue(ResourceLocation.parse(trimmed));
-				if (item != null && item != Items.AIR) {
-					items.add(item);
-				}
-			}
-		}
-		return items;
-	}
-
-	/**
-	 * 将标签 ID 解析为物品列表.
-	 */
-	private static List<Item> resolveTagItems(String tagId) {
-		TagKey<Item> tagKey = TagKey.create(Registries.ITEM, ResourceLocation.parse(tagId));
-		ITagManager<Item> tagManager = ForgeRegistries.ITEMS.tags();
-
-		if (tagManager == null) {
-			return List.of();
-		}
-
-		return tagManager.getTag(tagKey)
-				.stream()
-				.collect(Collectors.toList());
-	}
-
 	private static Component stripColor(Component line) {
 		if (line instanceof MutableComponent mc && mc.getStyle().getColor() != null) {
 			mc.setStyle(mc.getStyle().withColor((TextColor) null));
 		}
 		return line;
-	}
-
-	/**
-	 * 提取 '§' 符号
-	 */
-	private static String extractLeadingFormatCodes(String text) {
-		int i = 0;
-
-		while (i + 1 < text.length() && text.charAt(i) == '§') {
-			i += 2;
-		}
-		return i > 0 ? text.substring(0, i) : "";
 	}
 }

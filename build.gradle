@@ -70,6 +70,7 @@ mixin {
     add sourceSets.main, "${mod_id}.refmap.json"
 
     config "${mod_id}.mixins.json"
+    config "${mod_id}.ftbquests.mixins.json"
 }
 
 sourceSets.main.resources {
@@ -139,6 +140,10 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:15.0.0.12")
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:15.0.0.12")
     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:15.0.0.12")
+    // ftb quests
+    compileOnly fg.deobf("curse.maven:ftb-quests-forge-289412:7608804")
+    // FTB Library (FTB Quests 的 UI 基础库)
+    compileOnly fg.deobf("curse.maven:ftb-library-forge-404465:7296748")
     // Lomkok
     compileOnly 'org.projectlombok:lombok:1.18.28'
     annotationProcessor 'org.projectlombok:lombok:1.18.28'
