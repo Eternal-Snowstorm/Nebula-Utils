@@ -1,6 +1,7 @@
 package dev.celestiacraft.libs;
 
 import dev.celestiacraft.libs.common.register.NebulaItem;
+import dev.celestiacraft.libs.compat.ftbquests.client.FTBQuestsClientCompat;
 import dev.celestiacraft.libs.debug.DebugUserManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
@@ -17,6 +18,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import dev.celestiacraft.libs.client.tooltip.InlineItemClientTooltipComponent;
 import dev.celestiacraft.libs.client.tooltip.InlineItemTooltipComponent;
+import dev.celestiacraft.libs.compat.ICheckModLoaded;
 import dev.celestiacraft.libs.config.CommonConfig;
 
 @Mod(NebulaLibs.MODID)
@@ -96,7 +98,9 @@ public class NebulaLibs {
 	@SubscribeEvent
 	public static void onClientSetup(FMLClientSetupEvent event) {
 		event.enqueueWork(() -> {
-			LOGGER.debug("7f8f7032d4b1f5f2b67f0b1260b5c5f3f187503a75b309ad1c6a163e7ec7f993");
+			if (ICheckModLoaded.hasFTBQuests()) {
+				FTBQuestsClientCompat.init();
+			}
 		});
 	}
 }

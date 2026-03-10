@@ -121,4 +121,11 @@ public interface ICheckModLoaded {
 	static boolean hasAdAstra() {
 		return hasMod("ad_astra");
 	}
+
+	/**
+	 * @return 是否已加载 FTB Quests 模组
+	 */
+	static boolean hasFTBQuests() {
+		return hasMod("ftbquests");
+	}
 }
