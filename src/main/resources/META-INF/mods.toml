@@ -52,3 +52,17 @@ mandatory = false
 versionRange = "[0.5.1.j,6)"
 ordering = "NONE"
 side = "BOTH"
+
+[[dependencies."${mod_id}"]]
+modId = "ftbquests"
+mandatory = false
+versionRange = "[2001.4.0,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies."${mod_id}"]]
+modId = "ftblibrary"
+mandatory = false
+versionRange = "[2001.2.0,)"
+ordering = "NONE"
+side = "BOTH"
