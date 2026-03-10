@@ -8,6 +8,7 @@
 	"nebula_libs.export.lock": "Lock",
 	"nebula_libs.export.unlock": "Unlock",
 	"nebula_libs.export.rotate": "Rotate 90",
+	"nebula_libs.export.reset_angle": "Reset",
 	"nebula_libs.export.save_config": "Save Angle",
 	"debug.reload_users": "Debug users reloaded",
 	"item.nebula_libs.geological_hammer": "Geological Hammer (Debug Tool)",

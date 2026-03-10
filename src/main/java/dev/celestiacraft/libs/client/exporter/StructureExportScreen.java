@@ -169,10 +169,22 @@ public class StructureExportScreen extends Screen {
 							if (rotationY >= 360f) rotationY -= 360f;
 							syncAngleInputs();
 						}
-				).bounds(centerX + 50, angleY, 65, 20).build());
+				).bounds(centerX + 48, angleY, 55, 20).build());
+
+		addRenderableWidget(
+				Button.builder(
+						NebulaLang.translateDirect("export.reset_angle"),
+						button -> {
+							ExportConfig preset = ExportConfig.load();
+							rotationX = preset.rotationX;
+							rotationY = preset.rotationY;
+							zoom = preset.zoom;
+							syncAngleInputs();
+						}
+				).bounds(centerX + 106, angleY, 40, 20).build());
 
 		saveConfigCheckbox = new Checkbox(
-				centerX + 120,
+				centerX + 149,
 				angleY,
 				20,
 				20,
