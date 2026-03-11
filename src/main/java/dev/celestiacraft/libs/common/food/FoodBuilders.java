@@ -80,6 +80,29 @@ import java.util.function.Supplier;
  * <li>保持 Forge / NeoForge 原生 {@link FoodProperties} 兼容</li>
  * <li>支持链式 API 和可读性较高的定义方式</li>
  * </ul>
+ * <h2>在 finishUsingItem 中触发 eaten 回调</h2>
+ *
+ * <p>由于 {@link FoodProperties} 本身不支持食用回调逻辑，因此需要在
+ * {@code Item#finishUsingItem} 中手动触发 {@link #eaten(Consumer)}。</p>
+ *
+ * <pre>{@code
+ * @Override
+ * public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
+ *     ItemStack result = super.finishUsingItem(stack, level, entity);
+ *
+ *     if (!level.isClientSide() && entity instanceof Player player) {
+ *         FoodBuilders food = CmiFoodBuilder.PIG_IRON;
+ *
+ *         if (food.getEaten() != null) {
+ *             food.getEaten().accept(new FoodEatenEvent(player, stack, level));
+ *         }
+ *     }
+ *
+ *     return result;
+ * }
+ * }</pre>
+ *
+ * <p>这样即可实现类似 KubeJS 中 {@code eaten()} 的行为。</p>
  */
 public class FoodBuilders implements Supplier<FoodProperties> {
 	private final FoodProperties.Builder builder = new FoodProperties.Builder();
