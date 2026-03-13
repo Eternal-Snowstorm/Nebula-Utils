@@ -5,9 +5,5 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.logging.Level;
 
-public record FoodEatenEvent(
-		Player player,
-		ItemStack stack,
-		Level level
-) {
+public record FoodEatenEvent(Player player, ItemStack stack, Level level) {
 }
