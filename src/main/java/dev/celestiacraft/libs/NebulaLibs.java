@@ -1,5 +1,10 @@
 package dev.celestiacraft.libs;
 
+import com.simibubi.create.foundation.data.CreateRegistrate;
+import com.simibubi.create.foundation.item.ItemDescription;
+import com.simibubi.create.foundation.item.KineticStats;
+import com.simibubi.create.foundation.item.TooltipHelper;
+import com.simibubi.create.foundation.item.TooltipModifier;
 import dev.celestiacraft.libs.common.register.NebulaItem;
 import dev.celestiacraft.libs.compat.ftbquests.client.FTBQuestsClientCompat;
 import dev.celestiacraft.libs.debug.DebugUserManager;
@@ -27,9 +32,16 @@ public class NebulaLibs {
 	public static final String MODID = "nebula_libs";
 	public static final String NAME = "Nebula Libs";
 	public static final Logger LOGGER = LogManager.getLogger("Nebula");
+	public static final CreateRegistrate REGISTRATE = CreateRegistrate.create(MODID)
+			.setTooltipModifierFactory((item) -> {
+				return new ItemDescription.Modifier(item, TooltipHelper.Palette.STANDARD_CREATE)
+						.andThen(TooltipModifier.mapNull(KineticStats.create(item)));
+			});
 
 	public NebulaLibs(FMLJavaModLoadingContext context) {
 		IEventBus bus = context.getModEventBus();
+
+		REGISTRATE.registerEventListeners(bus);
 
 		NebulaItem.register(bus);
 
