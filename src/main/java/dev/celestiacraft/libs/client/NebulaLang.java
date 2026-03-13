@@ -59,12 +59,10 @@ public class NebulaLang {
 	 * @see #translateDirect(String, Object...) 直接获取 Component 而非 Builder
 	 */
 	public static LangBuilder translate(String langKey, Object... args) {
-		return builder().add(
-				Components.translatable(
-						String.format("%s.%s", NebulaLibs.MODID, langKey),
-						Lang.resolveBuilders(args)
-				)
-		);
+		return builder().add(Components.translatable(
+				String.format("%s.%s", NebulaLibs.MODID, langKey),
+				Lang.resolveBuilders(args)
+		));
 	}
 
 	public static MutableComponent translateDirect(String langKey, Object... args) {
