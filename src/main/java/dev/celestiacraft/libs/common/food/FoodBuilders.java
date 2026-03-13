@@ -110,63 +110,90 @@ public class FoodBuilders implements Supplier<FoodProperties> {
 	@Getter
 	private Consumer<FoodEatenEvent> eaten;
 
+	/**
+	 * 创建一个新的 {@link FoodBuilders} 实例。
+	 *
+	 * @param consumer
+	 * @return
+	 */
 	public static FoodBuilders food(Consumer<FoodBuilders> consumer) {
 		FoodBuilders builder = new FoodBuilders();
 		consumer.accept(builder);
 		return builder;
 	}
 
+	/**
+	 * 设置食物的饱食度
+	 *
+	 * @param hunger 食物的饱食度
+	 * @return 当前 {@link FoodBuilders} 实例
+	 */
 	public FoodBuilders nutrition(int hunger) {
 		builder.nutrition(hunger);
 		return this;
 	}
 
+	/**
+	 * 设置食物的饱和度倍率
+	 *
+	 * @param saturation 食物的饱和度倍率
+	 * @return 当前 {@link FoodBuilders} 实例
+	 */
 	public FoodBuilders saturationMod(float saturation) {
 		builder.saturationMod(saturation);
 		return this;
 	}
 
+	/**
+	 * 设置食物是否总是可食用
+	 *
+	 * @return
+	 */
 	public FoodBuilders alwaysEat() {
 		builder.alwaysEat();
 		return this;
 	}
 
-	public FoodBuilders alwaysEat(boolean flag) {
-		if (flag) {
-			builder.alwaysEat();
-		}
-		return this;
-	}
-
+	/**
+	 * 设置食物是否为肉
+	 *
+	 * @return
+	 */
 	public FoodBuilders meat() {
 		builder.meat();
 		return this;
 	}
 
-	public FoodBuilders meat(boolean flag) {
-		if (flag) {
-			builder.meat();
-		}
-		return this;
-	}
-
+	/**
+	 * 设置食物是否为快速食用
+	 *
+	 * @return
+	 */
 	public FoodBuilders fast() {
 		builder.fast();
 		return this;
 	}
 
-	public FoodBuilders fastToEat(boolean flag) {
-		if (flag) {
-			builder.fast();
-		}
-		return this;
-	}
-
+	/**
+	 * 添加一个 MobEffect 效果
+	 *
+	 * @param effect      效果名称
+	 * @param duration    效果持续时间
+	 * @param amplifier   效果等级
+	 * @param probability 效果触发概率
+	 * @return 当前 {@link FoodBuilders} 实例
+	 */
 	public FoodBuilders effect(MobEffect effect, int duration, int amplifier, float probability) {
 		effects.add(new EffectEntry(effect, duration, amplifier, probability));
 		return this;
 	}
 
+	/**
+	 * 移除 MobEffect 效果
+	 *
+	 * @param effect 效果名称
+	 * @return 当前 {@link FoodBuilders} 实例
+	 */
 	public FoodBuilders removeEffect(MobEffect effect) {
 		effects.removeIf((entry) -> {
 			return entry.effect == effect;
@@ -174,34 +201,41 @@ public class FoodBuilders implements Supplier<FoodProperties> {
 		return this;
 	}
 
+	/**
+	 * 食用后触发的事件
+	 *
+	 * @param callback
+	 * @return 当前 {@link FoodBuilders} 实例
+	 */
 	public FoodBuilders eaten(Consumer<FoodEatenEvent> callback) {
 		this.eaten = callback;
 		return this;
 	}
 
+	/**
+	 * 构建 {@link FoodProperties} 实例
+	 *
+	 * @return
+	 */
 	public FoodProperties build() {
 		for (EffectEntry effect : effects) {
 			builder.effect(() -> {
-				return new MobEffectInstance(
-						effect.effect,
-						effect.duration,
-						effect.amplifier
-				);
+				return new MobEffectInstance(effect.effect, effect.duration, effect.amplifier);
 			}, effect.probability);
 		}
 		return builder.build();
 	}
 
+	/**
+	 * 构建 {@link FoodProperties} 实例
+	 *
+	 * @return
+	 */
 	@Override
 	public FoodProperties get() {
 		return build();
 	}
 
-	private record EffectEntry(
-			MobEffect effect,
-			int duration,
-			int amplifier,
-			float probability
-	) {
+	private record EffectEntry(MobEffect effect, int duration, int amplifier, float probability) {
 	}
 }
