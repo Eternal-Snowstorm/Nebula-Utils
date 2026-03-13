@@ -1,7 +1,10 @@
 package dev.celestiacraft.libs.common.material;
 
+import dev.celestiacraft.libs.common.fluid.FluidRegistrar;
+
 public class RegisterManager {
 	static MaterialRegistrar registrar = new MaterialRegistrar();
+	static FluidRegistrar fluidRegistrar = new FluidRegistrar();
 
 	protected void ingot(Material material) {
 		registrar.createItem("ingot", material)
@@ -65,6 +68,11 @@ public class RegisterManager {
 
 	protected void slurry(Material material) {
 		registrar.createItem("slurry", material)
+				.register();
+	}
+
+	protected void molten(Material material) {
+		fluidRegistrar.createMoltenFluid(material)
 				.register();
 	}
 }

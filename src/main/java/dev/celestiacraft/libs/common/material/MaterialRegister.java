@@ -16,6 +16,8 @@ public class MaterialRegister {
 					case WIRE -> manager.wire(material);
 					case PRISM -> manager.prism(material);
 
+					case MOLTEN -> manager.molten(material);
+
 					/*
 					 * case CLUMP -> manager.clump(material);
 					 * case SHARD -> manager.shard(material);
