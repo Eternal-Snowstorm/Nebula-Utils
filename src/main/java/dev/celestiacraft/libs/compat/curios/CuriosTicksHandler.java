@@ -25,10 +25,10 @@ public class CuriosTicksHandler {
 		}
 
 		// 获取所有Curios物品
-		for (ItemStack stack : CuriosUtils.getAllItems(player)) {
+		for (ItemStack stack : ICuriosHelper.getAllItems(player)) {
 			Item item = stack.getItem();
 
-			if (!(item instanceof CuriosUtils tickable)) {
+			if (!(item instanceof ICuriosHelper tickable)) {
 				continue;
 			}
 

@@ -33,7 +33,7 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 import dev.celestiacraft.libs.NebulaLibs;
 import dev.celestiacraft.libs.compat.ICheckModLoaded;
-import dev.celestiacraft.libs.compat.curios.CuriosUtils;
+import dev.celestiacraft.libs.compat.curios.ICuriosHelper;
 import dev.celestiacraft.libs.tags.TagsBuilder;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.item.ModifiableItem;
@@ -92,7 +92,7 @@ public class ModKubeJSPlugin extends KubeJSPlugin {
 		}
 
 		if (ICheckModLoaded.hasCurios()) {
-			event.add("CuriosUtils", CuriosUtils.class);
+			event.add("CuriosUtils", ICuriosHelper.class);
 			event.add("CuriosApi", CuriosApi.class);
 		}
 

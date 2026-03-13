@@ -8,7 +8,7 @@ import top.theillusivec4.curios.api.CuriosApi;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface CuriosUtils {
+public interface ICuriosHelper {
 	/**
 	 * 检查指定实体的 Curios 槽位中是否存在某个指定的物品,
 	 *
@@ -87,7 +87,7 @@ public interface CuriosUtils {
 	 * </p>
 	 *
 	 * <pre>{@code
-	 * public class CobaltItem extends Item implements CuriosUtils {
+	 * public class CobaltItem extends Item implements ICuriosHelper {
 	 *     @Override
 	 *     public void curiosTick(CuriosContext context) {
 	 *         context.player.addEffect(new MobEffectInstance(

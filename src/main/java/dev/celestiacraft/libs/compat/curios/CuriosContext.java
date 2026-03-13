@@ -12,8 +12,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * 构件上下文对象
- *
  * <p>
  * 该对象用于在构件行为触发时传递运行环境信息。
  * </p>
