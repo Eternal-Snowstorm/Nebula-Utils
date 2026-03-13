@@ -12,7 +12,7 @@ public class CuriosUtils {
 	/**
 	 * 检查指定实体的 Curios 槽位中是否存在某个指定的物品,
 	 *
-	 * <p>该方法会通过 {@code CuriosApi#getCuriosInventory(LivingEntity)}
+	 * <p>该方法会通过 {@link CuriosApi#getCuriosInventory(LivingEntity)}
 	 * 获取实体的 Curios 物品处理器, 并遍历其饰品栏内容,
 	 * 判断是否存在与给定 {@link Item} 匹配的 {@link ItemStack}.</p>
 	 *
@@ -34,7 +34,7 @@ public class CuriosUtils {
 	/**
 	 * 获取指定实体的 Curios 槽位中的所有物品列表.
 	 *
-	 * <p>该方法会通过 {@code CuriosApi#getCuriosInventory(LivingEntity)}
+	 * <p>该方法会通过 {@link CuriosApi#getCuriosInventory(LivingEntity)}
 	 * 获取实体的 Curios 物品处理器, 并遍历其所有饰品栏内容,
 	 * 将非空物品栈添加到结果列表中.</p>
 	 *
