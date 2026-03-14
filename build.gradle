@@ -223,6 +223,10 @@ tasks.withType(JavaCompile).configureEach {
     options.compilerArgs << "-parameters"
 }
 
+afterEvaluate {
+    minecraft.runs.data.jvmArgs.removeIf { it.contains('mixin.config') }
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
