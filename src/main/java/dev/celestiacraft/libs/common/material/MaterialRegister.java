@@ -17,6 +17,7 @@ public class MaterialRegister {
 					case GEAR -> manager.gear(material);
 					case WIRE -> manager.wire(material);
 					case PRISM -> manager.prism(material);
+					case RAW_ORE -> manager.rawOre(material);
 
 					case BLOCK -> manager.metalBlock(material);
 					case RAW_BLOCK -> manager.rawBlock(material);

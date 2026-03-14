@@ -9,6 +9,7 @@ public enum MaterialType {
 	GEAR,
 	PRISM,
 	WIRE,
+	RAW_ORE,
 
 	BLOCK,
 	RAW_BLOCK,

@@ -33,11 +33,21 @@ public class MaterialRegistrar {
 	 * @return
 	 */
 	protected ItemBuilder<Item, CreateRegistrate> createItem(String type, Material material) {
-		String registerId = String.format("%s_%s", material.name, type);
+		String registerId;
+
+		if ("raw".equals(type)) {
+			registerId = String.format("raw_%s", material.name);
+		} else {
+			registerId = String.format("%s_%s", material.name, type);
+		}
+
 		ItemBuilder<Item, CreateRegistrate> builder = registrate.item(registerId, Item::new);
 
 		builder.tag(TagsBuilder.item(String.format("%ss/%s", type, material.name)).forge());
 		builder.tag(TagsBuilder.item(String.format("%ss", type)).forge());
+		if (material.displayName != null) {
+			builder.lang(material.displayName);
+		}
 
 		return builder;
 	}

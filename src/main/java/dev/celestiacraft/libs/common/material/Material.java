@@ -1,5 +1,6 @@
 package dev.celestiacraft.libs.common.material;
 
+import com.simibubi.create.foundation.data.CreateRegistrate;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -15,6 +16,8 @@ public class Material {
 	public final String namespace;
 	// 材料名
 	public String name;
+	// 显示名称
+	public String displayName;
 	// 挖掘等级
 	public TagKey<Block> level;
 
@@ -40,8 +43,16 @@ public class Material {
 	}
 
 	// 设置具体材料信息
-	public Material material(String name, TagKey<Block> level) {
+	public Material create(String name, TagKey<Block> level) {
 		this.name = name;
+		this.level = level;
+		MATERIALS.add(this);
+		return this;
+	}
+
+	public Material create(String name, String displayName, TagKey<Block> level) {
+		this.name = name;
+		this.displayName = displayName;
 		this.level = level;
 		MATERIALS.add(this);
 		return this;
@@ -63,9 +74,29 @@ public class Material {
 		return this;
 	}
 
+	/**
+	 * 设置材料的显示名称
+	 * <p>
+	 * 由于Registrate自身的限制
+	 * 显示名称只能使用英文
+	 *
+	 * @param displayName
+	 * @return
+	 */
+	public Material displayName(String displayName) {
+		this.displayName = displayName;
+		return this;
+	}
+
 	public Material color(int color1, int color2) {
 		this.color1 = color1;
 		this.color2 = color2;
+		return this;
+	}
+
+	public Material color(int color) {
+		this.color1 = color;
+		this.color2 = color;
 		return this;
 	}
 
@@ -118,6 +149,10 @@ public class Material {
 
 	public Material wire() {
 		return type(MaterialType.WIRE);
+	}
+
+	public Material rawOre() {
+		return type(MaterialType.RAW_ORE);
 	}
 
 	public Material clump() {

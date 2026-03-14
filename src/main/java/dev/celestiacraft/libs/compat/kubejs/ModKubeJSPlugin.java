@@ -9,6 +9,7 @@ import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.utility.Lang;
 import dev.celestiacraft.libs.client.NebulaLang;
+import dev.celestiacraft.libs.common.material.Material;
 import dev.celestiacraft.libs.compat.jade.CommonJadeTipProvider;
 import dev.celestiacraft.libs.compat.patchouli.multiblock.*;
 import dev.celestiacraft.libs.compat.tconstruct.util.SimpleTConUtils;
@@ -79,6 +80,7 @@ public class ModKubeJSPlugin extends KubeJSPlugin {
 		event.add("Gson", Gson.class);
 		event.add("GsonBuilder", GsonBuilder.class);
 		event.add("GsonBuildConfig", GsonBuildConfig.class);
+		event.add("NebulaMaterial", Material.class);
 
 		if (ICheckModLoaded.hasCreate()) {
 			event.add("AllSoundEvents", AllSoundEvents.class);

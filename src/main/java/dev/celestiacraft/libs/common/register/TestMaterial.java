@@ -7,7 +7,7 @@ import net.minecraft.tags.BlockTags;
 public class TestMaterial {
 	public static final Material MATERIAL = new Material(NebulaLibs.MODID);
 
-	public static final Material COPPER = MATERIAL.material("copper", BlockTags.NEEDS_IRON_TOOL)
+	public static final Material COPPER = MATERIAL.create("copper", BlockTags.NEEDS_IRON_TOOL)
 			.color(0xB87333, 0xD4956A)
 			.destroy(3, 6)
 			.isMetal()
@@ -18,11 +18,8 @@ public class TestMaterial {
 			.rod()
 			.gear()
 			.wire()
+			.rawOre()
 			.metalBlock()
 			.rawBlock()
 			.molten();
-
-	public static void init() {
-
-	}
 }
