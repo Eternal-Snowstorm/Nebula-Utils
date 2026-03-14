@@ -1,15 +1,10 @@
 package dev.celestiacraft.libs.common.material;
 
-import dev.celestiacraft.libs.NebulaLibs;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import com.simibubi.create.foundation.data.CreateRegistrate;
 
-@Mod.EventBusSubscriber(modid = NebulaLibs.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class MaterialRegister {
-	@SubscribeEvent
-	public static void onCommonSetup(FMLCommonSetupEvent event) {
-		RegisterManager manager = new RegisterManager(NebulaLibs.INSTANCE.registrate);
+	public static void register(CreateRegistrate registrate) {
+		RegisterManager manager = new RegisterManager(registrate);
 
 		for (Material material : Material.MATERIALS) {
 			for (MaterialType type : material.types) {

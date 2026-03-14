@@ -33,7 +33,7 @@ public class MaterialRegistrar {
 	 * @return
 	 */
 	protected ItemBuilder<Item, CreateRegistrate> createItem(String type, Material material) {
-		String registerId = String.format("%s_%s", type, material.name);
+		String registerId = String.format("%s_%s", material.name, type);
 		ItemBuilder<Item, CreateRegistrate> builder = registrate.item(registerId, Item::new);
 
 		builder.tag(TagsBuilder.item(String.format("%ss/%s", type, material.name)).forge());
@@ -91,7 +91,8 @@ public class MaterialRegistrar {
 					provider.withExistingParent(context.getName(), NebulaLibs.loadForgeResource("item/bucket_drip"))
 							.customLoader(DynamicFluidContainerModelBuilder::begin)
 							.fluid(ForgeRegistries.FLUIDS.getValue(ResourceLocation.fromNamespaceAndPath(registrate.getModid(), registerId)));
-				});
+				})
+				.register();
 
 		return builder;
 	}
@@ -112,7 +113,7 @@ public class MaterialRegistrar {
 			registerId = String.format("raw_%s_block", material.name);
 			tagId = String.format("storage_blocks/raw_%s", material.name);
 		} else {
-			registerId = String.format("%s_%s", type, material.name);
+			registerId = String.format("%s_%s", material.name, type);
 			tagId = String.format("storage_blocks/%s", material.name);
 		}
 
