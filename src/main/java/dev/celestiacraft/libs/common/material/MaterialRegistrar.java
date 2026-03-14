@@ -10,7 +10,6 @@ import dev.celestiacraft.libs.common.fluid.type.MoltenType;
 import dev.celestiacraft.libs.tags.TagsBuilder;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -128,11 +127,12 @@ public class MaterialRegistrar {
 		}
 
 		BlockBuilder<Block, CreateRegistrate> builder = registrate.block(registerId, Block::new);
-		ItemBuilder<BlockItem, BlockBuilder<Block, CreateRegistrate>> itemBuilder = builder.item();
 
-		// Tags
-		itemBuilder.tag(TagsBuilder.item(tagId).forge());
-		itemBuilder.tag(TagsBuilder.item("storage_blocks").forge());
+		// Tags (item)
+		builder.item()
+				.tag(TagsBuilder.item(tagId).forge())
+				.tag(TagsBuilder.item("storage_blocks").forge())
+				.build();
 
 		// Block 属性
 		SoundType sound = material.sound != null ?

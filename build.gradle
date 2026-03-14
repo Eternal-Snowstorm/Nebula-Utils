@@ -11,6 +11,7 @@ buildscript {
 }
 
 plugins {
+    id 'idea'
     id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
     id 'org.spongepowered.mixin' version '0.7.+'
@@ -127,6 +128,9 @@ dependencies {
     // KubeJS
     compileOnly fg.deobf("curse.maven:kubejs-238086:5853326")
     runtimeOnly fg.deobf("curse.maven:kubejs-238086:5853326")
+
+    // Architectury
+    runtimeOnly fg.deobf("curse.maven:architectury-api-419699:5137938")
     // Rhino
     compileOnly fg.deobf("curse.maven:rhino-416294:6186971")
     runtimeOnly fg.deobf("curse.maven:rhino-416294:6186971")
@@ -140,9 +144,9 @@ dependencies {
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:5.14.1+1.20.1")
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:5.14.1+1.20.1")
     // Jei
-    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:15.0.0.12")
-    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:15.0.0.12")
-    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:15.0.0.12")
+    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:15.20.0.103")
+    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:15.20.0.103")
+    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:15.20.0.103")
     // ftb quests
     compileOnly fg.deobf("curse.maven:ftb-quests-forge-289412:7608804")
     // FTB Library (FTB Quests 的 UI 基础库)
@@ -224,7 +228,7 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 afterEvaluate {
-    minecraft.runs.data.jvmArgs.removeIf { it.contains('mixin.config') }
+    minecraft.runs.data.args.removeIf { it == '--mixin.config' || it.endsWith('.mixins.json') }
 }
 
 publishing {
