@@ -62,7 +62,8 @@ public class MaterialRegistrar {
 			builder.model((context, provider) -> {
 				provider.withExistingParent(context.getName(), provider.mcLoc("item/generated"))
 						.texture("layer0", provider.modLoc(String.format("item/material/%s/%s", type, type)))
-						.texture("layer1", provider.modLoc(String.format("item/material/%s/%s_secondary", type, type))).texture("layer2", provider.modLoc(String.format("item/material/%s/%s_overlay", type, type)));
+						.texture("layer1", provider.modLoc(String.format("item/material/%s/%s_secondary", type, type))).texture("layer2", provider.modLoc(String.format("item/material/%s/%s_overlay", type, type)))
+						.texture("layer2", provider.modLoc(String.format("item/material/%s/%s_overlay", type, type))).texture("layer2", provider.modLoc(String.format("item/material/%s/%s_overlay", type, type)));
 			});
 		}
 
