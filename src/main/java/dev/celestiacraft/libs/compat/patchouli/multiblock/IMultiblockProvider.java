@@ -83,7 +83,10 @@ public interface IMultiblockProvider {
 	 */
 	@Info("Gets the BlockEntity instance\n\n获取当前 BlockEntity 实例")
 	default BlockEntity getBlockEntity() {
-		return getMultiblockHandler().getBlockEntity();
+		if (getMultiblockHandler().getContext() instanceof BlockEntityContext context) {
+			return context.getBlockEntity();
+		}
+		return null;
 	}
 
 	/**

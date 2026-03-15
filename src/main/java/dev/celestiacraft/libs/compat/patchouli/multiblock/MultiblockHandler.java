@@ -2,6 +2,7 @@ package dev.celestiacraft.libs.compat.patchouli.multiblock;
 
 import com.mojang.datafixers.util.Pair;
 import dev.latvian.mods.kubejs.typings.Info;
+import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -105,7 +106,7 @@ import java.util.function.Supplier;
  * boolean hasDiamond = multiblock.containsBlock(Blocks.DIAMOND_BLOCK);
  *
  * // 按标签检测(例如所有原木类方块)
- * boolean hasLogs = multiblock.containsBlock(state -> state.is(BlockTags.LOGS));
+ * boolean hasLogs = multiblock.containsBlock((state) -> state.is(BlockTags.LOGS));
  *
  * // 查找结构中所有铁块的位置
  * List<BlockPos> ironPositions = multiblock.findBlock(Blocks.IRON_BLOCK);
@@ -120,20 +121,20 @@ import java.util.function.Supplier;
  * multiblock.destroyAll(true);
  *
  * // 仅破坏结构中指定类型的方块
- * multiblock.destroyByBlock(Blocks.IRON_BLOCK, true);
+ * multiblock.destroyBlock(Blocks.IRON_BLOCK, true);
  *
  * // 破坏所有属于 Tag 的方块（不掉落）
- * multiblock.destroyByTag(BlockTags.LOGS, false);
+ * multiblock.destroyTag(BlockTags.LOGS, false);
  *
  * // 按谓词精确控制
- * multiblock.destroyByFilter(
- *     state -> state.is(Blocks.PISTON) && state.getValue(PistonBlock.FACING) == Direction.UP,
- *     true
- * );
+ * multiblock.destroyFilter((state) -> {
+ *     return state.is(Blocks.PISTON) && state.getValue(PistonBlock.FACING) == Direction.UP;
+ * }, true);
  * }</pre>
  */
 public class MultiblockHandler {
-	private final BlockEntity entity;
+	@Getter
+	private final MultiblockContext context;
 	private final Supplier<IMultiblock> structure;
 	private final String tranKey;
 	private final BlockPos renderOffset;
@@ -144,86 +145,70 @@ public class MultiblockHandler {
 
 	private boolean isShowingVisualization = false;
 
-	private MultiblockHandler(BlockEntity owner, Supplier<IMultiblock> structure, String tranKey, BlockPos renderOffset, int cacheTicks) {
-		this.entity = owner;
+	private MultiblockHandler(
+			MultiblockContext context,
+			Supplier<IMultiblock> structure,
+			String tranKey,
+			BlockPos renderOffset,
+			int cacheTicks
+	) {
+		this.context = context;
 		this.structure = structure;
 		this.tranKey = tranKey;
 		this.renderOffset = renderOffset;
 		this.cacheTicks = cacheTicks;
 	}
 
-	/**
-	 * 判断多方块结构是否完整(带 tick 缓存).
-	 *
-	 * <p>
-	 * 在缓存有效期内直接返回缓存结果，避免每 tick 都执行完整的 validate 遍历.
-	 * 缓存过期后自动重新验证.
-	 * </p>
-	 *
-	 * @return true 如果结构完整
-	 */
+	private Level getLevel() {
+		return context.getLevel();
+	}
+
+	private BlockPos getBlockPos() {
+		return context.getBlockPos();
+	}
+
 	@Info("Checks if the multiblock structure is valid (with tick-based caching)\n\n判断多方块结构是否完整(带 tick 缓存)")
 	public boolean isValid() {
-		Level level = entity.getLevel();
+		Level level = getLevel();
 
 		if (level == null) {
 			return false;
 		}
+
 		long currentTick = level.getGameTime();
 
 		if (lastValidationTick >= 0 && (currentTick - lastValidationTick) < cacheTicks) {
 			return cachedValid;
 		}
-		cachedValid = structure.get().validate(level, entity.getBlockPos()) != null;
+
+		cachedValid = structure.get().validate(level, getBlockPos()) != null;
 		lastValidationTick = currentTick;
+
 		return cachedValid;
 	}
 
-	/**
-	 * 强制立即重新验证，忽略缓存.
-	 *
-	 * <p>
-	 * 适用于需要立即获取最新状态的场景(如玩家刚放置/破坏方块后).
-	 * 验证结果会更新缓存.
-	 * </p>
-	 *
-	 * @return true 如果结构完整
-	 */
-	@Info("Forces immediate re-validation, ignoring cache\n\n强制立即重新验证，忽略缓存")
+	@Info("Forces immediate re-validation, ignoring cache\n\n强制立即重新验证, 忽略缓存")
 	public boolean forceValidate() {
-		Level level = entity.getLevel();
+		Level level = getLevel();
+
 		if (level == null) {
 			return false;
 		}
-		cachedValid = structure.get().validate(level, entity.getBlockPos()) != null;
+
+		cachedValid = structure.get().validate(level, getBlockPos()) != null;
 		lastValidationTick = level.getGameTime();
+
 		return cachedValid;
 	}
 
-	/**
-	 * 使缓存失效，下次调用 isValid() 时会重新验证.
-	 */
 	@Info("Invalidates the validation cache\n\n使验证缓存失效")
 	public void invalidateCache() {
 		lastValidationTick = -1;
 	}
 
-
-	/**
-	 * 切换多方块全息预览的显示/隐藏.
-	 *
-	 * <p>
-	 * 仅在客户端生效. 逻辑如下:
-	 * <ul>
-	 *     <li>如果结构已完整 → 强制关闭预览(不需要引导了)</li>
-	 *     <li>如果当前正在显示 → 关闭预览</li>
-	 *     <li>如果当前未显示 → 打开预览</li>
-	 * </ul>
-	 * </p>
-	 */
 	@Info("Toggles the multiblock holographic preview on/off\n\n切换多方块全息预览的显示/隐藏")
 	public void toggleVisualization() {
-		Level level = entity.getLevel();
+		Level level = getLevel();
 
 		if (level == null || !level.isClientSide()) {
 			return;
@@ -243,12 +228,9 @@ public class MultiblockHandler {
 		}
 	}
 
-	/**
-	 * 显示多方块全息预览. 仅客户端生效.
-	 */
 	@Info("Shows the multiblock holographic preview\n\n显示多方块全息预览")
 	public void showVisualization() {
-		Level level = entity.getLevel();
+		Level level = getLevel();
 
 		if (level == null || !level.isClientSide) {
 			return;
@@ -257,186 +239,107 @@ public class MultiblockHandler {
 		PatchouliAPI.get().showMultiblock(
 				structure.get(),
 				Component.translatable(tranKey),
-				entity.getBlockPos().offset(renderOffset),
+				getBlockPos().offset(renderOffset),
 				Rotation.NONE
 		);
+
 		isShowingVisualization = true;
 	}
 
-	/**
-	 * 隐藏多方块全息预览. 仅客户端生效.
-	 */
 	@Info("Hides the multiblock holographic preview\n\n隐藏多方块全息预览")
 	public void hideVisualization() {
-		Level level = entity.getLevel();
+		Level level = getLevel();
 
 		if (level == null || !level.isClientSide) {
 			return;
 		}
 
 		PatchouliAPI.get().clearMultiblock();
+
 		isShowingVisualization = false;
 	}
 
-	/**
-	 * 当前是否正在显示全息预览.
-	 */
 	@Info("Whether the holographic preview is currently showing\n\n当前是否正在显示全息预览")
 	public boolean isShowingVisualization() {
 		return isShowingVisualization;
 	}
 
-	/**
-	 * 获取底层的 IMultiblock 结构定义.
-	 */
 	@Info("Gets the underlying IMultiblock structure definition\n\n获取底层的 IMultiblock 结构定义")
 	public IMultiblock getStructure() {
 		return structure.get();
 	}
 
-	/**
-	 * 获取所属的 BlockEntity.
-	 */
-	public BlockEntity getBlockEntity() {
-		return entity;
-	}
-
-	/**
-	 * 检测已成型的多方块结构中是否包含指定方块.
-	 *
-	 * <p>
-	 * 先通过 validate 获取成型旋转方向，再通过 simulate 遍历所有位置，
-	 * 检查世界中对应坐标的方块是否与目标匹配.
-	 * </p>
-	 *
-	 * @param block 要检测的方块
-	 * @return true 如果结构中存在该方块
-	 */
 	@Info("Checks if the formed multiblock contains a specific block\n\n检测已成型的多方块结构中是否包含指定方块")
 	public boolean containsBlock(Block block) {
-		return containsBlock(state -> state.is(block));
+		return containsBlock((state) -> {
+			return state.is(block);
+		});
 	}
 
-	/**
-	 * 检测已成型的多方块结构中是否包含满足条件的方块.
-	 *
-	 * <p>
-	 * 使用自定义谓词检查结构中每个位置的 BlockState.
-	 * 适用于按标签、属性等复杂条件匹配的场景.
-	 * </p>
-	 *
-	 * @param predicate BlockState 匹配条件
-	 * @return true 如果结构中存在满足条件的方块
-	 */
 	@Info("Checks if the formed multiblock contains a block matching the predicate\n\n检测已成型的多方块结构中是否包含满足条件的方块")
 	public boolean containsBlock(Predicate<BlockState> predicate) {
-		Level level = entity.getLevel();
-		if (level == null) {
-			return false;
-		}
-
-		IMultiblock mb = structure.get();
-		Rotation rotation = mb.validate(level, entity.getBlockPos());
-		if (rotation == null) {
-			return false;
-		}
-
-		Pair<BlockPos, Collection<IMultiblock.SimulateResult>> result =
-				mb.simulate(level, entity.getBlockPos(), rotation, false);
-
-		for (IMultiblock.SimulateResult sr : result.getSecond()) {
-			BlockState worldState = level.getBlockState(sr.getWorldPosition());
-			if (predicate.test(worldState)) {
-				return true;
-			}
-		}
-		return false;
+		return !findBlock(predicate).isEmpty();
 	}
 
-	/**
-	 * 查找已成型的多方块结构中所有指定方块的位置.
-	 *
-	 * @param block 要查找的方块
-	 * @return 匹配位置列表，结构未成型时返回空列表
-	 */
 	@Info("Finds all positions of a specific block within the formed multiblock\n\n查找已成型的多方块结构中所有指定方块的位置")
 	public List<BlockPos> findBlock(Block block) {
-		return findBlock(state -> state.is(block));
+		return findBlock((state) -> {
+			return state.is(block);
+		});
 	}
 
-	/**
-	 * 查找已成型的多方块结构中所有属于指定标签的方块位置.
-	 *
-	 * @param tag 要查找的方块标签
-	 * @return 匹配位置列表，结构未成型时返回空列表
-	 */
 	@Info("Finds all positions of blocks matching a tag within the formed multiblock\n\n查找已成型的多方块结构中所有属于指定标签的方块位置")
 	public List<BlockPos> findBlock(TagKey<Block> tag) {
-		return findBlock(state -> state.is(tag));
+		return findBlock((state) -> {
+			return state.is(tag);
+		});
 	}
 
-	/**
-	 * 查找已成型的多方块结构中所有满足条件的方块位置.
-	 *
-	 * @param predicate BlockState 匹配条件
-	 * @return 匹配位置列表，结构未成型时返回空列表
-	 */
 	@Info("Finds all positions matching the predicate within the formed multiblock\n\n查找已成型的多方块结构中所有满足条件的方块位置")
 	public List<BlockPos> findBlock(Predicate<BlockState> predicate) {
 		List<BlockPos> positions = new ArrayList<>();
-		Level level = entity.getLevel();
+		Level level = getLevel();
+
 		if (level == null) {
 			return positions;
 		}
 
 		IMultiblock mb = structure.get();
-		Rotation rotation = mb.validate(level, entity.getBlockPos());
+		Rotation rotation = mb.validate(level, getBlockPos());
+
 		if (rotation == null) {
 			return positions;
 		}
 
-		Pair<BlockPos, Collection<IMultiblock.SimulateResult>> result =
-				mb.simulate(level, entity.getBlockPos(), rotation, false);
+		Pair<BlockPos, Collection<IMultiblock.SimulateResult>> result = mb.simulate(
+				level,
+				getBlockPos(),
+				rotation,
+				false
+		);
 
 		for (IMultiblock.SimulateResult sr : result.getSecond()) {
-			BlockState worldState = level.getBlockState(sr.getWorldPosition());
-			if (predicate.test(worldState)) {
-				positions.add(sr.getWorldPosition());
+			BlockPos pos = sr.getWorldPosition();
+			BlockState state = level.getBlockState(pos);
+
+			if (predicate.test(state)) {
+				positions.add(pos);
 			}
 		}
+
 		return positions;
 	}
 
-	/**
-	 * 统计已成型的多方块结构中指定方块的数量.
-	 *
-	 * @param block 要统计的方块
-	 * @return 匹配数量，结构未成型时返回 0
-	 */
 	@Info("Counts occurrences of a specific block within the formed multiblock\n\n统计已成型的多方块结构中指定方块的数量")
-	public int countBlock(Block block) {
+	public int countBlockTag(Block block) {
 		return findBlock(block).size();
 	}
 
-	/**
-	 * 统计已成型的多方块结构中属于指定标签的方块数量.
-	 *
-	 * @param tag 要统计的方块标签
-	 * @return 匹配数量，结构未成型时返回 0
-	 */
 	@Info("Counts occurrences of blocks matching a tag within the formed multiblock\n\n统计已成型的多方块结构中属于指定标签的方块数量")
-	public int countBlock(TagKey<Block> tag) {
+	public int countBlockTag(TagKey<Block> tag) {
 		return findBlock(tag).size();
 	}
 
-	/**
-	 * 破坏已成型的多方块结构中所有非空气方块.
-	 *
-	 * <p><strong>注意: </strong>仅在服务端执行有效. 破坏完成后自动使验证缓存失效.</p>
-	 *
-	 * @param dropItems 是否掉落物品
-	 * @return 实际破坏的方块数量，结构未成型或 Level 为空时返回 0
-	 */
 	@Info("Destroys all non-air blocks in the formed multiblock structure\n\n破坏已成型的多方块结构中所有非空气方块")
 	public int destroyAll(boolean dropItems) {
 		return destroyMatching((state) -> {
@@ -444,15 +347,6 @@ public class MultiblockHandler {
 		}, dropItems);
 	}
 
-	/**
-	 * 破坏已成型的多方块结构中所有指定类型的方块.
-	 *
-	 * <p><strong>注意: </strong>仅在服务端执行有效. 破坏完成后自动使验证缓存失效.</p>
-	 *
-	 * @param block     要破坏的方块类型
-	 * @param dropItems 是否掉落物品
-	 * @return 实际破坏的方块数量，结构未成型或 Level 为空时返回 0
-	 */
 	@Info("Destroys all blocks of the specified type in the formed multiblock\n\n破坏已成型的多方块结构中所有指定类型的方块")
 	public int destroyBlock(Block block, boolean dropItems) {
 		return destroyMatching((state) -> {
@@ -460,15 +354,6 @@ public class MultiblockHandler {
 		}, dropItems);
 	}
 
-	/**
-	 * 破坏已成型的多方块结构中所有属于指定标签的方块.
-	 *
-	 * <p><strong>注意: </strong>仅在服务端执行有效. 破坏完成后自动使验证缓存失效.</p>
-	 *
-	 * @param tag       要破坏的方块标签
-	 * @param dropItems 是否掉落物品
-	 * @return 实际破坏的方块数量，结构未成型或 Level 为空时返回 0
-	 */
 	@Info("Destroys all blocks matching the specified tag in the formed multiblock\n\n破坏已成型的多方块结构中所有属于指定标签的方块")
 	public int destroyTag(TagKey<Block> tag, boolean dropItems) {
 		return destroyMatching((state) -> {
@@ -476,59 +361,40 @@ public class MultiblockHandler {
 		}, dropItems);
 	}
 
-	/**
-	 * 破坏已成型的多方块结构中所有满足自定义条件的方块.
-	 *
-	 * <p><strong>注意: </strong>仅在服务端执行有效. 破坏完成后自动使验证缓存失效.</p>
-	 *
-	 * @param predicate BlockState 匹配条件
-	 * @param dropItems 是否掉落物品
-	 * @return 实际破坏的方块数量，结构未成型或 Level 为空时返回 0
-	 */
 	@Info("Destroys all blocks matching the predicate in the formed multiblock\n\n破坏已成型的多方块结构中所有满足自定义条件的方块")
 	public int destroyFilter(Predicate<BlockState> predicate, boolean dropItems) {
 		return destroyMatching(predicate, dropItems);
 	}
 
-	/**
-	 * 按谓词遍历已成型的多方块结构并破坏匹配方块的内部实现.
-	 *
-	 * <p>
-	 * 使用 {@code validate()} 获取当前成型的旋转方向，
-	 * 再使用 {@code simulate()} 遍历所有位置，
-	 * 对世界中匹配谓词的方块执行破坏操作.
-	 * 若有任何方块被破坏，自动使验证缓存失效.
-	 * </p>
-	 *
-	 * @param predicate BlockState 匹配条件
-	 * @param dropItems 是否掉落物品
-	 * @return 实际破坏的方块数量
-	 */
 	private int destroyMatching(Predicate<BlockState> predicate, boolean dropItems) {
-		Level level = entity.getLevel();
+		Level level = getLevel();
+
 		if (level == null || level.isClientSide()) {
 			return 0;
 		}
 
 		IMultiblock mb = structure.get();
-		Rotation rotation = mb.validate(level, entity.getBlockPos());
+		Rotation rotation = mb.validate(level, getBlockPos());
+
 		if (rotation == null) {
 			return 0;
 		}
 
 		Pair<BlockPos, Collection<IMultiblock.SimulateResult>> result = mb.simulate(
 				level,
-				entity.getBlockPos(),
+				getBlockPos(),
 				rotation,
 				false
 		);
 
 		int count = 0;
-		for (IMultiblock.SimulateResult sr : result.getSecond()) {
-			BlockPos pos = sr.getWorldPosition();
-			BlockState worldState = level.getBlockState(pos);
 
-			if (!worldState.isAir() && predicate.test(worldState)) {
+		for (IMultiblock.SimulateResult sr : result.getSecond()) {
+
+			BlockPos pos = sr.getWorldPosition();
+			BlockState state = level.getBlockState(pos);
+
+			if (!state.isAir() && predicate.test(state)) {
 				level.destroyBlock(pos, dropItems);
 				count++;
 			}
@@ -537,122 +403,70 @@ public class MultiblockHandler {
 		if (count > 0) {
 			invalidateCache();
 		}
+
 		return count;
 	}
 
-	/**
-	 * 创建 MultiblockHandler 构建器.
-	 *
-	 * @param entity    持有此 Handler 的 BlockEntity
-	 * @param structure 多方块结构的懒加载供应器
-	 * @return Builder 实例
-	 */
 	@Info("Creates a MultiblockHandler builder\n\n创建 MultiblockHandler 构建器")
 	public static Builder builder(BlockEntity entity, Supplier<IMultiblock> structure) {
-		return new Builder(entity, structure);
+		return new Builder(new BlockEntityContext(entity), structure);
 	}
 
-	/**
-	 * MultiblockHandler 的构建器.
-	 *
-	 * <p>
-	 * 通过链式调用配置各项参数，最终调用 build() 生成 Handler 实例.
-	 * 所有配置项均有合理默认值，最简用法只需要 owner 和 structure.
-	 * </p>
-	 */
+	@Info("Creates a MultiblockHandler builder without BlockEntity\n\n创建无 BlockEntity 的 MultiblockHandler 构建器")
+	public static Builder builder(Level level, BlockPos pos, Supplier<IMultiblock> structure) {
+		return new Builder(new WorldContext(level, pos), structure);
+	}
+
 	public static class Builder {
-		private final BlockEntity block;
+		private final MultiblockContext context;
 		private final Supplier<IMultiblock> structure;
+
 		private String tranKey = null;
 		private BlockPos renderOffset = BlockPos.ZERO;
 		private int cacheTicks = 20;
 
-		private Builder(BlockEntity entity, Supplier<IMultiblock> structure) {
-			this.block = entity;
+		private Builder(MultiblockContext context, Supplier<IMultiblock> structure) {
+			this.context = context;
 			this.structure = structure;
 		}
 
-		/**
-		 * 设置全息预览显示的翻译 key.
-		 *
-		 * <p>
-		 * 如果不设置，将自动从 BlockEntity 所属方块的 registry name 推导:
-		 * {@code multiblock.building.<namespace>.<path>}
-		 * </p>
-		 *
-		 * @param tranKey 翻译 key
-		 * @return Builder 自身
-		 */
 		@Info("Sets the translation key for the visualization display name\n\n设置全息预览显示的翻译 key")
 		public Builder translationKey(String tranKey) {
 			this.tranKey = tranKey;
 			return this;
 		}
 
-		/**
-		 * 设置渲染偏移量.
-		 *
-		 * <p>
-		 * Patchouli 渲染多方块时可能需要位置修正(例如 Y 轴下沉一格).
-		 * 此偏移量会叠加到 BlockEntity 的 worldPosition 上.
-		 * </p>
-		 *
-		 * @param x X 偏移
-		 * @param y Y 偏移
-		 * @param z Z 偏移
-		 * @return Builder 自身
-		 */
 		@Info("Sets the render offset for visualization\n\n设置渲染偏移量")
 		public Builder renderOffset(int x, int y, int z) {
 			this.renderOffset = new BlockPos(x, y, z);
 			return this;
 		}
 
-		/**
-		 * 设置渲染偏移量.
-		 *
-		 * @param offset 偏移 BlockPos
-		 * @return Builder 自身
-		 */
-		@Info("Sets the render offset for visualization\n\n设置渲染偏移量")
-		public Builder renderOffset(BlockPos offset) {
-			this.renderOffset = offset;
-			return this;
-		}
-
-		/**
-		 * 设置验证缓存的 tick 间隔.
-		 *
-		 * <p>
-		 * 默认 20 tick(1秒). 值越大性能越好，但验证响应越慢.
-		 * 设置为 0 表示禁用缓存(每次调用都验证).
-		 * </p>
-		 *
-		 * @param ticks 缓存间隔(tick数)
-		 * @return Builder 自身
-		 */
 		@Info("Sets the validation cache interval in ticks (default: 20)\n\n设置验证缓存的 tick 间隔(默认20)")
 		public Builder cacheTicks(int ticks) {
 			this.cacheTicks = Math.max(0, ticks);
 			return this;
 		}
 
-		/**
-		 * 构建 MultiblockHandler 实例.
-		 *
-		 * @return 配置完成的 MultiblockHandler
-		 */
 		@Info("Builds the MultiblockHandler instance\n\n构建 MultiblockHandler 实例")
 		public MultiblockHandler build() {
-			String resolvedKey = this.tranKey;
+			String resolvedKey = tranKey;
 
-			if (resolvedKey == null) {
-				ResourceLocation blockKey = ForgeRegistries.BLOCKS.getKey(block.getBlockState().getBlock());
+			if (resolvedKey == null && context instanceof BlockEntityContext entityContext) {
+				ResourceLocation blockKey = ForgeRegistries.BLOCKS.getKey(
+						entityContext.getBlockEntity().getBlockState().getBlock()
+				);
+
 				if (blockKey != null) {
-					resolvedKey = String.format("multiblock.building.%s.%s", blockKey.getNamespace(), blockKey.getPath());
+					resolvedKey = String.format(
+							"multiblock.building.%s.%s",
+							blockKey.getNamespace(),
+							blockKey.getPath()
+					);
 				}
 			}
-			return new MultiblockHandler(block, structure, resolvedKey, renderOffset, cacheTicks);
+
+			return new MultiblockHandler(context, structure, resolvedKey, renderOffset, cacheTicks);
 		}
 	}
 }
