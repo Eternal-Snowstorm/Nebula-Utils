@@ -101,11 +101,6 @@ public class Material {
 	public String name;
 
 	/**
-	 * 材料显示名称
-	 */
-	public String displayName;
-
-	/**
 	 * 方块挖掘等级标签
 	 */
 	public TagKey<Block> level;
@@ -128,12 +123,12 @@ public class Material {
 	/**
 	 * 基础颜色
 	 */
-	public int color0 = 0xFFFFFF;
+	public int color1 = 0xFFFFFFFF;
 
 	/**
 	 * 覆盖层颜色
 	 */
-	public int color1 = 0xFFFFFF;
+	public int color2 = 0xFFFFFFFF;
 
 	/**
 	 * 方块声音类型
@@ -166,22 +161,6 @@ public class Material {
 	 */
 	public Material create(String name, TagKey<Block> level) {
 		this.name = name;
-		this.level = level;
-		MATERIALS.add(this);
-		return this;
-	}
-
-	/**
-	 * 创建一个新的材料定义并指定显示名称
-	 *
-	 * @param name        材料名称
-	 * @param displayName 显示名称
-	 * @param level       挖掘等级
-	 * @return 当前材料实例
-	 */
-	public Material create(String name, String displayName, TagKey<Block> level) {
-		this.name = name;
-		this.displayName = displayName;
 		this.level = level;
 		MATERIALS.add(this);
 		return this;
@@ -223,31 +202,15 @@ public class Material {
 	}
 
 	/**
-	 * 设置显示名称
-	 *
-	 * <p>
-	 * 由于 Registrate 的限制,
-	 * 显示名称通常需要使用英文
-	 * </p>
-	 *
-	 * @param displayName 显示名称
-	 * @return 当前材料实例
-	 */
-	public Material displayName(String displayName) {
-		this.displayName = displayName;
-		return this;
-	}
-
-	/**
 	 * 设置材料颜色
 	 *
-	 * @param color0 底层颜色
+	 * @param color1 底层颜色
 	 * @param color1 覆盖层颜色
 	 * @return 当前材料实例
 	 */
-	public Material color(int color0, int color1) {
-		this.color0 = color0;
-		this.color1 = color1;
+	public Material color(int color1, int color2) {
+		this.color1 = color1 | 0xFF000000;
+		this.color2 = color1 | 0xFF000000;
 		return this;
 	}
 
@@ -258,8 +221,8 @@ public class Material {
 	 * @return 当前材料实例
 	 */
 	public Material color(int color) {
-		this.color0 = color;
-		this.color1 = color;
+		this.color1 = color | 0xFF000000;
+		this.color2 = color | 0xFF000000;
 		return this;
 	}
 

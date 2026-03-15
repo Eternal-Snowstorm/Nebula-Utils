@@ -22,7 +22,7 @@ public class MoltenType extends FluidType {
 		consumer.accept(new IClientFluidTypeExtensions() {
 			@Override
 			public int getTintColor() {
-				return 0xFF000000 | color;
+				return color | 0xFF000000;
 			}
 
 			@Override
