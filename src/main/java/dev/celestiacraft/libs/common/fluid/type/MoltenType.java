@@ -1,6 +1,6 @@
 package dev.celestiacraft.libs.common.fluid.type;
 
-import dev.celestiacraft.libs.client.assets.textures.fluid.FluidTextures;
+import dev.celestiacraft.libs.client.assets.FluidTextures;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidType;

@@ -1,4 +1,4 @@
-package dev.celestiacraft.libs.client.assets.textures.fluid;
+package dev.celestiacraft.libs.client.assets;
 
 import dev.celestiacraft.libs.NebulaLibs;
 import net.minecraft.resources.ResourceLocation;

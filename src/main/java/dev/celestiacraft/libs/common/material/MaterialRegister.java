@@ -7,7 +7,10 @@ public class MaterialRegister {
 		RegisterManager manager = new RegisterManager(registrate);
 
 		for (Material material : Material.MATERIALS) {
-			for (MaterialType type : material.types) {
+			for (Material.MaterialEntry entry : material.types) {
+				MaterialType type = entry.type();
+				boolean overlay = entry.overlay();
+
 				switch (type) {
 					case INGOT -> manager.ingot(material);
 					case PLATE -> manager.plate(material);

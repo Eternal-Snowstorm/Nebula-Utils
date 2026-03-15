@@ -5,7 +5,7 @@ import com.tterrag.registrate.builders.BlockBuilder;
 import com.tterrag.registrate.builders.FluidBuilder;
 import com.tterrag.registrate.builders.ItemBuilder;
 import dev.celestiacraft.libs.NebulaLibs;
-import dev.celestiacraft.libs.client.assets.textures.fluid.FluidTextures;
+import dev.celestiacraft.libs.client.assets.FluidTextures;
 import dev.celestiacraft.libs.common.fluid.type.MoltenType;
 import dev.celestiacraft.libs.tags.TagsBuilder;
 import net.minecraft.client.renderer.RenderType;
@@ -42,8 +42,24 @@ public class MaterialRegistrar {
 
 		ItemBuilder<Item, CreateRegistrate> builder = registrate.item(registerId, Item::new);
 
+		if (!material.overlay) {
+			builder.model((context, provider) -> {
+				provider.withExistingParent(context.getName(), provider.mcLoc("item/generated"))
+						.texture("layer0", provider.modLoc(String.format("item/material/%s/%s", type, type)))
+						.texture("layer1", provider.modLoc(String.format("item/material/%s/%s_secondary", type, type)));
+			});
+		} else {
+			builder.model((context, provider) -> {
+				provider.withExistingParent(context.getName(), provider.mcLoc("item/generated"))
+						.texture("layer0", provider.modLoc(String.format("item/material/%s/%s", type, type)))
+						.texture("layer1", provider.modLoc(String.format("item/material/%s/%s_secondary", type, type)))
+						.texture("layer2", provider.modLoc(String.format("item/material/%s/%s_overlay", type, type)));
+			});
+		}
+
 		builder.tag(TagsBuilder.item(String.format("%ss/%s", type, material.name)).forge());
 		builder.tag(TagsBuilder.item(String.format("%ss", type)).forge());
+
 		if (material.displayName != null) {
 			builder.lang(material.displayName);
 		}
@@ -79,7 +95,7 @@ public class MaterialRegistrar {
 	 */
 	protected FluidBuilder<ForgeFlowingFluid.Flowing, CreateRegistrate> createMoltenFluid(Material material) {
 		String registerId = String.format("molten_%s", material.name);
-		int color = material.color1;
+		int color = material.color0;
 
 		FluidBuilder<ForgeFlowingFluid.Flowing, CreateRegistrate> builder = registrate.fluid(
 				registerId,

@@ -5,8 +5,10 @@ import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.KineticStats;
 import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.item.TooltipModifier;
+import dev.celestiacraft.libs.common.material.Material;
 import dev.celestiacraft.libs.common.material.MaterialRegister;
 import dev.celestiacraft.libs.common.register.NebulaItem;
+import dev.celestiacraft.libs.common.register.TestMaterial;
 import dev.celestiacraft.libs.compat.ftbquests.client.FTBQuestsClientCompat;
 import dev.celestiacraft.libs.debug.DebugUserManager;
 import net.minecraft.client.Minecraft;
@@ -36,6 +38,8 @@ public class NebulaLibs {
 	public final CreateRegistrate registrate;
 	public static NebulaLibs INSTANCE;
 
+	public static final Material MATERIAL = new Material(MODID);
+
 	public NebulaLibs(FMLJavaModLoadingContext context) {
 		IEventBus bus = context.getModEventBus();
 		INSTANCE = this;
@@ -46,6 +50,7 @@ public class NebulaLibs {
 							.andThen(TooltipModifier.mapNull(KineticStats.create(item)));
 				});
 
+		TestMaterial.init();
 		registrate.registerEventListeners(bus);
 
 		MaterialRegister.register(registrate);
