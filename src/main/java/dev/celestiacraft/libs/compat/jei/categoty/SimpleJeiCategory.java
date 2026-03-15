@@ -2,6 +2,7 @@ package dev.celestiacraft.libs.compat.jei.categoty;
 
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
@@ -16,7 +17,6 @@ import org.jetbrains.annotations.NotNull;
 import dev.celestiacraft.libs.compat.jei.function.IDrawHandler;
 import dev.celestiacraft.libs.compat.jei.function.ITooltipHandler;
 
-import java.util.List;
 import java.util.function.Supplier;
 
 /**
@@ -123,13 +123,13 @@ import java.util.function.Supplier;
  *     <li>
  *         setBackground(IDrawable background)
  *         <br>
- *         直接提供自定义背景对象.
+ *         提供自定义背景对象, 在 draw() 中自动绘制.
  *     </li>
  *
  *     <li>
  *         setBackground(int width, int height)
  *         <br>
- *         通过 IGuiHelper 创建空白背景.
+ *         通过 IGuiHelper 创建空白背景, 在 draw() 中自动绘制.
  *         若未调用且存在 helper,
  *         默认使用 setSize 尺寸生成背景.
  *     </li>
@@ -236,11 +236,6 @@ public class SimpleJeiCategory<T> implements IRecipeCategory<T> {
 	}
 
 	@Override
-	public @NotNull IDrawable getBackground() {
-		return background;
-	}
-
-	@Override
 	public @NotNull IDrawable getIcon() {
 		return iconSupplier.get();
 	}
@@ -264,17 +259,19 @@ public class SimpleJeiCategory<T> implements IRecipeCategory<T> {
 
 	@Override
 	public void draw(@NotNull T recipe, @NotNull IRecipeSlotsView view, @NotNull GuiGraphics graphics, double mouseX, double mouseY) {
+		if (background != null) {
+			background.draw(graphics);
+		}
 		if (drawHandler != null) {
 			drawHandler.draw(recipe, view, graphics, mouseX, mouseY);
 		}
 	}
 
 	@Override
-	public @NotNull List<Component> getTooltipStrings(@NotNull T recipe, @NotNull IRecipeSlotsView view, double mouseX, double mouseY) {
+	public void getTooltip(@NotNull ITooltipBuilder tooltip, @NotNull T recipe, @NotNull IRecipeSlotsView view, double mouseX, double mouseY) {
 		if (tooltipHandler != null) {
-			return tooltipHandler.getTooltips(recipe, view, mouseX, mouseY);
+			tooltipHandler.getTooltips(tooltip, recipe, view, mouseX, mouseY);
 		}
-		return List.of();
 	}
 
 	public static class Builder<T> {
