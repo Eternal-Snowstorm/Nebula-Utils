@@ -113,6 +113,24 @@ import java.util.function.Supplier;
  * // 统计结构中金块的数量
  * int goldCount = multiblock.countBlock(Blocks.GOLD_BLOCK);
  * }</pre>
+ *
+ * <h3>4. 破坏结构内方块</h3>
+ * <pre>{@code
+ * // 破坏结构中所有方块（掉落物品）
+ * multiblock.destroyAll(true);
+ *
+ * // 仅破坏结构中指定类型的方块
+ * multiblock.destroyByBlock(Blocks.IRON_BLOCK, true);
+ *
+ * // 破坏所有属于 Tag 的方块（不掉落）
+ * multiblock.destroyByTag(BlockTags.LOGS, false);
+ *
+ * // 按谓词精确控制
+ * multiblock.destroyByFilter(
+ *     state -> state.is(Blocks.PISTON) && state.getValue(PistonBlock.FACING) == Direction.UP,
+ *     true
+ * );
+ * }</pre>
  */
 public class MultiblockHandler {
 	private final BlockEntity entity;
@@ -409,6 +427,106 @@ public class MultiblockHandler {
 	@Info("Counts occurrences of blocks matching a tag within the formed multiblock\n\n统计已成型的多方块结构中属于指定标签的方块数量")
 	public int countBlock(TagKey<Block> tag) {
 		return findBlock(tag).size();
+	}
+
+	/**
+	 * 破坏已成型的多方块结构中所有非空气方块.
+	 *
+	 * <p><strong>注意：</strong>仅在服务端执行有效. 破坏完成后自动使验证缓存失效.</p>
+	 *
+	 * @param dropItems 是否掉落物品
+	 * @return 实际破坏的方块数量，结构未成型或 Level 为空时返回 0
+	 */
+	@Info("Destroys all non-air blocks in the formed multiblock structure\n\n破坏已成型的多方块结构中所有非空气方块")
+	public int destroyAll(boolean dropItems) {
+		return destroyMatching(state -> !state.isAir(), dropItems);
+	}
+
+	/**
+	 * 破坏已成型的多方块结构中所有指定类型的方块.
+	 *
+	 * <p><strong>注意：</strong>仅在服务端执行有效. 破坏完成后自动使验证缓存失效.</p>
+	 *
+	 * @param block     要破坏的方块类型
+	 * @param dropItems 是否掉落物品
+	 * @return 实际破坏的方块数量，结构未成型或 Level 为空时返回 0
+	 */
+	@Info("Destroys all blocks of the specified type in the formed multiblock\n\n破坏已成型的多方块结构中所有指定类型的方块")
+	public int destroyByBlock(Block block, boolean dropItems) {
+		return destroyMatching(state -> state.is(block), dropItems);
+	}
+
+	/**
+	 * 破坏已成型的多方块结构中所有属于指定标签的方块.
+	 *
+	 * <p><strong>注意：</strong>仅在服务端执行有效. 破坏完成后自动使验证缓存失效.</p>
+	 *
+	 * @param tag       要破坏的方块标签
+	 * @param dropItems 是否掉落物品
+	 * @return 实际破坏的方块数量，结构未成型或 Level 为空时返回 0
+	 */
+	@Info("Destroys all blocks matching the specified tag in the formed multiblock\n\n破坏已成型的多方块结构中所有属于指定标签的方块")
+	public int destroyByTag(TagKey<Block> tag, boolean dropItems) {
+		return destroyMatching(state -> state.is(tag), dropItems);
+	}
+
+	/**
+	 * 破坏已成型的多方块结构中所有满足自定义条件的方块.
+	 *
+	 * <p><strong>注意：</strong>仅在服务端执行有效. 破坏完成后自动使验证缓存失效.</p>
+	 *
+	 * @param predicate BlockState 匹配条件
+	 * @param dropItems 是否掉落物品
+	 * @return 实际破坏的方块数量，结构未成型或 Level 为空时返回 0
+	 */
+	@Info("Destroys all blocks matching the predicate in the formed multiblock\n\n破坏已成型的多方块结构中所有满足自定义条件的方块")
+	public int destroyByFilter(Predicate<BlockState> predicate, boolean dropItems) {
+		return destroyMatching(predicate, dropItems);
+	}
+
+	/**
+	 * 按谓词遍历已成型的多方块结构并破坏匹配方块的内部实现.
+	 *
+	 * <p>
+	 * 使用 {@code validate()} 获取当前成型的旋转方向，
+	 * 再使用 {@code simulate()} 遍历所有位置，
+	 * 对世界中匹配谓词的方块执行破坏操作.
+	 * 若有任何方块被破坏，自动使验证缓存失效.
+	 * </p>
+	 *
+	 * @param predicate BlockState 匹配条件
+	 * @param dropItems 是否掉落物品
+	 * @return 实际破坏的方块数量
+	 */
+	private int destroyMatching(Predicate<BlockState> predicate, boolean dropItems) {
+		Level level = entity.getLevel();
+		if (level == null || level.isClientSide()) {
+			return 0;
+		}
+
+		IMultiblock mb = structure.get();
+		Rotation rotation = mb.validate(level, entity.getBlockPos());
+		if (rotation == null) {
+			return 0;
+		}
+
+		Pair<BlockPos, Collection<IMultiblock.SimulateResult>> result =
+				mb.simulate(level, entity.getBlockPos(), rotation, false);
+
+		int count = 0;
+		for (IMultiblock.SimulateResult sr : result.getSecond()) {
+			BlockPos pos = sr.getWorldPosition();
+			BlockState worldState = level.getBlockState(pos);
+			if (!worldState.isAir() && predicate.test(worldState)) {
+				level.destroyBlock(pos, dropItems);
+				count++;
+			}
+		}
+
+		if (count > 0) {
+			invalidateCache();
+		}
+		return count;
 	}
 
 	/**
