@@ -93,6 +93,14 @@ public class DefineBlockBuilder {
 	}
 
 	/**
+	 * 支持任意方块
+	 */
+	@Info("Allows the use of any block, generally used for empty spaces\n\n支持任意方块, 一般用于空位")
+	public void anyBlock() {
+		any();
+	}
+
+	/**
 	 * 指定方块 + Predicate<BlockState>
 	 */
 	@Info("Specifies a block + Predicate<BlockState>\n\n指定方块 + Predicate<BlockState>")

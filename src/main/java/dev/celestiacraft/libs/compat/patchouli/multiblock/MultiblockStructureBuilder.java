@@ -27,8 +27,8 @@ import java.util.function.Consumer;
  *
  * <pre>{@code
  * IMultiblock multiblock = new MultiblockStructureBuilder(structure)
- *     .define('A', (builder) -> builder.block(Blocks.IRON_BLOCK))
- *     .define('B', (builder) -> builder.any())
+ *     .define('0', (builder) -> builder.block(Blocks.IRON_BLOCK))
+ *     .define('A', (builder) -> builder.any())
  *     .build();
  * }</pre>
  *
@@ -54,6 +54,16 @@ public class MultiblockStructureBuilder {
 	 */
 	public MultiblockStructureBuilder(String[][] structure) {
 		this.structure = structure;
+	}
+
+	/**
+	 * 定义结构时必须有一个"0"的位置作为整个结构的中心位置
+	 *
+	 * @param structure 多维字符数组表示结构
+	 */
+	@Info("When defining a structure, there must be a \"0\" position as the center position of the entire structure\n\n定义结构时必须有一个\"0\"的位置作为整个结构的中心位置")
+	public static MultiblockStructureBuilder create(String[][] structure) {
+		return new MultiblockStructureBuilder(structure);
 	}
 
 	/**
