@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import dev.latvian.mods.kubejs.typings.Info;
 import lombok.Getter;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -271,32 +272,32 @@ public class MultiblockHandler {
 
 	@Info("Checks if the formed multiblock contains a specific block\n\n检测已成型的多方块结构中是否包含指定方块")
 	public boolean containsBlock(Block block) {
-		return containsBlock((state) -> {
+		return containsFilterBlock((state) -> {
 			return state.is(block);
 		});
 	}
 
 	@Info("Checks if the formed multiblock contains a block matching the predicate\n\n检测已成型的多方块结构中是否包含满足条件的方块")
-	public boolean containsBlock(Predicate<BlockState> predicate) {
-		return !findBlock(predicate).isEmpty();
+	public boolean containsFilterBlock(Predicate<BlockState> predicate) {
+		return !findFilterBlock(predicate).isEmpty();
 	}
 
 	@Info("Finds all positions of a specific block within the formed multiblock\n\n查找已成型的多方块结构中所有指定方块的位置")
 	public List<BlockPos> findBlock(Block block) {
-		return findBlock((state) -> {
+		return findFilterBlock((state) -> {
 			return state.is(block);
 		});
 	}
 
 	@Info("Finds all positions of blocks matching a tag within the formed multiblock\n\n查找已成型的多方块结构中所有属于指定标签的方块位置")
-	public List<BlockPos> findBlock(TagKey<Block> tag) {
-		return findBlock((state) -> {
+	public List<BlockPos> findBlockTag(TagKey<Block> tag) {
+		return findFilterBlock((state) -> {
 			return state.is(tag);
 		});
 	}
 
 	@Info("Finds all positions matching the predicate within the formed multiblock\n\n查找已成型的多方块结构中所有满足条件的方块位置")
-	public List<BlockPos> findBlock(Predicate<BlockState> predicate) {
+	public List<BlockPos> findFilterBlock(Predicate<BlockState> predicate) {
 		List<BlockPos> positions = new ArrayList<>();
 		Level level = getLevel();
 
@@ -331,13 +332,13 @@ public class MultiblockHandler {
 	}
 
 	@Info("Counts occurrences of a specific block within the formed multiblock\n\n统计已成型的多方块结构中指定方块的数量")
-	public int countBlockTag(Block block) {
+	public int countBlock(Block block) {
 		return findBlock(block).size();
 	}
 
 	@Info("Counts occurrences of blocks matching a tag within the formed multiblock\n\n统计已成型的多方块结构中属于指定标签的方块数量")
 	public int countBlockTag(TagKey<Block> tag) {
-		return findBlock(tag).size();
+		return findBlockTag(tag).size();
 	}
 
 	@Info("Destroys all non-air blocks in the formed multiblock structure\n\n破坏已成型的多方块结构中所有非空气方块")
@@ -405,6 +406,24 @@ public class MultiblockHandler {
 		}
 
 		return count;
+	}
+
+	@Info("Gets the facing direction of the formed multiblock\n\n获取多方块结构的朝向")
+	public Direction getDirection() {
+		Level level = getLevel();
+
+		if (level == null) {
+			return Direction.NORTH;
+		}
+
+		IMultiblock mb = structure.get();
+		Rotation rotation = mb.validate(level, getBlockPos());
+
+		if (rotation == null) {
+			return Direction.NORTH;
+		}
+
+		return rotation.rotate(Direction.NORTH);
 	}
 
 	@Info("Creates a MultiblockHandler builder\n\n创建 MultiblockHandler 构建器")
