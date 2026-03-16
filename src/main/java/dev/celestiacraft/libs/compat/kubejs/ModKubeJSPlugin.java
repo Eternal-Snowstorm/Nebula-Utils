@@ -101,7 +101,7 @@ public class ModKubeJSPlugin extends KubeJSPlugin {
 		}
 
 		if (ICheckModLoaded.hasPatchouli()) {
-			event.add("MultiblockStructureBuilder", StructureBuilder.class);
+			event.add("StructureBuilder", StructureBuilder.class);
 			event.add("DefineBlockBuilder", DefineBlockBuilder.class);
 			event.add("PropertyImmutableMap", PropertyImmutableMap.class);
 			event.add("MultiblockHandler", MultiblockHandler.class);
