@@ -58,7 +58,7 @@ public class DefineBlockBuilder {
 	 * @param block 具体方块
 	 */
 	@Info("Specify a block\n\n指定具体方块")
-	public void toBlock(Block block) {
+	public void block(Block block) {
 		matchers.add(pos);
 		matchers.add(block);
 	}
