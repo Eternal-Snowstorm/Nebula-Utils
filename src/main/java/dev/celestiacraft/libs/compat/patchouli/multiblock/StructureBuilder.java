@@ -15,9 +15,9 @@ import java.util.function.Consumer;
  * Patchouli 方向展示
  * <pre>{@code
  *     E
- *
- * N       S
- *
+ *     |
+ * N ——+—— S
+ *     |
  *     W
  * }</pre>
  * </p>
