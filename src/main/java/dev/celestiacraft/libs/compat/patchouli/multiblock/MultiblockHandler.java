@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.registries.ForgeRegistries;
 import vazkii.patchouli.api.IMultiblock;
 import vazkii.patchouli.api.PatchouliAPI;
@@ -232,16 +233,25 @@ public class MultiblockHandler {
 	@Info("Shows the multiblock holographic preview\n\n显示多方块全息预览")
 	public void showVisualization() {
 		Level level = getLevel();
+		BlockState state = level.getBlockState(getBlockPos());
+		Direction direction = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
 
-		if (level == null || !level.isClientSide) {
+		if (!level.isClientSide()) {
 			return;
 		}
+
+		Rotation rotation = switch (direction.getOpposite()) {
+			case SOUTH -> Rotation.CLOCKWISE_180;
+			case WEST -> Rotation.COUNTERCLOCKWISE_90;
+			case EAST -> Rotation.CLOCKWISE_90;
+			default -> Rotation.NONE;
+		};
 
 		PatchouliAPI.get().showMultiblock(
 				structure.get(),
 				Component.translatable(tranKey),
 				getBlockPos().offset(renderOffset),
-				Rotation.NONE
+				rotation
 		);
 
 		isShowingVisualization = true;
