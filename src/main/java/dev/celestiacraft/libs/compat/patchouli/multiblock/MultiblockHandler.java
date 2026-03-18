@@ -234,8 +234,7 @@ public class MultiblockHandler {
 	public void showVisualization() {
 		Level level = getLevel();
 		BlockState state = level.getBlockState(getBlockPos());
-		// FACING NOT HORIZONTAL_FACING!!!
-		Direction direction = state.getValue(BlockStateProperties.FACING);
+		Direction direction = getFacing(state);
 
 		if (!level.isClientSide()) {
 			return;
@@ -498,5 +497,15 @@ public class MultiblockHandler {
 
 			return new MultiblockHandler(context, structure, resolvedKey, renderOffset, cacheTicks);
 		}
+	}
+
+	private Direction getFacing(BlockState state) {
+		if (state.hasProperty(BlockStateProperties.FACING)) {
+			return state.getValue(BlockStateProperties.FACING);
+		}
+		if (state.hasProperty(BlockStateProperties.HORIZONTAL_FACING)) {
+			return state.getValue(BlockStateProperties.HORIZONTAL_FACING);
+		}
+		return Direction.NORTH;
 	}
 }
