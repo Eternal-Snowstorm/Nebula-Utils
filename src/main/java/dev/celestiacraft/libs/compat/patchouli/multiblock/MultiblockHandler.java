@@ -136,7 +136,7 @@ import java.util.function.Supplier;
  */
 public class MultiblockHandler {
 	@Getter
-	private final MultiblockContext context;
+	private final IMultiblockContext context;
 	private final Supplier<IMultiblock> structure;
 	private final String tranKey;
 	private final BlockPos renderOffset;
@@ -148,7 +148,7 @@ public class MultiblockHandler {
 	private boolean isShowingVisualization = false;
 
 	private MultiblockHandler(
-			MultiblockContext context,
+			IMultiblockContext context,
 			Supplier<IMultiblock> structure,
 			String tranKey,
 			BlockPos renderOffset,
@@ -447,14 +447,14 @@ public class MultiblockHandler {
 	}
 
 	public static class Builder {
-		private final MultiblockContext context;
+		private final IMultiblockContext context;
 		private final Supplier<IMultiblock> structure;
 
 		private String tranKey = null;
 		private BlockPos renderOffset = BlockPos.ZERO;
 		private int cacheTicks = 20;
 
-		private Builder(MultiblockContext context, Supplier<IMultiblock> structure) {
+		private Builder(IMultiblockContext context, Supplier<IMultiblock> structure) {
 			this.context = context;
 			this.structure = structure;
 		}

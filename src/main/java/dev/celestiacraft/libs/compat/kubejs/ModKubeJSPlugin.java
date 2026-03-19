@@ -108,7 +108,7 @@ public class ModKubeJSPlugin extends KubeJSPlugin {
 			event.add("MultiblockHandler$Builder", MultiblockHandler.Builder.class);
 			event.add("IMultiblockProvider", IMultiblockProvider.class);
 			event.add("BlockEntityContext", BlockEntityContext.class);
-			event.add("MultiblockContext", MultiblockContext.class);
+			event.add("MultiblockContext", IMultiblockContext.class);
 			event.add("WorldContext", WorldContext.class);
 		}
 	}

@@ -4,7 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-public class BlockEntityContext implements MultiblockContext {
+public class BlockEntityContext implements IMultiblockContext {
 	private final BlockEntity entity;
 
 	public BlockEntityContext(BlockEntity entity) {

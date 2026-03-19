@@ -3,7 +3,7 @@ package dev.celestiacraft.libs.compat.patchouli.multiblock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 
-public interface MultiblockContext {
+public interface IMultiblockContext {
 	Level getLevel();
 
 	BlockPos getBlockPos();
