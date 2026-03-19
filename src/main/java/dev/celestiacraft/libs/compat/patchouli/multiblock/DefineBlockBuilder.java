@@ -96,9 +96,9 @@ public class DefineBlockBuilder {
 	 * 指定方块 + Predicate<BlockState>
 	 */
 	@Info("Specifies a block + Predicate<BlockState>\n\n指定方块 + Predicate<BlockState>")
-	public void predicate(Block block, Predicate<BlockState> pred) {
+	public void predicate(Block block, Predicate<BlockState> predicate) {
 		matchers.add(pos);
-		matchers.add(PatchouliAPI.get().predicateMatcher(block, pred));
+		matchers.add(PatchouliAPI.get().predicateMatcher(block, predicate));
 	}
 
 	/**
