@@ -13,6 +13,7 @@ import dev.celestiacraft.libs.common.material.Material;
 import dev.celestiacraft.libs.compat.jade.CommonJadeTipProvider;
 import dev.celestiacraft.libs.compat.patchouli.multiblock.*;
 import dev.celestiacraft.libs.compat.tconstruct.util.SimpleTConUtils;
+import dev.celestiacraft.libs.debug.DebugUserManager;
 import dev.celestiacraft.libs.wrapper.IntWrapper;
 import dev.latvian.mods.kubejs.KubeJSPlugin;
 import dev.latvian.mods.kubejs.registry.RegistryInfo;
@@ -77,6 +78,7 @@ public class ModKubeJSPlugin extends KubeJSPlugin {
 		event.add("GsonBuildConfig", GsonBuildConfig.class);
 		event.add("NebulaMaterial", Material.class);
 		event.add("Lazy", Lazy.class);
+		event.add("DebugUserManager", DebugUserManager.class);
 
 		if (ICheckModLoaded.hasCreate()) {
 			event.add("AllSoundEvents", AllSoundEvents.class);

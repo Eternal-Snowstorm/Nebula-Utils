@@ -1,6 +1,8 @@
 package dev.celestiacraft.libs.compat.patchouli.multiblock;
 
 import dev.latvian.mods.kubejs.typings.Info;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -76,11 +78,29 @@ public class DefineBlockBuilder {
 
 	/**
 	 * 指定方块标签
+	 *
+	 * @param tag 标签
 	 */
 	@Info("Specify a block tag\n\n指定方块标签")
 	public void tag(TagKey<Block> tag) {
 		matchers.add(pos);
 		matchers.add(PatchouliAPI.get().tagMatcher(tag));
+	}
+
+	/**
+	 * 指定方块标签
+	 *
+	 * @param tag 标签
+	 */
+	@Info("Specify a block tag\n\n指定方块标签")
+	public void tagId(ResourceLocation tag) {
+		if (tag == null) {
+			return;
+		}
+
+		TagKey<Block> key = TagKey.create(Registries.BLOCK, tag);
+		matchers.add(pos);
+		matchers.add(PatchouliAPI.get().tagMatcher(key));
 	}
 
 	/**

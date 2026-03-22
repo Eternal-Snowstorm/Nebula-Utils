@@ -78,13 +78,8 @@ public class DebugUserManager {
 		if (player == null) {
 			return false;
 		}
-		return isDebugger(player.getGameProfile().getName());
-	}
 
-	public static boolean isDebugger(String name) {
-		if (name == null) {
-			return false;
-		}
-		return DEBUG_USERS.contains(name.toLowerCase());
+		String name = player.getGameProfile().getName();
+		return name != null && DEBUG_USERS.contains(name.toLowerCase());
 	}
 }
