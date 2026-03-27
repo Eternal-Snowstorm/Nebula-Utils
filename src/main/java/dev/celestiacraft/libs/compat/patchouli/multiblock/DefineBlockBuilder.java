@@ -99,8 +99,7 @@ public class DefineBlockBuilder {
 		}
 
 		TagKey<Block> key = TagKey.create(Registries.BLOCK, tag);
-		matchers.add(pos);
-		matchers.add(PatchouliAPI.get().tagMatcher(key));
+		tag(key);
 	}
 
 	/**
