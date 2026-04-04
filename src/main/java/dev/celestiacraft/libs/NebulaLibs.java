@@ -14,7 +14,6 @@ import dev.celestiacraft.libs.compat.ICheckModLoaded;
 import dev.celestiacraft.libs.compat.ftbquests.client.FTBQuestsClientCompat;
 import dev.celestiacraft.libs.config.CommonConfig;
 import dev.celestiacraft.libs.debug.DebugUserManager;
-import dev.celestiacraft.libs.register.NebulaRegistrate;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -37,8 +36,6 @@ public class NebulaLibs {
 	public static final Logger LOGGER = LogManager.getLogger("Nebula");
 	public final CreateRegistrate registrate;
 	public static NebulaLibs INSTANCE;
-
-	public static final NebulaRegistrate reg = NebulaRegistrate.create(MODID);
 
 	public static final Material MATERIAL = new Material(MODID);
 
