@@ -49,7 +49,7 @@ versionRange = "[2001.2.3-build.10,)"
 [[dependencies."${mod_id}"]]
 modId = "create"
 mandatory = false
-versionRange = "[0.5.1.j,6)"
+versionRange = "[0.5.1.j,7)"
 ordering = "NONE"
 side = "BOTH"
 
