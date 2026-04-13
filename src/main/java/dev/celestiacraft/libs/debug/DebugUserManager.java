@@ -39,7 +39,13 @@ public class DebugUserManager {
 			"Ye_Anqing",
 			"KEYboardManDesu",
 			"oooooooo_zane",
-			"Flash_Yi"
+			"Flash_Yi",
+			"Sergei",
+			"Elina",
+			"xiaolizi_",
+			"X_CnJiu",
+			"LirxOwO",
+			"ein_NameUwU"
 	);
 
 	public static Set<String> getAllDebugUsers() {
