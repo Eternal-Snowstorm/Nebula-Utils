@@ -241,4 +241,14 @@ public interface IEnergyItem {
 	default int getEnergyBarColor(ItemStack stack) {
 		return 0x00FFFF;
 	}
+
+	/**
+	 * 获取比例条
+	 *
+	 * @param stack
+	 * @return
+	 */
+	default float getRatioBar(ItemStack stack) {
+		return (float) getEnergyStored(stack) / getCapacity(stack);
+	}
 }
