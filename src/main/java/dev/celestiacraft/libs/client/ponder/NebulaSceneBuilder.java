@@ -10,7 +10,6 @@ import net.createmod.ponder.api.level.PonderLevel;
 import net.createmod.ponder.api.scene.SceneBuilder;
 import net.createmod.ponder.api.scene.SceneBuildingUtil;
 import net.createmod.ponder.api.scene.Selection;
-import net.createmod.ponder.foundation.PonderScene;
 import net.createmod.ponder.foundation.element.InputWindowElement;
 import net.createmod.ponder.foundation.instruction.ShowInputInstruction;
 import net.minecraft.core.BlockPos;
@@ -22,7 +21,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class NebulaSceneBuilder extends CreateSceneBuilder {
 	public static final Object OBJECT = new Object();
-	private PonderScene ponderScene;
 	private final ExtendedWorldInstructions world;
 
 	public NebulaSceneBuilder(SceneBuilder builder) {
@@ -36,13 +34,13 @@ public class NebulaSceneBuilder extends CreateSceneBuilder {
 	}
 
 	public void showStructure() {
-		showStructure(ponderScene.getBasePlateSize() * 2);
+		showStructure(scene.getBasePlateSize() * 2);
 	}
 
 	public void showStructure(int height) {
-		BlockPos start = new BlockPos(ponderScene.getBasePlateOffsetX(), 0, ponderScene.getBasePlateOffsetZ());
-		BlockPos size = new BlockPos(ponderScene.getBasePlateSize() - 1, height, ponderScene.getBasePlateSize() - 1);
-		Selection selection = ponderScene.getSceneBuildingUtil().select().cuboid(start, size);
+		BlockPos start = new BlockPos(scene.getBasePlateOffsetX(), 0, scene.getBasePlateOffsetZ());
+		BlockPos size = new BlockPos(scene.getBasePlateSize() - 1, height, scene.getBasePlateSize() - 1);
+		Selection selection = scene.getSceneBuildingUtil().select().cuboid(start, size);
 		encapsulateBounds(size);
 		world().showSection(selection, Direction.UP);
 	}
