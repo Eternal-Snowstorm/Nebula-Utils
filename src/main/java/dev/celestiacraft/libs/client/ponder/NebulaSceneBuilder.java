@@ -1,6 +1,7 @@
 package dev.celestiacraft.libs.client.ponder;
 
 import com.simibubi.create.foundation.ponder.CreateSceneBuilder;
+import net.createmod.catnip.math.Pointing;
 import net.createmod.ponder.api.PonderPalette;
 import net.createmod.ponder.api.element.ElementLink;
 import net.createmod.ponder.api.element.EntityElement;
@@ -10,6 +11,8 @@ import net.createmod.ponder.api.scene.SceneBuilder;
 import net.createmod.ponder.api.scene.SceneBuildingUtil;
 import net.createmod.ponder.api.scene.Selection;
 import net.createmod.ponder.foundation.PonderScene;
+import net.createmod.ponder.foundation.element.InputWindowElement;
+import net.createmod.ponder.foundation.instruction.ShowInputInstruction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -72,6 +75,12 @@ public class NebulaSceneBuilder extends CreateSceneBuilder {
 				.sharedText(location)
 				.pointAt(position)
 				.colored(PonderPalette.BLUE);
+	}
+
+	public InputWindowElement showControls(int duration, Vec3 pos, Pointing pointing) {
+		InputWindowElement element = new InputWindowElement(pos, pointing);
+		addInstruction(new ShowInputInstruction(element, duration));
+		return element;
 	}
 
 	public static void init5x5(SceneBuilder builder, SceneBuildingUtil util) {
