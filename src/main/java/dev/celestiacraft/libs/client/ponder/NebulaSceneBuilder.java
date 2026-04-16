@@ -21,15 +21,15 @@ import org.jetbrains.annotations.NotNull;
 
 public class NebulaSceneBuilder extends CreateSceneBuilder {
 	public static final Object OBJECT = new Object();
-	private final ExtendedWorldInstructions world;
+	private final NebulaWorldInstructions world;
 
 	public NebulaSceneBuilder(SceneBuilder builder) {
 		super(builder);
-		world = new ExtendedWorldInstructions();
+		world = new NebulaWorldInstructions();
 	}
 
 	@Override
-	public @NotNull ExtendedWorldInstructions world() {
+	public @NotNull NebulaSceneBuilder.NebulaWorldInstructions world() {
 		return world;
 	}
 
@@ -112,7 +112,7 @@ public class NebulaSceneBuilder extends CreateSceneBuilder {
 		builder.idle(time);
 	}
 
-	public class ExtendedWorldInstructions extends WorldInstructions {
+	public class NebulaWorldInstructions extends WorldInstructions {
 		public void removeEntity(ElementLink<EntityElement> link) {
 			addInstruction((scene) -> {
 				EntityElement resolve = scene.resolve(link);
