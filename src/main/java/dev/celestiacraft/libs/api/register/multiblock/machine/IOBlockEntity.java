@@ -6,6 +6,10 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,6 +29,7 @@ import java.util.List;
  * <ul>
  *     <li>声明该 IO 方块允许接入的主控 BE 类型集合</li>
  *     <li>基于 {@link #supportedControllers()} 提供默认的白名单校验</li>
+ *     <li>统一提供常用 capability 的便捷访问方法</li>
  * </ul>
  *
  * <p>
@@ -32,6 +37,7 @@ import java.util.List;
  * </p>
  * <ul>
  *     <li>实现 {@link #supportedControllers()}, 以 {@link List#of(Object[])} 枚举可配合使用的主控 BE 类</li>
+ *     <li>按需暴露物品 / 流体 / 能量 capability</li>
  * </ul>
  *
  * <pre>{@code
@@ -78,6 +84,57 @@ public abstract class IOBlockEntity extends BlockEntity {
 	@Override
 	public ClientboundBlockEntityDataPacket getUpdatePacket() {
 		return ClientboundBlockEntityDataPacket.create(this);
+	}
+
+	/**
+	 * 获取当前 IO 方块暴露的物品能力
+	 *
+	 * @return 物品能力, 不存在时返回 {@code null}
+	 */
+	@Nullable
+	public IItemHandler getItemHandler() {
+		return getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
+	}
+
+	/**
+	 * 获取当前 IO 方块暴露的流体能力
+	 *
+	 * @return 流体能力, 不存在时返回 {@code null}
+	 */
+	@Nullable
+	public IFluidHandler getFluidHandler() {
+		return getCapability(ForgeCapabilities.FLUID_HANDLER).orElse(null);
+	}
+
+	/**
+	 * 获取当前 IO 方块暴露的能量能力
+	 *
+	 * @return 能量能力, 不存在时返回 {@code null}
+	 */
+	@Nullable
+	public IEnergyStorage getEnergyStorage() {
+		return getCapability(ForgeCapabilities.ENERGY).orElse(null);
+	}
+
+	/**
+	 * 当前 IO 方块是否暴露了物品能力
+	 */
+	public boolean hasItemHandler() {
+		return getItemHandler() != null;
+	}
+
+	/**
+	 * 当前 IO 方块是否暴露了流体能力
+	 */
+	public boolean hasFluidHandler() {
+		return getFluidHandler() != null;
+	}
+
+	/**
+	 * 当前 IO 方块是否暴露了能量能力
+	 */
+	public boolean hasEnergyStorage() {
+		return getEnergyStorage() != null;
 	}
 
 	/**

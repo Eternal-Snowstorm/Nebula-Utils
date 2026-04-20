@@ -27,6 +27,7 @@ import vazkii.patchouli.api.IMultiblock;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public abstract class MachineControllerBlockEntity extends ControllerBlockEntity {
@@ -234,6 +235,88 @@ public abstract class MachineControllerBlockEntity extends ControllerBlockEntity
 		return entities.isEmpty() ? null : entities.get(0);
 	}
 
+	protected final List<IOBlockEntity> findMatchedIOBlockEntities() {
+		return findMatchedIOBlockEntities(IOBlockEntity.class);
+	}
+
+	protected final <T extends IOBlockEntity> List<T> findMatchedIOBlockEntities(Class<T> type) {
+		if (level == null || !isStructureValid()) {
+			return Collections.emptyList();
+		}
+
+		List<T> result = new ArrayList<>();
+		for (BlockPos pos : getMultiblockHandler().findFilterBlock((state) -> true)) {
+			BlockEntity entity = level.getBlockEntity(pos);
+			if (type.isInstance(entity)) {
+				T ioBlockEntity = type.cast(entity);
+				if (ioBlockEntity.isControllerAllowed(this)) {
+					result.add(ioBlockEntity);
+				}
+			}
+		}
+		return result;
+	}
+
+	@Nullable
+	protected final IOBlockEntity findFirstMatchedIOBlockEntity() {
+		return findFirstMatchedIOBlockEntity(IOBlockEntity.class);
+	}
+
+	@Nullable
+	protected final <T extends IOBlockEntity> T findFirstMatchedIOBlockEntity(Class<T> type) {
+		List<T> entities = findMatchedIOBlockEntities(type);
+		return entities.isEmpty() ? null : entities.get(0);
+	}
+
+	protected final int countMatchedIOBlockEntities() {
+		return findMatchedIOBlockEntities().size();
+	}
+
+	protected final int countMatchedItemIOBlockEntities() {
+		return countMatchedAllowedIOBlockEntities(IOBlockEntity::hasItemHandler);
+	}
+
+	protected final int countMatchedFluidIOBlockEntities() {
+		return countMatchedAllowedIOBlockEntities(IOBlockEntity::hasFluidHandler);
+	}
+
+	protected final int countMatchedEnergyIOBlockEntities() {
+		return countMatchedAllowedIOBlockEntities(IOBlockEntity::hasEnergyStorage);
+	}
+
+	@Nullable
+	protected final IOBlockEntity findFirstMatchedItemIOBlockEntity() {
+		return findFirstMatchedAllowedIOBlockEntity(IOBlockEntity::hasItemHandler);
+	}
+
+	@Nullable
+	protected final IOBlockEntity findFirstMatchedFluidIOBlockEntity() {
+		return findFirstMatchedAllowedIOBlockEntity(IOBlockEntity::hasFluidHandler);
+	}
+
+	@Nullable
+	protected final IOBlockEntity findFirstMatchedEnergyIOBlockEntity() {
+		return findFirstMatchedAllowedIOBlockEntity(IOBlockEntity::hasEnergyStorage);
+	}
+
+	@Nullable
+	protected final IItemHandler findFirstMatchedItemHandler() {
+		IOBlockEntity ioBlockEntity = findFirstMatchedItemIOBlockEntity();
+		return ioBlockEntity == null ? null : ioBlockEntity.getItemHandler();
+	}
+
+	@Nullable
+	protected final IFluidHandler findFirstMatchedFluidHandler() {
+		IOBlockEntity ioBlockEntity = findFirstMatchedFluidIOBlockEntity();
+		return ioBlockEntity == null ? null : ioBlockEntity.getFluidHandler();
+	}
+
+	@Nullable
+	protected final IEnergyStorage findFirstMatchedEnergyStorage() {
+		IOBlockEntity ioBlockEntity = findFirstMatchedEnergyIOBlockEntity();
+		return ioBlockEntity == null ? null : ioBlockEntity.getEnergyStorage();
+	}
+
 	protected final int getStoredEnergy() {
 		return energyStored;
 	}
@@ -421,6 +504,26 @@ public abstract class MachineControllerBlockEntity extends ControllerBlockEntity
 	}
 
 	protected void onWorkConditionFailed(MultiblockContext<? extends MachineControllerBlockEntity> context, WorkConditionResult result) {
+	}
+
+	private int countMatchedAllowedIOBlockEntities(Predicate<IOBlockEntity> predicate) {
+		int count = 0;
+		for (IOBlockEntity entity : findMatchedIOBlockEntities()) {
+			if (predicate.test(entity)) {
+				count++;
+			}
+		}
+		return count;
+	}
+
+	@Nullable
+	private IOBlockEntity findFirstMatchedAllowedIOBlockEntity(Predicate<IOBlockEntity> predicate) {
+		for (IOBlockEntity entity : findMatchedIOBlockEntities()) {
+			if (predicate.test(entity)) {
+				return entity;
+			}
+		}
+		return null;
 	}
 
 	private int configuredItemSlotsHint() {
