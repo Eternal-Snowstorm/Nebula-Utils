@@ -40,17 +40,15 @@ public class NebulaLibs {
 	public static final Material MATERIAL = new Material(MODID);
 
 	public NebulaLibs(FMLJavaModLoadingContext context) {
-
 		IEventBus bus = context.getModEventBus();
 		INSTANCE = this;
 
-		this.registrate = CreateRegistrate.create(MODID)
+		registrate = CreateRegistrate.create(MODID)
 				.setTooltipModifierFactory((item) -> {
 					return new ItemDescription.Modifier(item, FontHelper.Palette.STANDARD_CREATE)
 							.andThen(TooltipModifier.mapNull(KineticStats.create(item)));
 				});
 
-//		TestMaterial.init();
 		registrate.registerEventListeners(bus);
 
 		MaterialRegister.register(registrate);
@@ -63,6 +61,10 @@ public class NebulaLibs {
 
 	public static ResourceLocation loadResource(String path) {
 		return ResourceLocation.fromNamespaceAndPath(MODID, path);
+	}
+
+	public static void modifyWindowsTitle(String title) {
+		Minecraft.getInstance().getWindow().setTitle(title);
 	}
 
 	public static ResourceLocation loadForgeResource(String path) {
