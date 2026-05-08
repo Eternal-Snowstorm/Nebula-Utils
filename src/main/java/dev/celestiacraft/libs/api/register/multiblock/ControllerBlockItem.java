@@ -1,6 +1,6 @@
 package dev.celestiacraft.libs.api.register.multiblock;
 
-import dev.celestiacraft.libs.api.client.tooltip.TooltipContext;
+import dev.celestiacraft.libs.api.client.context.TooltipContext;
 import dev.celestiacraft.libs.api.register.block.BasicBlockItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;

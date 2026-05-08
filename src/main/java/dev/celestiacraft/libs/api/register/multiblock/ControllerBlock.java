@@ -2,7 +2,7 @@ package dev.celestiacraft.libs.api.register.multiblock;
 
 import com.simibubi.create.AllTags;
 import com.simibubi.create.foundation.block.IBE;
-import dev.celestiacraft.libs.api.interaction.UseContext;
+import dev.celestiacraft.libs.api.interaction.context.UseContext;
 import dev.celestiacraft.libs.api.register.block.BasicBlock;
 import dev.celestiacraft.libs.common.register.NebulaItem;
 import dev.celestiacraft.libs.compat.patchouli.multiblock.IMultiblockProvider;

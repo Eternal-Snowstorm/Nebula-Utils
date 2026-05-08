@@ -1,6 +1,6 @@
 package dev.celestiacraft.libs.wrapper;
 
-public final class IntWrapper {
+public class IntWrapper {
 	private final int value;
 
 	public IntWrapper(int value) {

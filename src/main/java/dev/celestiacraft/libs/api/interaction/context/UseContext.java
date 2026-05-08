@@ -1,4 +1,4 @@
-package dev.celestiacraft.libs.api.interaction;
+package dev.celestiacraft.libs.api.interaction.context;
 
 import lombok.Getter;
 import net.minecraft.core.BlockPos;

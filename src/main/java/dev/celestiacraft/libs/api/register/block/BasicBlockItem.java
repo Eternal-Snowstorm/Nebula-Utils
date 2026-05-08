@@ -1,6 +1,6 @@
 package dev.celestiacraft.libs.api.register.block;
 
-import dev.celestiacraft.libs.api.client.tooltip.TooltipContext;
+import dev.celestiacraft.libs.api.client.context.TooltipContext;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;

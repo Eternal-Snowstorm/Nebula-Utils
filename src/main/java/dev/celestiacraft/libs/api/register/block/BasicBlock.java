@@ -1,7 +1,7 @@
 package dev.celestiacraft.libs.api.register.block;
 
 import dev.celestiacraft.libs.api.interaction.IFluidInteractable;
-import dev.celestiacraft.libs.api.interaction.UseContext;
+import dev.celestiacraft.libs.api.interaction.context.UseContext;
 import dev.celestiacraft.libs.api.register.multiblock.ControllerBlockFacing;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

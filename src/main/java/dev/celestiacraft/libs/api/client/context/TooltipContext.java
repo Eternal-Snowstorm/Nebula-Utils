@@ -1,4 +1,4 @@
-package dev.celestiacraft.libs.api.client.tooltip;
+package dev.celestiacraft.libs.api.client.context;
 
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
@@ -45,11 +45,11 @@ public class TooltipContext {
 		tooltip.add(Component.literal(text));
 	}
 
-	public void addTrans(String key) {
+	public void addTranslatable(String key) {
 		tooltip.add(Component.translatable(key));
 	}
 
-	public void addTrans(String key, Object... args) {
+	public void addTranslatable(String key, Object... args) {
 		tooltip.add(Component.translatable(key, args));
 	}
 
@@ -75,25 +75,25 @@ public class TooltipContext {
 
 	public void addShiftTooltip(String normalKey, String shiftKey) {
 		if (isShiftDown()) {
-			addTrans(shiftKey);
+			addTranslatable(shiftKey);
 		} else {
-			addTrans(normalKey);
+			addTranslatable(normalKey);
 		}
 	}
 
 	public void addCtrlTooltip(String normalKey, String shiftKey) {
 		if (isCtrlDown()) {
-			addTrans(shiftKey);
+			addTranslatable(shiftKey);
 		} else {
-			addTrans(normalKey);
+			addTranslatable(normalKey);
 		}
 	}
 
 	public void addAltTooltip(String normalKey, String shiftKey) {
 		if (isAltDown()) {
-			addTrans(shiftKey);
+			addTranslatable(shiftKey);
 		} else {
-			addTrans(normalKey);
+			addTranslatable(normalKey);
 		}
 	}
 }
