@@ -302,9 +302,19 @@ public class BasicBlock extends Block implements IFluidInteractable {
 		return false;
 	}
 
-	public static ToIntFunction<BlockState> litBlockEmission(int level) {
+	public static ToIntFunction<BlockState> litBlockEmission(int litLevel) {
 		return (state) -> {
-			return state.getValue(BlockStateProperties.LIT) ? level : 0;
+			return state.getValue(BlockStateProperties.LIT)
+					? litLevel
+					: 0;
+		};
+	}
+
+	public static ToIntFunction<BlockState> litBlockEmission(int litLevel, int extinguishLevel) {
+		return (state) -> {
+			return state.getValue(BlockStateProperties.LIT)
+					? litLevel
+					: extinguishLevel;
 		};
 	}
 
