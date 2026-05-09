@@ -17,6 +17,8 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
@@ -24,6 +26,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.ToIntFunction;
 
 public class BasicBlock extends Block implements IFluidInteractable {
+	public static final DirectionProperty FACING = BlockStateProperties.FACING;
+	public static final DirectionProperty HORIZONTAL_FACING = BlockStateProperties.HORIZONTAL_FACING;
+
+	public static final BooleanProperty LIT = BlockStateProperties.LIT;
+	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
+	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+
 	public BasicBlock(Properties properties) {
 		super(properties);
 
@@ -35,11 +44,11 @@ public class BasicBlock extends Block implements IFluidInteractable {
 		}
 
 		if (useRedstone()) {
-			state = state.setValue(BlockStateProperties.POWERED, false);
+			state = state.setValue(POWERED, false);
 		}
 
 		if (useLitState()) {
-			state = state.setValue(BlockStateProperties.LIT, false);
+			state = state.setValue(LIT, false);
 		}
 
 		registerDefaultState(state);
@@ -149,8 +158,8 @@ public class BasicBlock extends Block implements IFluidInteractable {
 	 */
 	protected Property<Direction> getFacingProperty() {
 		return switch (useFacingType()) {
-			case FACING -> BlockStateProperties.FACING;
-			case HORIZONTAL -> BlockStateProperties.HORIZONTAL_FACING;
+			case FACING -> FACING;
+			case HORIZONTAL -> HORIZONTAL_FACING;
 			default -> null;
 		};
 	}
@@ -198,11 +207,11 @@ public class BasicBlock extends Block implements IFluidInteractable {
 		}
 
 		if (useRedstone()) {
-			builder.add(BlockStateProperties.POWERED);
+			builder.add(POWERED);
 		}
 
 		if (useLitState()) {
-			builder.add(BlockStateProperties.LIT);
+			builder.add(LIT);
 		}
 	}
 
@@ -313,7 +322,7 @@ public class BasicBlock extends Block implements IFluidInteractable {
 		int finalLitLevel = litLevel;
 		int finalExtinguishLevel = extinguishLevel;
 		return (state) -> {
-			return state.getValue(BlockStateProperties.LIT)
+			return state.getValue(LIT)
 					? finalLitLevel
 					: finalExtinguishLevel;
 		};
