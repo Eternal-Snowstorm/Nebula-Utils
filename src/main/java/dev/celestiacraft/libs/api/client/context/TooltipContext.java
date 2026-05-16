@@ -37,6 +37,10 @@ public class TooltipContext {
 		return Minecraft.getInstance().player;
 	}
 
+	public void addEmpty() {
+		tooltip.add(Component.empty());
+	}
+
 	public void add(Component component) {
 		tooltip.add(component);
 	}
@@ -51,10 +55,6 @@ public class TooltipContext {
 
 	public void addTranslatable(String key, Object... args) {
 		tooltip.add(Component.translatable(key, args));
-	}
-
-	public void blank() {
-		tooltip.add(Component.empty());
 	}
 
 	public boolean isShiftDown() {
