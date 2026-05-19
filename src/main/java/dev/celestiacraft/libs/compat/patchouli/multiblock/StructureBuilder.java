@@ -72,11 +72,17 @@ public class StructureBuilder {
 
 	/**
 	 * 定义结构时必须有一个"0"的位置作为整个结构的中心位置
+	 * <p>
+	 * 并且字符空格 {@code ''} 默认为任意方块
 	 *
 	 * @param structure 多维字符数组表示结构
 	 */
 	public StructureBuilder(String[][] structure) {
 		this.structure = structure;
+
+		// 默认空格为任意方块
+		matchers.add(' ');
+		matchers.add(PatchouliAPI.get().anyMatcher());
 	}
 
 	/**
