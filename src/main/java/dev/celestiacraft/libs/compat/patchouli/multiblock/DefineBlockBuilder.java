@@ -50,6 +50,10 @@ public class DefineBlockBuilder {
 	private final List<Object> matchers;
 
 	public DefineBlockBuilder(char pos, List<Object> matchers) {
+		if (matchers == null) {
+			throw new IllegalArgumentException("Matchers cannot be null");
+		}
+
 		this.pos = pos;
 		this.matchers = matchers;
 	}
@@ -61,6 +65,10 @@ public class DefineBlockBuilder {
 	 */
 	@Info("Specify a block\n\n指定具体方块")
 	public void block(Block block) {
+		if (block == null) {
+			throw new IllegalArgumentException("Block cannot be null");
+		}
+
 		matchers.add(pos);
 		matchers.add(block);
 	}
@@ -72,6 +80,10 @@ public class DefineBlockBuilder {
 	 */
 	@Info("Specify a block states\n\n指定具体方块状态")
 	public void state(BlockState state) {
+		if (state == null) {
+			throw new IllegalArgumentException("BlockState cannot be null");
+		}
+
 		matchers.add(pos);
 		matchers.add(PatchouliAPI.get().stateMatcher(state));
 	}
@@ -83,6 +95,10 @@ public class DefineBlockBuilder {
 	 */
 	@Info("Specify a block tag\n\n指定方块标签")
 	public void tag(TagKey<Block> tag) {
+		if (tag == null) {
+			throw new IllegalArgumentException("Tag cannot be null");
+		}
+
 		matchers.add(pos);
 		matchers.add(PatchouliAPI.get().tagMatcher(tag));
 	}
@@ -95,7 +111,7 @@ public class DefineBlockBuilder {
 	@Info("Specify a block tag\n\n指定方块标签")
 	public void tagId(ResourceLocation tag) {
 		if (tag == null) {
-			return;
+			throw new IllegalArgumentException("Tag ResourceLocation cannot be null");
 		}
 
 		TagKey<Block> key = TagKey.create(Registries.BLOCK, tag);
@@ -116,6 +132,14 @@ public class DefineBlockBuilder {
 	 */
 	@Info("Specifies a block + Predicate<BlockState>\n\n指定方块 + Predicate<BlockState>")
 	public void predicate(Block block, Predicate<BlockState> predicate) {
+		if (block == null) {
+			throw new IllegalArgumentException("Block cannot be null");
+		}
+
+		if (predicate == null) {
+			throw new IllegalArgumentException("Predicate cannot be null");
+		}
+
 		matchers.add(pos);
 		matchers.add(PatchouliAPI.get().predicateMatcher(block, predicate));
 	}
@@ -125,10 +149,35 @@ public class DefineBlockBuilder {
 	 */
 	@Info("Specifies a block + state mapping (Map<Property, Comparable>)\n\n指定方块 + 状态映射 (Map<Property, Comparable>)")
 	public void map(Block block, Map<Property<?>, ? extends Comparable<?>> map) {
-		BlockState state = block.defaultBlockState();
-		for (Map.Entry<Property<?>, ? extends Comparable<?>> entry : map.entrySet()) {
-			state = state.setValue((Property) entry.getKey(), (Comparable) entry.getValue());
+		if (block == null) {
+			throw new IllegalArgumentException("Block cannot be null");
 		}
+
+		if (map == null) {
+			throw new IllegalArgumentException("Map cannot be null");
+		}
+
+		BlockState state = block.defaultBlockState();
+
+		for (Map.Entry<Property<?>, ? extends Comparable<?>> entry : map.entrySet()) {
+			if (entry == null) {
+				continue;
+			}
+
+			Property<?> property = entry.getKey();
+			Comparable<?> value = entry.getValue();
+
+			if (property == null) {
+				throw new IllegalArgumentException("Property in map cannot be null");
+			}
+
+			if (value == null) {
+				throw new IllegalArgumentException("Property value in map cannot be null");
+			}
+
+			state = state.setValue((Property) property, (Comparable) value);
+		}
+
 		matchers.add(pos);
 		matchers.add(PatchouliAPI.get().stateMatcher(state));
 	}
