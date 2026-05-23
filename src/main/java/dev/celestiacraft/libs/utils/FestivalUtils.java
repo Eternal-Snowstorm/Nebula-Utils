@@ -120,4 +120,72 @@ public class FestivalUtils {
 		// 明天是正月初一
 		return lunar.getMonth() == 1 && lunar.getDay() == 1;
 	}
+
+	public static String getFestivalGreeting() {
+		if (isChineseNewYear()) {
+			return "Happy Spring Festival!";
+		}
+
+		if (isChineseNewYearsEve()) {
+			return "Happy Chinese New Year's Eve!";
+		}
+
+		if (isLanternFestival()) {
+			return "Happy Lantern Festival!";
+		}
+
+		if (isDragonBoatFestival()) {
+			return "Happy Dragon Boat Festival!";
+		}
+
+		if (isMidAutumnFestival()) {
+			return "Happy Mid-Autumn Festival!";
+		}
+
+		if (isLabaFestival()) {
+			return "Happy Laba Festival!";
+		}
+
+		if (isDoubleNinthFestival()) {
+			return "Happy Double Ninth Festival!";
+		}
+
+		if (isNewYear()) {
+			return "Happy New Year!";
+		}
+
+		if (isWomensDay()) {
+			return "Happy Women's Day!";
+		}
+
+		if (isAprilFoolsDay()) {
+			return "Happy April Fools' Day!";
+		}
+
+		if (isLabourDay()) {
+			return "Happy Labour Day!";
+		}
+
+		if (isChildrensDay()) {
+			return "Happy Children's Day!";
+		}
+
+		if (isHalloween()) {
+			return "Happy Halloween!";
+		}
+
+		if (isChristmasEve()) {
+			return "Merry Christmas Eve!";
+		}
+
+		if (isChristmas()) {
+			return "Merry Christmas!";
+		}
+
+		if (isNewYearsEve()) {
+			return "Happy New Year's Eve!";
+		}
+
+		return null;
+	}
 }
