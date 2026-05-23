@@ -156,6 +156,9 @@ dependencies {
 	// Lomkok
 	compileOnly 'org.projectlombok:lombok:1.18.28'
 	annotationProcessor 'org.projectlombok:lombok:1.18.28'
+	// Lunar
+	implementation 'cn.6tail:lunar:1.7.4'
+	jarJar("cn.6tail:lunar:1.7.4")
 }
 tasks.named('processResources', ProcessResources).configure {
 	var replaceProperties = [
