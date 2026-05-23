@@ -127,8 +127,9 @@ public class NebulaLibs {
 	@SubscribeEvent
 	public static void onClientSetup(FMLClientSetupEvent event) {
 		event.enqueueWork(() -> {
+			LOGGER.debug("7f8f7032d4b1f5f2b67f0b1260b5c5f3f187503a75b309ad1c6a163e7ec7f993");
+
 			if (ICheckModLoaded.hasFTBQuests()) {
-				LOGGER.debug("7f8f7032d4b1f5f2b67f0b1260b5c5f3f187503a75b309ad1c6a163e7ec7f993");
 				FTBQuestsClientCompat.init();
 			}
 		});
