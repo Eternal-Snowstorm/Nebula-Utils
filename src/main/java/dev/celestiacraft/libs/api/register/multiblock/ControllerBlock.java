@@ -92,12 +92,19 @@ public abstract class ControllerBlock<T extends BlockEntity & IMultiblockProvide
 
 				T be = getBlockEntity(context.getLevel(), context.getPos());
 
-				if (be != null && be.isStructureValid()) {
-					context.getPlayer().displayClientMessage(
-							Component.translatable("tip.structurally_valid"),
-							true
-					);
-					return InteractionResult.SUCCESS;
+				if (be != null) {
+					if (be.isStructureValid()) {
+						context.getPlayer().displayClientMessage(
+								Component.translatable("tip.structurally_valid"),
+								true
+						);
+						return InteractionResult.SUCCESS;
+					} else {
+						context.getPlayer().displayClientMessage(
+								Component.translatable("tip.structurally_invalid"),
+								true
+						);
+					}
 				}
 			}
 		}

@@ -1,4 +1,4 @@
-package dev.celestiacraft.libs.compat.jade;
+package dev.celestiacraft.libs.compat.jade.util;
 
 import dev.celestiacraft.libs.client.tooltip.InlineItemPatternParser;
 import net.minecraft.ChatFormatting;
@@ -76,7 +76,7 @@ public class CommonJadeTipProvider {
 		TIPS.clear();
 	}
 
-	static void onTooltipCollected(ITooltip tooltip, Accessor<?> accessor) {
+	public static void onTooltipCollected(ITooltip tooltip, Accessor<?> accessor) {
 		if (accessor instanceof EntityAccessor ea && ea.getEntity() instanceof ItemEntity ie) {
 			rebuildItemEntityTooltip(tooltip, ie);
 		}
@@ -169,7 +169,7 @@ public class CommonJadeTipProvider {
 		for (int j = 0; j < row.size(); j++) {
 			IElement element = row.get(j);
 			String msg = element.getCachedMessage();
-			boolean hasPattern = msg != null && InlineItemPatternParser.hasPattern(msg);
+			boolean hasPattern = InlineItemPatternParser.hasPattern(msg);
 			if (hasPattern && result == null) {
 				result = new ArrayList<>(row.subList(0, j));
 			}

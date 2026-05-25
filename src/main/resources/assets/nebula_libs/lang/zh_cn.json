@@ -16,5 +16,6 @@
 	"message.reloaded": "已重载全部脚本!",
 	"message.block_hardness": "这个方块的硬度是: %s",
 	"tooltip.preview_right_click": "使用%s右键可以显示预览",
-	"tip.structurally_valid": "结构有效"
+	"tip.structurally_valid": "结构有效",
+	"tip.structurally_invalid": "结构无效"
 }

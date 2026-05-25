@@ -13,7 +13,7 @@ import dev.celestiacraft.libs.client.NebulaLang;
 import dev.celestiacraft.libs.common.material.Material;
 import dev.celestiacraft.libs.compat.ICheckModLoaded;
 import dev.celestiacraft.libs.compat.curios.ICuriosHelper;
-import dev.celestiacraft.libs.compat.jade.CommonJadeTipProvider;
+import dev.celestiacraft.libs.compat.jade.util.CommonJadeTipProvider;
 import dev.celestiacraft.libs.compat.patchouli.multiblock.*;
 import dev.celestiacraft.libs.compat.tconstruct.util.SimpleTConUtils;
 import dev.celestiacraft.libs.debug.DebugUserManager;
