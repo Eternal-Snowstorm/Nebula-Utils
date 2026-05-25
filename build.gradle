@@ -32,7 +32,7 @@ java {
 	withSourcesJar()
 }
 
-jarJar.enable()
+//jarJar.enable()
 
 minecraft {
 	mappings channel: 'parchment', version: '2023.09.03-1.20.1'
