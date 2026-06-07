@@ -10,6 +10,7 @@
 		"FluidTypeMixin"
 	],
 	"client": [
+		"EntityAccessor"
 	],
 	"injectors": {
 		"defaultRequire": 1

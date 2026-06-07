@@ -3,7 +3,6 @@ package dev.celestiacraft.libs.client.exporter;
 import dev.celestiacraft.libs.compat.ICheckModLoaded;
 import dev.celestiacraft.libs.compat.mekanism.MekanismTransmitterHelper;
 import lombok.Getter;
-import net.createmod.catnip.levelWrappers.WrappedLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
