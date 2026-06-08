@@ -24,11 +24,11 @@ public class TierBuilder {
 	@Getter
 	private float speed;
 	@Getter
+	private float attackSpeedModifier;
+	@Getter
 	private float attackDamageBonus;
 	@Getter
 	private int atackDamageModifier;
-	@Getter
-	private float attackSpeedModifier;
 	@Getter
 	private int enchantmentValue;
 	@Getter
@@ -71,12 +71,22 @@ public class TierBuilder {
 		return this;
 	}
 
+	public TierBuilder setSpeedModifier(float modifier) {
+		this.attackSpeedModifier = modifier;
+		return this;
+	}
+
 	public TierBuilder setDamage(float attackDamageBonus) {
 		return setAttackDamageBonus(attackDamageBonus);
 	}
 
 	public TierBuilder setAttackDamageBonus(float attackDamageBonus) {
 		this.attackDamageBonus = attackDamageBonus;
+		return this;
+	}
+
+	public TierBuilder setDamageModifier(int modifier) {
+		this.atackDamageModifier = modifier;
 		return this;
 	}
 
