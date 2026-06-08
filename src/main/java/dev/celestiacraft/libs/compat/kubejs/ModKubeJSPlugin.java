@@ -9,6 +9,7 @@ import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.utility.CreateLang;
 import dev.celestiacraft.libs.NebulaLibs;
+import dev.celestiacraft.libs.api.register.tool.tier.TierBuilder;
 import dev.celestiacraft.libs.client.NebulaLang;
 import dev.celestiacraft.libs.common.material.Material;
 import dev.celestiacraft.libs.compat.ICheckModLoaded;
@@ -49,6 +50,7 @@ public class ModKubeJSPlugin extends KubeJSPlugin {
 		event.add("NebulaLibs", NebulaLibs.class);
 		event.add("NebulaLang", NebulaLang.class);
 		event.add("NebulaLang$JeiLang", NebulaLang.JeiLang.class);
+		event.add("TierBuilder", TierBuilder.class);
 		event.add("RegistryInfo", RegistryInfo.class);
 		event.add("LocalDateTime", LocalDateTime.class);
 		event.add("Player", Player.class);
