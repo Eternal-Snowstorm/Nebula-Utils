@@ -1,5 +1,6 @@
 package dev.celestiacraft.libs.api.register.tool.tier;
 
+import lombok.Getter;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -14,13 +15,25 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class TierBuilder {
+	@Getter
 	private ResourceLocation name;
-	private Integer level;
-	private Integer uses;
-	private Float speed;
-	private Float attackDamageBonus;
-	private Integer enchantmentValue;
+	@Getter
+	private int level;
+	@Getter
+	private int uses;
+	@Getter
+	private float speed;
+	@Getter
+	private float attackDamageBonus;
+	@Getter
+	private int atackDamageModifier;
+	@Getter
+	private float attackSpeedModifier;
+	@Getter
+	private int enchantmentValue;
+	@Getter
 	private TagKey<Block> mineableTag;
+	@Getter
 	private Supplier<Ingredient> repairIngredient;
 	private final List<Tier> after = new ArrayList<>();
 	private final List<Tier> before = new ArrayList<>();
@@ -113,11 +126,11 @@ public class TierBuilder {
 	private Tier build() {
 		return TierSortingRegistry.registerTier(
 				new ForgeTier(
-						required(level, "level"),
-						required(uses, "uses"),
-						required(speed, "speed"),
-						required(attackDamageBonus, "attackDamageBonus"),
-						required(enchantmentValue, "enchantmentValue"),
+						level,
+						uses,
+						speed,
+						attackDamageBonus,
+						enchantmentValue,
 						required(mineableTag, "mineableTag"),
 						required(repairIngredient, "repairIngredient")
 				),
