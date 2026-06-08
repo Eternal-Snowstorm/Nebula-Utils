@@ -235,7 +235,9 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 afterEvaluate {
-	minecraft.runs.data.args.removeIf { it == '--mixin.config' || it.endsWith('.mixins.json') }
+	minecraft.runs.data.args.removeIf {
+		it == '--mixin.config' || it.endsWith('.mixins.json')
+	}
 }
 
 publishing {

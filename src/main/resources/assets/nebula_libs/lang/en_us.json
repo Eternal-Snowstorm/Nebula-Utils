@@ -17,5 +17,6 @@
 	"message.block_hardness": "The hardness of this block is: %s",
 	"tooltip.preview_right_click": "Right-click with %s to preview",
 	"tip.structurally_valid": "Structurally valid",
-	"tip.structurally_invalid": "Structurally Invalid"
+	"tip.structurally_invalid": "Structurally Invalid",
+	"config.jade.plugin_nebula_libs.common": "Common"
 }

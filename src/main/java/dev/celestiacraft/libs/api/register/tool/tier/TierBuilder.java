@@ -77,16 +77,16 @@ public class TierBuilder {
 		return this;
 	}
 
-	public TierBuilder setRepairIngredient(TagKey<Item> repairTag) {
-		return setRepairIngredient(() -> Ingredient.of(repairTag));
+	public TierBuilder setRepairTag(TagKey<Item> tag) {
+		return setRepair(() -> Ingredient.of(tag));
 	}
 
-	public TierBuilder setRepairIngredient(Ingredient repairIngredient) {
-		return setRepairIngredient(() -> repairIngredient);
+	public TierBuilder setRepairIngredient(Ingredient ingredient) {
+		return setRepair(() -> ingredient);
 	}
 
-	public TierBuilder setRepairIngredient(Supplier<Ingredient> repairIngredient) {
-		this.repairIngredient = repairIngredient;
+	public TierBuilder setRepair(Supplier<Ingredient> supplier) {
+		this.repairIngredient = supplier;
 		return this;
 	}
 
