@@ -14,26 +14,17 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+@Getter
 public class TierBuilder {
-	@Getter
 	private ResourceLocation name;
-	@Getter
 	private int level;
-	@Getter
 	private int uses;
-	@Getter
 	private float speed;
-	@Getter
 	private float attackSpeedModifier;
-	@Getter
 	private float attackDamageBonus;
-	@Getter
 	private int atackDamageModifier;
-	@Getter
 	private int enchantmentValue;
-	@Getter
 	private TagKey<Block> mineableTag;
-	@Getter
 	private Supplier<Ingredient> repairIngredient;
 	private final List<Tier> after = new ArrayList<>();
 	private final List<Tier> before = new ArrayList<>();
