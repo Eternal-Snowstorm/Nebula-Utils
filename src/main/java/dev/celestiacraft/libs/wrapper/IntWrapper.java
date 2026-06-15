@@ -1,5 +1,7 @@
 package dev.celestiacraft.libs.wrapper;
 
+import dev.latvian.mods.kubejs.typings.Info;
+
 public class IntWrapper {
 	private final int value;
 
@@ -10,12 +12,22 @@ public class IntWrapper {
 	public static final IntWrapper ZERO = new IntWrapper(0);
 	public static final IntWrapper ONE = new IntWrapper(1);
 
-	// 加法
+	/**
+	 * 加法
+	 *
+	 * @param other
+	 * @return
+	 */
 	public IntWrapper plus(IntWrapper other) {
 		return new IntWrapper(this.value + other.value);
 	}
 
-	// 减法
+	/**
+	 * 减法
+	 *
+	 * @param other
+	 * @return
+	 */
 	public IntWrapper minus(IntWrapper other) {
 		return new IntWrapper(this.value - other.value);
 	}
@@ -48,5 +60,25 @@ public class IntWrapper {
 	@Override
 	public int hashCode() {
 		return value;
+	}
+
+	/**
+	 * 获取 int 的最大值
+	 *
+	 * @return
+	 */
+	@Info("获取 int 的最大值")
+	public static int getMaxValue() {
+		return Integer.MAX_VALUE;
+	}
+
+	/**
+	 * 获取 int 的最小值
+	 *
+	 * @return
+	 */
+	@Info("获取 int 的最小值")
+	public static int getMinValue() {
+		return Integer.MIN_VALUE;
 	}
 }

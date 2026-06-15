@@ -7,7 +7,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.ForgeTier;
 import net.minecraftforge.common.TierSortingRegistry;
 
 import java.util.*;
@@ -22,7 +21,7 @@ public class TierBuilder {
 	private float speed;
 	private float attackSpeedModifier;
 	private float attackDamageBonus;
-	private int atackDamageModifier;
+	private int attackDamageModifier;
 	private int enchantmentValue;
 	private TagKey<Block> mineableTag;
 	private Supplier<Ingredient> repairIngredient;
@@ -77,7 +76,7 @@ public class TierBuilder {
 	}
 
 	public TierBuilder setDamageModifier(int modifier) {
-		this.atackDamageModifier = modifier;
+		this.attackDamageModifier = modifier;
 		return this;
 	}
 
@@ -124,21 +123,27 @@ public class TierBuilder {
 		return this;
 	}
 
-	private Tier build() {
-		return TierSortingRegistry.registerTier(
-				new ForgeTier(
-						level,
-						uses,
-						speed,
-						attackDamageBonus,
-						enchantmentValue,
-						required(mineableTag, "mineableTag"),
-						required(repairIngredient, "repairIngredient")
-				),
+	private NebulaTier build() {
+		NebulaTier tier = new NebulaTier(
+				level,
+				uses,
+				speed,
+				attackDamageBonus,
+				enchantmentValue,
+				attackDamageModifier,
+				attackSpeedModifier,
+				required(mineableTag, "mineableTag"),
+				required(repairIngredient, "repairIngredient")
+		);
+
+		TierSortingRegistry.registerTier(
+				tier,
 				required(name, "name"),
 				List.copyOf(after),
 				List.copyOf(before)
 		);
+
+		return tier;
 	}
 
 	private static <T> T required(T value, String fieldName) {
