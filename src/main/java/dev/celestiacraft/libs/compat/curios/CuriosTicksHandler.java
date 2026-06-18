@@ -1,6 +1,7 @@
 package dev.celestiacraft.libs.compat.curios;
 
 import dev.celestiacraft.libs.NebulaLibs;
+import dev.celestiacraft.libs.compat.ICheckModLoaded;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -17,6 +18,9 @@ public class CuriosTicksHandler {
 		LivingEntity entity = event.getEntity();
 		Level level = entity.level();
 
+		if (!ICheckModLoaded.hasCurios()) {
+			return;
+		}
 		if (level.isClientSide()) {
 			return;
 		}
