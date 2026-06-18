@@ -1,4 +1,4 @@
-package dev.celestiacraft.libs.register.item;
+package dev.celestiacraft.libs.api.register.item;
 
 import dev.celestiacraft.libs.sounds.RecordSpec;
 import net.minecraft.world.item.RecordItem;
@@ -24,7 +24,7 @@ import net.minecraft.world.item.RecordItem;
  * 避免在构造器中重复传入多个参数.
  * </p>
  */
-public class ModRecordItem extends RecordItem {
+public class BasicRecordItem extends RecordItem {
 	/**
 	 * 应用默认属性.
 	 *
@@ -46,7 +46,7 @@ public class ModRecordItem extends RecordItem {
 	 * @param spec 唱片规格定义
 	 * @param properties 物品属性
 	 */
-	public ModRecordItem(RecordSpec spec, Properties properties) {
+	public BasicRecordItem(RecordSpec spec, Properties properties) {
 		super(spec.analog(), spec.sound(), applyProperties(properties), spec.length());
 	}
 }

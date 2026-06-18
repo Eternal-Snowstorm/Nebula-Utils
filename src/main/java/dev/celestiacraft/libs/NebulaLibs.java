@@ -1,19 +1,14 @@
 package dev.celestiacraft.libs;
 
-import com.simibubi.create.foundation.data.CreateRegistrate;
-import com.simibubi.create.foundation.item.ItemDescription;
-import com.simibubi.create.foundation.item.KineticStats;
-import com.simibubi.create.foundation.item.TooltipModifier;
+import com.tterrag.registrate.Registrate;
 import dev.celestiacraft.libs.client.tooltip.InlineItemClientTooltipComponent;
 import dev.celestiacraft.libs.client.tooltip.InlineItemTooltipComponent;
 import dev.celestiacraft.libs.common.material.Material;
-import dev.celestiacraft.libs.common.material.MaterialRegister;
 import dev.celestiacraft.libs.common.register.NebulaItem;
 import dev.celestiacraft.libs.compat.ICheckModLoaded;
 import dev.celestiacraft.libs.compat.ftbquests.client.FTBQuestsClientCompat;
 import dev.celestiacraft.libs.config.CommonConfig;
 import dev.celestiacraft.libs.debug.DebugUserManager;
-import net.createmod.catnip.lang.FontHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -35,7 +30,7 @@ public class NebulaLibs {
 	public static final String MODID = "nebula_libs";
 	public static final String NAME = "Nebula Libs";
 	public static final Logger LOGGER = LogManager.getLogger("Nebula");
-	public final CreateRegistrate registrate;
+	public static final Registrate REGISTRATE = Registrate.create(MODID);
 	public static NebulaLibs INSTANCE;
 
 	public static final Material MATERIAL = new Material(MODID);
@@ -43,16 +38,6 @@ public class NebulaLibs {
 	public NebulaLibs(FMLJavaModLoadingContext context) {
 		IEventBus bus = context.getModEventBus();
 		INSTANCE = this;
-
-		registrate = CreateRegistrate.create(MODID)
-				.setTooltipModifierFactory((item) -> {
-					return new ItemDescription.Modifier(item, FontHelper.Palette.STANDARD_CREATE)
-							.andThen(TooltipModifier.mapNull(KineticStats.create(item)));
-				});
-
-		registrate.registerEventListeners(bus);
-
-		MaterialRegister.register(registrate);
 
 		NebulaItem.register(bus);
 
@@ -64,11 +49,11 @@ public class NebulaLibs {
 		return ResourceLocation.fromNamespaceAndPath(MODID, path);
 	}
 
-	public static ResourceLocation loadForgeResource(String path) {
+	public static ResourceLocation loadForge(String path) {
 		return ResourceLocation.fromNamespaceAndPath("forge", path);
 	}
 
-	public static ResourceLocation loadCuriosResource(String path) {
+	public static ResourceLocation loadCurios(String path) {
 		return ResourceLocation.fromNamespaceAndPath(CuriosApi.MODID, path);
 	}
 

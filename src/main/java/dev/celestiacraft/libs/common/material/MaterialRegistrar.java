@@ -114,7 +114,7 @@ public class MaterialRegistrar {
 		builder.source(ForgeFlowingFluid.Source::new);
 		builder.bucket()
 				.model((context, provider) -> {
-					provider.withExistingParent(context.getName(), NebulaLibs.loadForgeResource("item/bucket_drip"))
+					provider.withExistingParent(context.getName(), NebulaLibs.loadForge("item/bucket_drip"))
 							.customLoader(DynamicFluidContainerModelBuilder::begin)
 							.fluid(ForgeRegistries.FLUIDS.getValue(ResourceLocation.fromNamespaceAndPath(registrate.getModid(), registerId)));
 				}).register();
