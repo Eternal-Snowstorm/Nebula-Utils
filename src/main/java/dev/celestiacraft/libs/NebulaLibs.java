@@ -5,6 +5,8 @@ import dev.celestiacraft.libs.client.tooltip.InlineItemClientTooltipComponent;
 import dev.celestiacraft.libs.client.tooltip.InlineItemTooltipComponent;
 import dev.celestiacraft.libs.common.material.Material;
 import dev.celestiacraft.libs.common.register.NebulaItem;
+import dev.celestiacraft.libs.common.register.NebulaRecipe;
+import dev.celestiacraft.libs.common.register.NebulaSerializer;
 import dev.celestiacraft.libs.compat.ICheckModLoaded;
 import dev.celestiacraft.libs.compat.ftbquests.client.FTBQuestsClientCompat;
 import dev.celestiacraft.libs.config.CommonConfig;
@@ -31,15 +33,15 @@ public class NebulaLibs {
 	public static final String NAME = "Nebula Libs";
 	public static final Logger LOGGER = LogManager.getLogger("Nebula");
 	public static final Registrate REGISTRATE = Registrate.create(MODID);
-	public static NebulaLibs INSTANCE;
 
 	public static final Material MATERIAL = new Material(MODID);
 
 	public NebulaLibs(FMLJavaModLoadingContext context) {
 		IEventBus bus = context.getModEventBus();
-		INSTANCE = this;
 
 		NebulaItem.register(bus);
+		NebulaRecipe.register(bus);
+		NebulaSerializer.register(bus);
 
 		context.registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC, "nebula/libs/common.toml");
 		DebugUserManager.load();

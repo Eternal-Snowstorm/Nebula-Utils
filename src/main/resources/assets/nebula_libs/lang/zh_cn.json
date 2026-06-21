@@ -18,5 +18,7 @@
 	"tooltip.preview_right_click": "使用%s右键可以显示预览",
 	"tip.structurally_valid": "结构有效",
 	"tip.structurally_invalid": "结构无效",
-	"config.jade.plugin_nebula_libs.common": "Common"
+	"config.jade.plugin_nebula_libs.common": "Common",
+	"jei.category.nebula_libs.anvil_craft": "铁砧合成",
+	"jei.category.anvil_craft.material_cost": "材料: %s"
 }

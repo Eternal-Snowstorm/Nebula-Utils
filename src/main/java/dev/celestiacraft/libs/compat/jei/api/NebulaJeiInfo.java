@@ -1,4 +1,4 @@
-package dev.celestiacraft.libs.compat.jei;
+package dev.celestiacraft.libs.compat.jei.api;
 
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.registration.IRecipeRegistration;

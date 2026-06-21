@@ -15,6 +15,7 @@ import dev.celestiacraft.libs.common.material.Material;
 import dev.celestiacraft.libs.compat.ICheckModLoaded;
 import dev.celestiacraft.libs.compat.curios.ICuriosHelper;
 import dev.celestiacraft.libs.compat.jade.util.CommonJadeTipProvider;
+import dev.celestiacraft.libs.compat.kubejs.recipe.AnvilCraftSchema;
 import dev.celestiacraft.libs.compat.patchouli.multiblock.*;
 import dev.celestiacraft.libs.compat.tconstruct.util.SimpleTConUtils;
 import dev.celestiacraft.libs.debug.DebugUserManager;
@@ -22,6 +23,7 @@ import dev.celestiacraft.libs.tags.TagsBuilder;
 import dev.celestiacraft.libs.utils.FestivalUtils;
 import dev.celestiacraft.libs.wrapper.IntWrapper;
 import dev.latvian.mods.kubejs.KubeJSPlugin;
+import dev.latvian.mods.kubejs.recipe.schema.RegisterRecipeSchemasEvent;
 import dev.latvian.mods.kubejs.registry.RegistryInfo;
 import dev.latvian.mods.kubejs.script.BindingsEvent;
 import net.minecraft.ChatFormatting;
@@ -45,7 +47,13 @@ import top.theillusivec4.curios.api.CuriosApi;
 
 import java.time.LocalDateTime;
 
-public class ModKubeJSPlugin extends KubeJSPlugin {
+public class NebulaKubeJSPlugin extends KubeJSPlugin {
+	@Override
+	public void registerRecipeSchemas(RegisterRecipeSchemasEvent event) {
+		event.namespace(NebulaLibs.MODID)
+				.register("anvil_craft", AnvilCraftSchema.SCHEMA);
+	}
+
 	public void registerBindings(BindingsEvent event) {
 		event.add("NebulaLibs", NebulaLibs.class);
 		event.add("NebulaLang", NebulaLang.class);

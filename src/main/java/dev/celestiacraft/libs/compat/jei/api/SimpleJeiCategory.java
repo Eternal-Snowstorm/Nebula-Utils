@@ -1,9 +1,11 @@
-package dev.celestiacraft.libs.compat.jei.categoty;
+package dev.celestiacraft.libs.compat.jei.api;
 
+import dev.celestiacraft.libs.api.utils.ExtraConsumer;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
+import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeType;
@@ -210,6 +212,7 @@ public class SimpleJeiCategory<T> implements IRecipeCategory<T> {
 	private final int width;
 	private final int height;
 	private final TriConsumer<IRecipeLayoutBuilder, T, IFocusGroup> recipeHandler;
+	private final ExtraConsumer<T> extra;
 	private final IDrawHandler<T> drawHandler;
 	private final ITooltipHandler<T> tooltipHandler;
 
@@ -221,6 +224,7 @@ public class SimpleJeiCategory<T> implements IRecipeCategory<T> {
 		this.width = builder.width;
 		this.height = builder.height;
 		this.recipeHandler = builder.recipeHandler;
+		this.extra = builder.extra;
 		this.drawHandler = builder.drawHandler;
 		this.tooltipHandler = builder.tooltipHandler;
 	}
@@ -270,6 +274,13 @@ public class SimpleJeiCategory<T> implements IRecipeCategory<T> {
 	}
 
 	@Override
+	public void createRecipeExtras(@NotNull IRecipeExtrasBuilder builder, @NotNull T recipe, @NotNull IFocusGroup group) {
+		if (extra != null) {
+			extra.accept(builder, recipe, group);
+		}
+	}
+
+	@Override
 	public @NotNull List<Component> getTooltipStrings(@NotNull T recipe, @NotNull IRecipeSlotsView view, double mouseX, double mouseY) {
 		if (tooltipHandler != null) {
 			return tooltipHandler.getTooltips(recipe, view, mouseX, mouseY);
@@ -292,6 +303,7 @@ public class SimpleJeiCategory<T> implements IRecipeCategory<T> {
 		private Integer backgroundHeight;
 
 		private TriConsumer<IRecipeLayoutBuilder, T, IFocusGroup> recipeHandler;
+		private ExtraConsumer<T> extra;
 		private IDrawHandler<T> drawHandler;
 		private ITooltipHandler<T> tooltipHandler;
 
@@ -360,6 +372,11 @@ public class SimpleJeiCategory<T> implements IRecipeCategory<T> {
 
 		public Builder<T> setDraw(IDrawHandler<T> handler) {
 			this.drawHandler = handler;
+			return this;
+		}
+
+		public Builder<T> setExtra(ExtraConsumer<T> extra) {
+			this.extra = extra;
 			return this;
 		}
 

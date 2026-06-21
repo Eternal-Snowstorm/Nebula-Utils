@@ -18,5 +18,7 @@
 	"tooltip.preview_right_click": "Right-click with %s to preview",
 	"tip.structurally_valid": "Structurally valid",
 	"tip.structurally_invalid": "Structurally Invalid",
-	"config.jade.plugin_nebula_libs.common": "Common"
+	"config.jade.plugin_nebula_libs.common": "Common",
+	"jei.category.nebula_libs.anvil_craft": "Anvil Craft",
+	"jei.category.anvil_craft.material_cost": "Material: %s"
 }
