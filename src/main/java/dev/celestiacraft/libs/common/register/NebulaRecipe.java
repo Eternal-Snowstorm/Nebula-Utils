@@ -18,7 +18,7 @@ public class NebulaRecipe {
 	static {
 		RECIPE_TYPES = DeferredRegister.create(ForgeRegistries.RECIPE_TYPES, NebulaLibs.MODID);
 
-		ANVIL_CRAFT = register("anvil_crarft");
+		ANVIL_CRAFT = register("anvil_craft");
 	}
 
 	private static <T extends Recipe<?>> Supplier<RecipeType<T>> register(String name) {
