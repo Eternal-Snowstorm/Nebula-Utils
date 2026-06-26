@@ -1,6 +1,6 @@
 package dev.celestiacraft.libs.api.register.block;
 
-public enum BasicBlockFacing {
+public enum BlockFacing {
 	NONE,
 	FACING,
 	HORIZONTAL

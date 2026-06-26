@@ -4,7 +4,7 @@ import com.simibubi.create.AllTags;
 import com.simibubi.create.foundation.block.IBE;
 import dev.celestiacraft.libs.api.interaction.context.UseContext;
 import dev.celestiacraft.libs.api.register.block.BasicBlock;
-import dev.celestiacraft.libs.api.register.block.IBasicEntityBlock;
+import dev.celestiacraft.libs.api.register.block.IEntityBlock;
 import dev.celestiacraft.libs.common.register.NebulaItem;
 import dev.celestiacraft.libs.compat.patchouli.multiblock.IMultiblockProvider;
 import net.minecraft.core.Direction;
@@ -55,7 +55,7 @@ import net.minecraft.world.level.block.state.properties.Property;
  * 无需手动处理事件注册或基础交互逻辑
  * </p>
  */
-public abstract class ControllerBlock<T extends BlockEntity & IMultiblockProvider> extends BasicBlock implements IBasicEntityBlock<T> {
+public abstract class ControllerBlock<T extends BlockEntity & IMultiblockProvider> extends BasicBlock implements IEntityBlock<T> {
 	public ControllerBlock(Properties properties) {
 		super(properties);
 	}

@@ -9,10 +9,10 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
-import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -22,7 +22,6 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
 import java.util.function.ToIntFunction;
 
 public class BasicBlock extends Block implements IFluidInteractable {
@@ -129,8 +128,8 @@ public class BasicBlock extends Block implements IFluidInteractable {
 	 *
 	 * @return 使用的方向类型, 默认 {@code NONE}
 	 */
-	protected BasicBlockFacing useFacingType() {
-		return BasicBlockFacing.NONE;
+	protected BlockFacing useFacingType() {
+		return BlockFacing.NONE;
 	}
 
 	/**
@@ -246,7 +245,7 @@ public class BasicBlock extends Block implements IFluidInteractable {
 		Direction facing = context.getHorizontalDirection().getOpposite();
 
 		// 如果是六面方向支持上下
-		if (useFacingType() == BasicBlockFacing.FACING) {
+		if (useFacingType() == BlockFacing.FACING) {
 			if (context.getPlayer() != null && context.getPlayer().isShiftKeyDown()) {
 				facing = context.getNearestLookingDirection().getOpposite();
 			}
@@ -381,27 +380,5 @@ public class BasicBlock extends Block implements IFluidInteractable {
 			case UP -> -90;
 			default -> 0;
 		};
-	}
-
-	/**
-	 * 在方块实体类型匹配时创建并返回对应的 {@link BlockEntityTicker}。
-	 * <p>
-	 * 通常用于 {@code EntityBlock#getTicker} 中,
-	 * 用于安全地判断当前的方块实体类型是否正确,
-	 * 只有类型一致时才会返回对应的 ticker。
-	 * <p>
-	 * 如果 {@code serverType} 与 {@code clientType} 不一致,
-	 * 则返回 {@code null}。
-	 *
-	 * @param serverType 期望的方块实体类型
-	 * @param clientType Minecraft 传入的实际方块实体类型
-	 * @param ticker     当类型匹配时返回的 ticker 实例
-	 * @param <E>        期望的方块实体类型
-	 * @param <A>        实际的方块实体类型
-	 * @return 如果两个方块实体类型一致则返回对应 ticker, 否则返回 {@code null}
-	 */
-	@Nullable
-	protected static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> createTickerHelper(BlockEntityType<A> serverType, BlockEntityType<E> clientType, BlockEntityTicker<? super E> ticker) {
-		return clientType == serverType ? (BlockEntityTicker<A>) ticker : null;
 	}
 }
