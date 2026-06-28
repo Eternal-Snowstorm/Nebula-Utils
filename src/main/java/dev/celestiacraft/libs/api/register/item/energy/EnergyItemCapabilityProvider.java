@@ -1,4 +1,4 @@
-package dev.celestiacraft.libs.common.item.energy;
+package dev.celestiacraft.libs.api.register.item.energy;
 
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;

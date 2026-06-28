@@ -1,7 +1,9 @@
-package dev.celestiacraft.libs.common.item.energy;
+package dev.celestiacraft.libs.api.register.item.energy;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 /**
  * 能量物品接口 (Forge Energy - Item 实现)
@@ -118,6 +120,8 @@ public interface IEnergyItem {
 	 * @return 最大输出速率
 	 */
 	int getMaxExtract(ItemStack stack);
+
+	ICapabilityProvider initCapabilities(ItemStack stack, CompoundTag nbt);
 
 	/**
 	 * 从 NBT 获取当前能量
