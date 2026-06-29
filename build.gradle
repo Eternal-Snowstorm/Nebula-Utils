@@ -91,6 +91,14 @@ repositories {
 		url 'https://maven.blamejared.com'
 	}
 	maven {
+		url = 'https://maven.architectury.dev/'
+		name = 'Architectury'
+	}
+	maven {
+		url = 'https://maven.latvian.dev/releases'
+		name = 'Latvian Mods (KubeJS, Rhino)'
+	}
+	maven {
 		name = "Illusive Soulworks maven"
 		url = "https://maven.theillusivec4.top/"
 	}
@@ -129,15 +137,11 @@ dependencies {
 	implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
 	compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.4.1"))
 	implementation("io.github.llamalad7:mixinextras-forge:0.4.1")
-	// KubeJS
-	compileOnly fg.deobf("curse.maven:kubejs-238086:5853326")
-	runtimeOnly fg.deobf("curse.maven:kubejs-238086:5853326")
 
-	// Architectury
-	runtimeOnly fg.deobf("curse.maven:architectury-api-419699:5137938")
-	// Rhino
-	compileOnly fg.deobf("curse.maven:rhino-416294:6186971")
-	runtimeOnly fg.deobf("curse.maven:rhino-416294:6186971")
+	// KubeJS
+	implementation fg.deobf("dev.architectury:architectury-forge:9.2.14")
+	implementation fg.deobf("dev.latvian.mods:rhino-forge:2001.2.3-build.10")
+	implementation fg.deobf("dev.latvian.mods:kubejs-forge:2001.6.5-build.26")
 	// Jade
 	compileOnly fg.deobf("curse.maven:jade-324717:6106101")
 	runtimeOnly fg.deobf("curse.maven:jade-324717:6106101")
