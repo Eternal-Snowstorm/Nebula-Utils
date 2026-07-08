@@ -12,6 +12,7 @@
 	"nebula_libs.export.save_config": "保存角度",
 	"debug.reload_users": "已重新加载调试用户",
 	"item.nebula_libs.geological_hammer": "地质锤(调试工具)",
+	"item.nebula_libs.block_entity_tool": "Block Entity Tool",
 	"message.jei.reloaded": "已重载JEI!",
 	"message.reloaded": "已重载全部脚本!",
 	"message.block_hardness": "这个方块的硬度是: %s",

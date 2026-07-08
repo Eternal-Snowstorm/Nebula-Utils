@@ -96,7 +96,7 @@ public class DebugTools {
 				break;
 
 			case "-re":
-				List<String> commandList = List.of(
+				List<String> reCommands = List.of(
 						"client_scripts",
 						"config",
 						"lang",
@@ -104,13 +104,24 @@ public class DebugTools {
 						"startup_scripts",
 						"textures"
 				);
-				commandList.forEach((cmd) -> {
-					CommandUtils.runCommand(player, "kjs reload " + cmd);
+				reCommands.forEach((command) -> {
+					CommandUtils.runCommand(player, "kjs reload " + command);
 				});
 
 				player.sendSystemMessage(Component.translatable("message.reloaded")
 						.withStyle(ChatFormatting.GREEN));
 
+				event.setCanceled(true);
+				break;
+
+			case "-mbd":
+				List<String> mbdCommands = List.of(
+						"mbd2 reload_machine_projects",
+						"mbd2 reload_recipe_type_projects"
+				);
+				mbdCommands.forEach((command) -> {
+					CommandUtils.runCommand(player, command);
+				});
 				event.setCanceled(true);
 				break;
 		}

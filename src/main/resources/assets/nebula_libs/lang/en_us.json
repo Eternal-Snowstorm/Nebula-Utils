@@ -12,6 +12,7 @@
 	"nebula_libs.export.save_config": "Save Angle",
 	"debug.reload_users": "Debug users reloaded",
 	"item.nebula_libs.geological_hammer": "Geological Hammer (Debug Tool)",
+	"item.nebula_libs.block_entity_tool": "Block Entity Tool",
 	"message.jei.reloaded": "JEI reloaded!",
 	"message.reloaded": "All scripts reloaded!",
 	"message.block_hardness": "The hardness of this block is: %s",
