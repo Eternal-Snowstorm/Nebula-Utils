@@ -16,11 +16,8 @@ public class AnvilCraftSerializer implements RecipeSerializer<AnvilCraftRecipe> 
 	public @NotNull AnvilCraftRecipe fromJson(@NotNull ResourceLocation location, @NotNull JsonObject object) {
 		Ingredient left = Ingredient.fromJson(object.get("left"));
 		Ingredient right = Ingredient.fromJson(object.get("right"));
-
-		ItemStack result = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(
-				object,
-				"result"
-		));
+		JsonObject so = GsonHelper.getAsJsonObject(object, "result");
+		ItemStack result = ShapedRecipe.itemStackFromJson(so);
 
 		int cost = GsonHelper.getAsInt(object, "cost", 0);
 		int materialCost = GsonHelper.getAsInt(object, "material_cost", 0);
