@@ -6,7 +6,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -77,23 +76,15 @@ public abstract class MachineControllerBlockEntity extends ControllerBlockEntity
 	}
 
 	@Override
-	public void onLoad() {
-		super.onLoad();
+	protected void onCapsRevived() {
 		rebuildCapabilities();
 	}
 
 	@Override
-	public void invalidateCaps() {
-		super.invalidateCaps();
+	protected void onCapsInvalidated() {
 		itemCapability.invalidate();
 		fluidCapability.invalidate();
 		energyCapability.invalidate();
-	}
-
-	@Override
-	public void reviveCaps() {
-		super.reviveCaps();
-		rebuildCapabilities();
 	}
 
 	@Override
@@ -114,8 +105,8 @@ public abstract class MachineControllerBlockEntity extends ControllerBlockEntity
 	}
 
 	@Override
-	protected void saveAdditional(@NotNull CompoundTag tag) {
-		super.saveAdditional(tag);
+	protected void write(CompoundTag tag) {
+		super.write(tag);
 
 		if (itemStorage != null) {
 			tag.put(INVENTORY_KEY, itemStorage.serializeNBT());
@@ -139,8 +130,8 @@ public abstract class MachineControllerBlockEntity extends ControllerBlockEntity
 	}
 
 	@Override
-	public void load(@NotNull CompoundTag tag) {
-		super.load(tag);
+	protected void read(CompoundTag tag) {
+		super.read(tag);
 
 		if (itemStorage != null && tag.contains(INVENTORY_KEY, Tag.TAG_COMPOUND)) {
 			itemStorage.deserializeNBT(tag.getCompound(INVENTORY_KEY));
@@ -164,16 +155,6 @@ public abstract class MachineControllerBlockEntity extends ControllerBlockEntity
 		if (internalEnergyStorageEnabled) {
 			energyStored = clampEnergy(tag.getInt(ENERGY_KEY));
 		}
-	}
-
-	@Override
-	public @NotNull CompoundTag getUpdateTag() {
-		return saveWithoutMetadata();
-	}
-
-	@Override
-	public ClientboundBlockEntityDataPacket getUpdatePacket() {
-		return ClientboundBlockEntityDataPacket.create(this);
 	}
 
 	protected final boolean canWork(MultiblockContext<? extends MachineControllerBlockEntity> context) {

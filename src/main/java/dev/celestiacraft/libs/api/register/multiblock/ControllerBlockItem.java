@@ -12,10 +12,13 @@ public class ControllerBlockItem extends BasicBlockItem {
 
 	@Override
 	public void addTooltips(TooltipContext context) {
-		if (!(this.getBlock() instanceof ControllerBlock controller)) {
+		if (!(getBlock() instanceof ControllerBlock controller)) {
 			return;
 		}
-		context.getTooltip().add(Component.translatable("tooltip.preview_right_click", controller.getTriggerName())
-				.withStyle(ChatFormatting.AQUA));
+		context.getTooltip()
+				.add(Component.translatable(
+						"tooltip.preview_right_click",
+						controller.getTriggerName()
+				).withStyle(ChatFormatting.AQUA));
 	}
 }

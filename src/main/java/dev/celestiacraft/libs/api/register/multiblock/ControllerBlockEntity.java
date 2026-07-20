@@ -1,5 +1,6 @@
 package dev.celestiacraft.libs.api.register.multiblock;
 
+import dev.celestiacraft.libs.api.register.block.BasicBlockEntity;
 import dev.celestiacraft.libs.api.register.multiblock.machine.IControllerRecipe;
 import dev.celestiacraft.libs.api.register.multiblock.machine.MultiblockContext;
 import dev.celestiacraft.libs.compat.patchouli.multiblock.IMultiblockProvider;
@@ -7,7 +8,6 @@ import dev.celestiacraft.libs.compat.patchouli.multiblock.MultiblockHandler;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import vazkii.patchouli.api.IMultiblock;
@@ -82,7 +82,7 @@ import java.util.function.Supplier;
  * }
  * }</pre>
  */
-public abstract class ControllerBlockEntity extends BlockEntity implements IMultiblockProvider {
+public abstract class ControllerBlockEntity extends BasicBlockEntity implements IMultiblockProvider {
 	@Getter
 	@Setter
 	protected int workTime;
@@ -139,7 +139,7 @@ public abstract class ControllerBlockEntity extends BlockEntity implements IMult
 	protected ControllerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, Supplier<IMultiblock> structure) {
 		super(type, pos, state);
 
-		this.multiblock = MultiblockHandler.builder(this, structure)
+		multiblock = MultiblockHandler.builder(this, structure)
 				.translationKey(getMultiblockKey())
 				.renderOffset(getRenderOffsetX(), getRenderOffsetY(), getRenderOffsetZ())
 				.cacheTicks(getCacheTicks())
@@ -226,7 +226,6 @@ public abstract class ControllerBlockEntity extends BlockEntity implements IMult
 	 * <pre>{@code
 	 * multiblock.{category}.{modid}.{name}
 	 * }</pre>
-	 * </p>
 	 *
 	 * <p>
 	 * 一般情况下无需重写, 只需实现 {@link #getModId()} 和 {@link #getMultiblockName()}
