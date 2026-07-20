@@ -52,18 +52,18 @@ public class MaterialRegistrar {
 			};
 		});
 
-		if (!material.overlay) {
-			builder.model((context, provider) -> {
-				provider.withExistingParent(context.getName(), provider.mcLoc("item/generated"))
-						.texture("layer0", provider.modLoc(String.format("item/material/%s/%s", type, type)))
-						.texture("layer1", provider.modLoc(String.format("item/material/%s/%s_secondary", type, type)));
-			});
-		} else {
+		if (material.overlay) {
 			builder.model((context, provider) -> {
 				provider.withExistingParent(context.getName(), provider.mcLoc("item/generated"))
 						.texture("layer0", provider.modLoc(String.format("item/material/%s/%s", type, type)))
 						.texture("layer1", provider.modLoc(String.format("item/material/%s/%s_secondary", type, type))).texture("layer2", provider.modLoc(String.format("item/material/%s/%s_overlay", type, type)))
 						.texture("layer2", provider.modLoc(String.format("item/material/%s/%s_overlay", type, type))).texture("layer2", provider.modLoc(String.format("item/material/%s/%s_overlay", type, type)));
+			});
+		} else {
+			builder.model((context, provider) -> {
+				provider.withExistingParent(context.getName(), provider.mcLoc("item/generated"))
+						.texture("layer0", provider.modLoc(String.format("item/material/%s/%s", type, type)))
+						.texture("layer1", provider.modLoc(String.format("item/material/%s/%s_secondary", type, type)));
 			});
 		}
 
@@ -103,9 +103,14 @@ public class MaterialRegistrar {
 		String registerId = String.format("molten_%s", material.name);
 		int color = material.color2;
 
-		FluidBuilder<ForgeFlowingFluid.Flowing, CreateRegistrate> builder = registrate.fluid(registerId, FluidTextures.MOLTEN_STILL, FluidTextures.MOLTEN_FLOW, ((properties, still, flow) -> {
-			return new MoltenType(properties, color);
-		}));
+		FluidBuilder<ForgeFlowingFluid.Flowing, CreateRegistrate> builder = registrate.fluid(
+				registerId,
+				FluidTextures.MOLTEN_STILL,
+				FluidTextures.MOLTEN_FLOW,
+				((properties, still, flow) -> {
+					return new MoltenType(properties, color);
+				})
+		);
 
 		builder.renderType(RenderType::translucent);
 		builder.tag(TagsBuilder.fluid("molten_materials").forge());

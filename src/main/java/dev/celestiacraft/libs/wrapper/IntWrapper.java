@@ -19,7 +19,7 @@ public class IntWrapper {
 	 * @return
 	 */
 	public IntWrapper plus(IntWrapper other) {
-		return new IntWrapper(this.value + other.value);
+		return new IntWrapper(value + other.value);
 	}
 
 	/**
@@ -29,7 +29,7 @@ public class IntWrapper {
 	 * @return
 	 */
 	public IntWrapper minus(IntWrapper other) {
-		return new IntWrapper(this.value - other.value);
+		return new IntWrapper(value - other.value);
 	}
 
 	public boolean isZero() {

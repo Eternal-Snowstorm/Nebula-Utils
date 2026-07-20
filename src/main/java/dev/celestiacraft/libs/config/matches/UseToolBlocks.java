@@ -11,7 +11,7 @@ import dev.celestiacraft.libs.config.CommonConfig;
 public class UseToolBlocks {
 	public static boolean matches(BlockState state) {
 		for (String entry : CommonConfig.MUST_USE_TOOL_BLOCKS.get()) {
-			if (entry.startsWith("#")) {
+			if (!entry.isEmpty() && entry.charAt(0) == '#') {
 				ResourceLocation id = ResourceLocation.tryParse(entry.substring(1));
 				TagKey<Block> tag = null;
 
