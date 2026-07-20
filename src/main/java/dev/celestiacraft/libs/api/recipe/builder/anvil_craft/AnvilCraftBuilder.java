@@ -51,7 +51,6 @@ public class AnvilCraftBuilder {
 	private void validate() {
 		Objects.requireNonNull(left, "Missing left ingredient");
 		Objects.requireNonNull(right, "Missing right ingredient");
-		Objects.requireNonNull(result, "Missing result item");
 
 		if (result.isEmpty()) {
 			throw new IllegalStateException("Missing result");
