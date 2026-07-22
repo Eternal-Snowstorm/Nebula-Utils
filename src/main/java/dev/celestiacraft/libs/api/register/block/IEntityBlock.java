@@ -90,7 +90,7 @@ public interface IEntityBlock<T extends BlockEntity> extends EntityBlock {
 		}
 
 		return createTickerHelper(type, getBlockEntityType(), (tickLevel, pos, tickState, entity) -> {
-			((ITickableBlockEntity) entity).tick(tickLevel, pos, tickState);
+			((ITickableBlockEntity) entity).tick(tickLevel, pos, tickState, entity);
 		});
 	}
 }
