@@ -161,7 +161,7 @@ public abstract class BasicBlockEntity extends BlockEntity {
 	 * </p>
 	 */
 	protected void updateBlock() {
-		if (isLevelNotNull()) {
+		if (isLevelNotNull() && level.isClientSide()) {
 			BlockState state = getBlockState();
 			level.sendBlockUpdated(worldPosition, state, state, 3);
 		}
@@ -171,11 +171,12 @@ public abstract class BasicBlockEntity extends BlockEntity {
 	 * 向客户端同步当前 BlockEntity 数据.
 	 *
 	 * <p>
-	 * 默认等同于 {@link #updateBlock()}.
+	 * 在 {@link #updateBlock()} 的基础上增加了{@link #setChanged()} .
 	 * </p>
 	 */
 	protected void sync() {
 		updateBlock();
+		setChanged();
 	}
 
 	/**
