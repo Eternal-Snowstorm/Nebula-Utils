@@ -4,27 +4,28 @@ import dev.celestiacraft.libs.api.interaction.IFluidInteractable;
 import dev.celestiacraft.libs.api.interaction.context.UseContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.RenderShape;
-import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.ToIntFunction;
 
-public class BasicBlock extends Block implements IFluidInteractable {
+public class BasicBlock extends Block implements IFluidInteractable, SimpleWaterloggedBlock {
 	public static final DirectionProperty FACING = BlockStateProperties.FACING;
 	public static final DirectionProperty HORIZONTAL_FACING = BlockStateProperties.HORIZONTAL_FACING;
 
@@ -50,6 +51,10 @@ public class BasicBlock extends Block implements IFluidInteractable {
 			state = state.setValue(LIT, false);
 		}
 
+		if (useWaterlogged()) {
+			state = state.setValue(WATERLOGGED, false);
+		}
+
 		registerDefaultState(state);
 	}
 
@@ -71,6 +76,30 @@ public class BasicBlock extends Block implements IFluidInteractable {
 		}
 
 		return InteractionResult.PASS;
+	}
+
+	@Override
+	public @NotNull FluidState getFluidState(@NotNull BlockState state) {
+		if (useWaterlogged() && state.getValue(WATERLOGGED)) {
+			return Fluids.WATER.getSource(false);
+		}
+		return super.getFluidState(state);
+	}
+
+	@Override
+	public @NotNull BlockState updateShape(
+			@NotNull BlockState state,
+			@NotNull Direction direction,
+			@NotNull BlockState neighborState,
+			@NotNull LevelAccessor level,
+			@NotNull BlockPos pos,
+			@NotNull BlockPos neighborPos) {
+
+		if (useWaterlogged() && state.getValue(WATERLOGGED)) {
+			level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+		}
+
+		return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
 	}
 
 	@Override
@@ -212,6 +241,10 @@ public class BasicBlock extends Block implements IFluidInteractable {
 		if (useLitState()) {
 			builder.add(LIT);
 		}
+
+		if (useWaterlogged()) {
+			builder.add(WATERLOGGED);
+		}
 	}
 
 	/**
@@ -249,6 +282,15 @@ public class BasicBlock extends Block implements IFluidInteractable {
 			if (context.getPlayer() != null && context.getPlayer().isShiftKeyDown()) {
 				facing = context.getNearestLookingDirection().getOpposite();
 			}
+		}
+
+		if (useWaterlogged()) {
+			state = state.setValue(
+					WATERLOGGED,
+					context.getLevel()
+							.getFluidState(context.getClickedPos())
+							.is(FluidTags.WATER)
+			);
 		}
 
 		return state.setValue(property, facing);
@@ -307,6 +349,15 @@ public class BasicBlock extends Block implements IFluidInteractable {
 	 * @return
 	 */
 	protected boolean useLitState() {
+		return false;
+	}
+
+	/**
+	 * 是否拥有含水状态
+	 *
+	 * @return
+	 */
+	protected boolean useWaterlogged() {
 		return false;
 	}
 

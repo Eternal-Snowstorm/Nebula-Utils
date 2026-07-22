@@ -65,7 +65,7 @@ public interface IEntityBlock<T extends BlockEntity> extends EntityBlock {
 	 * <p>
 	 * 默认实现会自动为实现了 {@link ITickableBlockEntity} 的方块实体创建
 	 * {@link BlockEntityTicker}, 并在每个游戏刻调用
-	 * {@link ITickableBlockEntity#tick(Level, BlockPos, BlockState)}
+	 * {@link ITickableBlockEntity#tick(Level, BlockPos, BlockState, T)}
 	 * <p>
 	 * 如果当前方块实体类型没有实现 {@link ITickableBlockEntity},
 	 * 或 Minecraft 传入的 {@link BlockEntityType} 与
