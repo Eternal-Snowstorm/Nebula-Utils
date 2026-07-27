@@ -1,8 +1,11 @@
 package dev.celestiacraft.libs.compat.jei.api;
 
 import dev.celestiacraft.libs.api.utils.ExtraConsumer;
+import dev.celestiacraft.libs.compat.jei.function.IDrawHandler;
+import dev.celestiacraft.libs.compat.jei.function.ITooltipHandler;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
@@ -15,8 +18,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import org.apache.logging.log4j.util.TriConsumer;
 import org.jetbrains.annotations.NotNull;
-import dev.celestiacraft.libs.compat.jei.function.IDrawHandler;
-import dev.celestiacraft.libs.compat.jei.function.ITooltipHandler;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -241,11 +242,6 @@ public class SimpleJeiCategory<T> implements IRecipeCategory<T> {
 	}
 
 	@Override
-	public @NotNull IDrawable getBackground() {
-		return background;
-	}
-
-	@Override
 	public @NotNull IDrawable getIcon() {
 		return iconSupplier.get();
 	}
@@ -282,11 +278,13 @@ public class SimpleJeiCategory<T> implements IRecipeCategory<T> {
 	}
 
 	@Override
-	public @NotNull List<Component> getTooltipStrings(@NotNull T recipe, @NotNull IRecipeSlotsView view, double mouseX, double mouseY) {
+	public void getTooltip(@NotNull ITooltipBuilder tooltip, @NotNull T recipe, @NotNull IRecipeSlotsView view, double mouseX, double mouseY) {
 		if (tooltipHandler != null) {
-			return tooltipHandler.getTooltips(recipe, view, mouseX, mouseY);
+			List<Component> tooltips = tooltipHandler.getTooltips(recipe, view, mouseX, mouseY);
+			if (tooltips != null && !tooltips.isEmpty()) {
+				tooltip.addAll(tooltips);
+			}
 		}
-		return List.of();
 	}
 
 	public static class Builder<T> {

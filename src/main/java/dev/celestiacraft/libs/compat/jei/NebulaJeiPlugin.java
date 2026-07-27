@@ -21,7 +21,7 @@ import dev.celestiacraft.libs.NebulaLibs;
 import java.util.List;
 
 @JeiPlugin
-public class ModJeiPlugin implements IModPlugin {
+public class NebulaJeiPlugin implements IModPlugin {
 	@Override
 	public @NotNull ResourceLocation getPluginUid() {
 		return NebulaLibs.loadResource("jei_plugin");
@@ -32,9 +32,7 @@ public class ModJeiPlugin implements IModPlugin {
 		IJeiHelpers helpers = registration.getJeiHelpers();
 		IGuiHelper helper = helpers.getGuiHelper();
 
-		registration.addRecipeCategories(
-				AnvilCraftCategory.builder(helper)
-		);
+		registration.addRecipeCategories(AnvilCraftCategory.builder(helper));
 	}
 
 	@Override

@@ -2,7 +2,6 @@ package dev.celestiacraft.libs.compat.kubejs;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 import com.google.gson.internal.GsonBuildConfig;
 import com.simibubi.create.AllParticleTypes;
 import com.simibubi.create.AllSoundEvents;
@@ -22,6 +21,7 @@ import dev.celestiacraft.libs.debug.DebugUserManager;
 import dev.celestiacraft.libs.tags.TagsBuilder;
 import dev.celestiacraft.libs.utils.FestivalUtils;
 import dev.celestiacraft.libs.wrapper.IntWrapper;
+import dev.celestiacraft.libs.wrapper.gson.JsonWapper;
 import dev.latvian.mods.kubejs.KubeJSPlugin;
 import dev.latvian.mods.kubejs.recipe.schema.RegisterRecipeSchemasEvent;
 import dev.latvian.mods.kubejs.registry.RegistryInfo;
@@ -39,7 +39,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.registries.ForgeRegistries;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.item.ModifiableItem;
@@ -80,12 +79,11 @@ public class NebulaKubeJSPlugin extends KubeJSPlugin {
 		event.add("BlockBehaviour$Properties", BlockBehaviour.Properties.class);
 		event.add("BlockItem", BlockItem.class);
 		event.add("IntWrapper", IntWrapper.class);
-		event.add("GsonObject", JsonObject.class);
+		event.add("JsonWapper", JsonWapper.class);
 		event.add("Gson", Gson.class);
 		event.add("GsonBuilder", GsonBuilder.class);
 		event.add("GsonBuildConfig", GsonBuildConfig.class);
 		event.add("NebulaMaterial", Material.class);
-		event.add("ForgeLazy", Lazy.class);
 		event.add("DebugUserManager", DebugUserManager.class);
 		event.add("FestivalUtils", FestivalUtils.class);
 

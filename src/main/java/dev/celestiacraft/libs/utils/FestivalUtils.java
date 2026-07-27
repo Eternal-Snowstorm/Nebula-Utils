@@ -27,7 +27,7 @@ public class FestivalUtils {
 	 * @param day   日期
 	 * @return
 	 */
-	public static boolean isLunarFestival(int month, int day) {
+	public static boolean isLunarToday(int month, int day) {
 		Solar solar = Solar.fromDate(new Date());
 		Lunar lunar = solar.getLunar();
 
@@ -83,32 +83,32 @@ public class FestivalUtils {
 
 	// 春节
 	public static boolean isChineseNewYear() {
-		return isLunarFestival(1, 1);
+		return isLunarToday(1, 1);
 	}
 
 	// 元宵节
 	public static boolean isLanternFestival() {
-		return isLunarFestival(1, 15);
+		return isLunarToday(1, 15);
 	}
 
 	// 端午节
 	public static boolean isDragonBoatFestival() {
-		return isLunarFestival(5, 5);
+		return isLunarToday(5, 5);
 	}
 
 	// 中秋节
 	public static boolean isMidAutumnFestival() {
-		return isLunarFestival(8, 15);
+		return isLunarToday(8, 15);
 	}
 
 	// 重阳节
 	public static boolean isDoubleNinthFestival() {
-		return isLunarFestival(9, 9);
+		return isLunarToday(9, 9);
 	}
 
 	// 腊八节
 	public static boolean isLabaFestival() {
-		return isLunarFestival(12, 8);
+		return isLunarToday(12, 8);
 	}
 
 	// 除夕
