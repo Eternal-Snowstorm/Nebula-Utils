@@ -175,8 +175,11 @@ public abstract class BasicBlockEntity extends BlockEntity {
 	 * </p>
 	 */
 	protected void sync() {
-		updateBlock();
-		setChanged();
+		if (isLevelNotNull() && level.isClientSide()) {
+			BlockState state = getBlockState();
+			setChanged();
+			level.sendBlockUpdated(worldPosition, state, state, 3);
+		}
 	}
 
 	/**

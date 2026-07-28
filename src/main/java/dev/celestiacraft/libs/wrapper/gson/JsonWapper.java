@@ -8,9 +8,13 @@ import java.util.Set;
 
 public class JsonWapper extends JsonElement {
 	private final LinkedTreeMap<String, JsonElement> members = new LinkedTreeMap<>(false);
+	private JsonObject object;
 
-	@SuppressWarnings("deprecation")
 	public JsonWapper() {
+	}
+
+	public JsonWapper(JsonObject json) {
+		object = json;
 	}
 
 	@Override
