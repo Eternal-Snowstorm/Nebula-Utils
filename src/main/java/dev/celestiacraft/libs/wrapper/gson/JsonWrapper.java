@@ -1,37 +1,36 @@
 package dev.celestiacraft.libs.wrapper.gson;
 
 import com.google.gson.*;
-import com.google.gson.internal.LinkedTreeMap;
 
 import java.util.Map;
 import java.util.Set;
 
-public class JsonWapper extends JsonElement {
-	private final LinkedTreeMap<String, JsonElement> members = new LinkedTreeMap<>(false);
-	private JsonObject object;
+public class JsonWrapper extends JsonElement {
+	private final JsonObject object;
 
-	public JsonWapper() {
+	public JsonWrapper() {
+		object = new JsonObject();
 	}
 
-	public JsonWapper(JsonObject json) {
+	public JsonWrapper(JsonObject json) {
 		object = json;
 	}
 
 	@Override
 	public JsonObject deepCopy() {
 		JsonObject result = new JsonObject();
-		for (Map.Entry<String, JsonElement> entry : members.entrySet()) {
+		for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
 			result.add(entry.getKey(), entry.getValue().deepCopy());
 		}
 		return result;
 	}
 
 	public void add(String property, JsonElement value) {
-		members.put(property, value == null ? JsonNull.INSTANCE : value);
+		object.add(property, value == null ? JsonNull.INSTANCE : value);
 	}
 
 	public JsonElement remove(String property) {
-		return members.remove(property);
+		return object.remove(property);
 	}
 
 	public void addStringProperty(String property, String value) {
@@ -51,50 +50,64 @@ public class JsonWapper extends JsonElement {
 	}
 
 	public Set<Map.Entry<String, JsonElement>> entrySet() {
-		return members.entrySet();
+		return object.entrySet();
 	}
 
 	public Set<String> keySet() {
-		return members.keySet();
+		return object.keySet();
 	}
 
 	public int size() {
-		return members.size();
+		return object.size();
 	}
 
 	public boolean has(String memberName) {
-		return members.containsKey(memberName);
+		return object.asMap().containsKey(memberName);
 	}
 
 	public JsonElement get(String memberName) {
-		return members.get(memberName);
+		return object.get(memberName);
 	}
 
 	public JsonPrimitive getAsJsonPrimitive(String memberName) {
-		return (JsonPrimitive) members.get(memberName);
+		return (JsonPrimitive) object.get(memberName);
 	}
 
 	public JsonArray getAsJsonArray(String memberName) {
-		return (JsonArray) members.get(memberName);
+		return (JsonArray) object.get(memberName);
 	}
 
 	public JsonObject getAsJsonObject(String memberName) {
-		return (JsonObject) members.get(memberName);
-	}
-
-	public Map<String, JsonElement> asMap() {
-		return members;
+		return (JsonObject) object.get(memberName);
 	}
 
 	@Override
-	public boolean equals(Object object) {
-		return (object == this)
-				|| (object instanceof JsonWapper
-				&& ((JsonWapper) object).members.equals(members));
+	public JsonObject getAsJsonObject() {
+		return object;
+	}
+
+	@Override
+	public boolean isJsonObject() {
+		return true;
+	}
+
+	public Map<String, JsonElement> asMap() {
+		return object.asMap();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return (obj == this)
+				|| (obj instanceof JsonWrapper
+				&& ((JsonWrapper) obj).object.equals(object));
 	}
 
 	@Override
 	public int hashCode() {
-		return members.hashCode();
+		return object.hashCode();
+	}
+
+	public JsonObject toJson() {
+		return object.deepCopy();
 	}
 }

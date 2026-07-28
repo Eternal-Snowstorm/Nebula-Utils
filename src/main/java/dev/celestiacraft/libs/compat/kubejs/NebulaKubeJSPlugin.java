@@ -21,7 +21,7 @@ import dev.celestiacraft.libs.debug.DebugUserManager;
 import dev.celestiacraft.libs.tags.TagsBuilder;
 import dev.celestiacraft.libs.utils.FestivalUtils;
 import dev.celestiacraft.libs.wrapper.IntWrapper;
-import dev.celestiacraft.libs.wrapper.gson.JsonWapper;
+import dev.celestiacraft.libs.wrapper.gson.JsonWrapper;
 import dev.latvian.mods.kubejs.KubeJSPlugin;
 import dev.latvian.mods.kubejs.recipe.schema.RegisterRecipeSchemasEvent;
 import dev.latvian.mods.kubejs.registry.RegistryInfo;
@@ -79,7 +79,7 @@ public class NebulaKubeJSPlugin extends KubeJSPlugin {
 		event.add("BlockBehaviour$Properties", BlockBehaviour.Properties.class);
 		event.add("BlockItem", BlockItem.class);
 		event.add("IntWrapper", IntWrapper.class);
-		event.add("JsonWapper", JsonWapper.class);
+		event.add("JsonWrapper", JsonWrapper.class);
 		event.add("Gson", Gson.class);
 		event.add("GsonBuilder", GsonBuilder.class);
 		event.add("GsonBuildConfig", GsonBuildConfig.class);
