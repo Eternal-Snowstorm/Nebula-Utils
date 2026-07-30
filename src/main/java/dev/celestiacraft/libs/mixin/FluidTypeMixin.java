@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import dev.celestiacraft.libs.config.CommonConfig;
+import dev.celestiacraft.libs.config.common.CommonConfigs;
 
 @Mixin(value = FluidType.class, remap = false)
 public abstract class FluidTypeMixin {
@@ -32,7 +32,7 @@ public abstract class FluidTypeMixin {
 		Fluid fluid = state.getType();
 		ResourceLocation id = ForgeRegistries.FLUIDS.getKey(fluid);
 
-		for (String entry : CommonConfig.BURNING_FLUIDS.get()) {
+		for (String entry : CommonConfigs.BURNING_FLUIDS.get()) {
 			if (entry.startsWith("#")) {
 				ResourceLocation tagId = ResourceLocation.tryParse(entry.substring(1));
 				if (tagId != null) {

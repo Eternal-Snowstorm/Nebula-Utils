@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import dev.celestiacraft.libs.config.CommonConfig;
+import dev.celestiacraft.libs.config.common.CommonConfigs;
 
 @Mixin(AlterGroundDecorator.class)
 public abstract class AlterGroundDecoratorMixin {
@@ -21,7 +21,7 @@ public abstract class AlterGroundDecoratorMixin {
 			cancellable = true
 	)
 	private void onPlaceBlockAt(TreeDecorator.Context context, BlockPos pos, CallbackInfo info) {
-		if (!CommonConfig.ENABLE_LARGE_SPRUCE_PODZOL_CONVERSION.get()) {
+		if (!CommonConfigs.ENABLE_LARGE_SPRUCE_PODZOL_CONVERSION.get()) {
 			BlockStateProvider provider = ((AlterGroundDecoratorAccessor) this).getProvider();
 			BlockState state = provider.getState(context.random(), pos);
 			if (state.is(Blocks.PODZOL)) {

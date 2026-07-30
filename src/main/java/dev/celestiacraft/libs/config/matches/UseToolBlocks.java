@@ -1,22 +1,22 @@
 package dev.celestiacraft.libs.config.matches;
 
-import net.minecraft.core.registries.Registries;
+import dev.celestiacraft.libs.config.common.CommonConfigs;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
-import dev.celestiacraft.libs.config.CommonConfig;
 
 public class UseToolBlocks {
 	public static boolean matches(BlockState state) {
-		for (String entry : CommonConfig.MUST_USE_TOOL_BLOCKS.get()) {
+		for (String entry : CommonConfigs.MUST_USE_TOOL_BLOCKS.get()) {
 			if (!entry.isEmpty() && entry.charAt(0) == '#') {
 				ResourceLocation id = ResourceLocation.tryParse(entry.substring(1));
 				TagKey<Block> tag = null;
 
 				if (id != null) {
-					tag = TagKey.create(Registries.BLOCK, id);
+					tag = BlockTags.create(id);
 				}
 
 				if (tag != null && state.is(tag)) {

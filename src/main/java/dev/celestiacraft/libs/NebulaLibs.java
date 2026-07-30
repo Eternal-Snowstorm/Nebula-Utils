@@ -43,7 +43,7 @@ public class NebulaLibs {
 		NebulaRecipe.register(bus);
 		NebulaSerializer.register(bus);
 
-		context.registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC, "nebula/libs/common.toml");
+		registerConfig(context);
 		DebugUserManager.load();
 	}
 
@@ -61,6 +61,10 @@ public class NebulaLibs {
 
 	public static void modifyWindowsTitle(String title) {
 		Minecraft.getInstance().getWindow().setTitle(title);
+	}
+
+	private static void registerConfig(FMLJavaModLoadingContext context) {
+		context.registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC, "nebula/libs/common.toml");
 	}
 
 	/**
