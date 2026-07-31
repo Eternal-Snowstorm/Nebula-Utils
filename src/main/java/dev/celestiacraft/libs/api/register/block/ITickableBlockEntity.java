@@ -28,9 +28,10 @@ public interface ITickableBlockEntity<T extends BlockEntity> {
 	 * 默认按客户端和服务端分流到对应的专用方法.
 	 * </p>
 	 *
-	 * @param level 当前世界
-	 * @param pos   方块位置
-	 * @param state 方块状态
+	 * @param level  当前世界
+	 * @param pos    方块位置
+	 * @param state  方块状态
+	 * @param entity 方块实体
 	 */
 	default void tick(Level level, BlockPos pos, BlockState state, T entity) {
 		if (level.isClientSide()) {
@@ -47,9 +48,10 @@ public interface ITickableBlockEntity<T extends BlockEntity> {
 	 * 默认实现为空.
 	 * </p>
 	 *
-	 * @param level 当前世界
-	 * @param pos   方块位置
-	 * @param state 方块状态
+	 * @param level  当前世界
+	 * @param pos    方块位置
+	 * @param state  方块状态
+	 * @param entity 方块实体
 	 */
 	default void clientTick(Level level, BlockPos pos, BlockState state, T entity) {
 	}
@@ -61,9 +63,10 @@ public interface ITickableBlockEntity<T extends BlockEntity> {
 	 * 默认实现为空.
 	 * </p>
 	 *
-	 * @param level 当前世界
-	 * @param pos   方块位置
-	 * @param state 方块状态
+	 * @param level  当前世界
+	 * @param pos    方块位置
+	 * @param state  方块状态
+	 * @param entity 方块实体
 	 */
 	default void serverTick(Level level, BlockPos pos, BlockState state, T entity) {
 	}
