@@ -15,6 +15,7 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.apache.logging.log4j.util.TriConsumer;
 import org.jetbrains.annotations.NotNull;
@@ -350,6 +351,55 @@ public class SimpleJeiCategory<T> implements IRecipeCategory<T> {
 
 		public Builder<T> setIcon(Supplier<IDrawable> iconSupplier) {
 			this.iconSupplier = iconSupplier;
+			return this;
+		}
+
+		public Builder<T> setIcon(ResourceLocation location, int u, int v, int width, int height) {
+			if (helper == null) {
+				String exceptionMessage = "setIcon(ResourceLocation, int, int, int, int) requires builder(type, IGuiHelper)";
+				throw new IllegalStateException(exceptionMessage);
+			}
+			iconSupplier = () -> {
+				return helper.drawableBuilder(location, u, v, width, height).build();
+			};
+			return this;
+		}
+
+		public Builder<T> setIcon(ResourceLocation location, int width, int height) {
+			if (helper == null) {
+				String exceptionMessage = "setIcon(ResourceLocation, int, int) requires builder(type, IGuiHelper)";
+				throw new IllegalStateException(exceptionMessage);
+			}
+			iconSupplier = () -> {
+				return helper.drawableBuilder(location, 0, 0, width, height).build();
+			};
+			return this;
+		}
+
+		public Builder<T> setIcon(String location, int u, int v, int width, int height) {
+			if (helper == null) {
+				String exceptionMessage = "setIcon(String, int, int, int, int) requires builder(type, IGuiHelper)";
+				throw new IllegalStateException(exceptionMessage);
+			}
+			iconSupplier = () -> {
+				return helper.drawableBuilder(ResourceLocation.tryParse(location), u, v, width, height).build();
+			};
+			return this;
+		}
+
+		public Builder<T> setIcon(String location, int width, int height) {
+			if (helper == null) {
+				String exceptionMessage = "setIcon(String, int, int) requires builder(type, IGuiHelper)";
+				throw new IllegalStateException(exceptionMessage);
+			}
+			iconSupplier = () -> {
+				return helper.drawableBuilder(ResourceLocation.tryParse(location), 0, 0, width, height).build();
+			};
+			return this;
+		}
+
+		public Builder<T> setIcon(DoubleIcon icon) {
+			iconSupplier = () -> icon;
 			return this;
 		}
 
