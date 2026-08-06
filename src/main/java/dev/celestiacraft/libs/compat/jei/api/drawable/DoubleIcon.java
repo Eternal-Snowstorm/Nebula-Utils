@@ -1,4 +1,4 @@
-package dev.celestiacraft.libs.compat.jei.api;
+package dev.celestiacraft.libs.compat.jei.api.drawable;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
