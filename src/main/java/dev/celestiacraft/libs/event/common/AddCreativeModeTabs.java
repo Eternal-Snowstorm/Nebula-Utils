@@ -15,8 +15,8 @@ public class AddCreativeModeTabs {
 		ResourceKey<CreativeModeTab> key = event.getTabKey();
 
 		if (key.equals(CreativeModeTabs.OP_BLOCKS)) {
-			event.accept(NebulaItem.GEOLOGICAL_HAMMER);
-			event.accept(NebulaItem.BLOCK_ENTITY_TOOL);
+			event.accept(NebulaItem.GEOLOGICAL_HAMMER.asStack());
+			event.accept(NebulaItem.BLOCK_ENTITY_TOOL.asStack());
 		}
 	}
 }
