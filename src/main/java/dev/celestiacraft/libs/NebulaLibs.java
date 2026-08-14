@@ -1,5 +1,6 @@
 package dev.celestiacraft.libs;
 
+import dev.celestiacraft.libs.api.recipe.condition.NebulaConditionIds;
 import dev.celestiacraft.libs.client.tooltip.InlineItemClientTooltipComponent;
 import dev.celestiacraft.libs.client.tooltip.InlineItemTooltipComponent;
 import dev.celestiacraft.libs.common.material.Material;
@@ -44,6 +45,7 @@ public class NebulaLibs {
 		NebulaItem.register();
 		NebulaRecipe.register(bus);
 		NebulaSerializer.register(bus);
+		NebulaConditionIds.register();
 
 		registerConfig(context);
 		DebugUserManager.load();
