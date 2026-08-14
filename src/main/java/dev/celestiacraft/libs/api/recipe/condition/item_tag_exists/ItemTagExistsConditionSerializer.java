@@ -7,8 +7,6 @@ import net.minecraft.tags.ItemTags;
 import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
 
 public class ItemTagExistsConditionSerializer implements IConditionSerializer<ItemTagExistsCondition> {
-	public static final ItemTagExistsConditionSerializer INSTANCE = new ItemTagExistsConditionSerializer();
-
 	@Override
 	public void write(JsonObject json, ItemTagExistsCondition condition) {
 		json.addProperty("tag", condition.getTag().location().toString());

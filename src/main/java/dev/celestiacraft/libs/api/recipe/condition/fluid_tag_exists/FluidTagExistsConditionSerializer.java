@@ -7,8 +7,6 @@ import net.minecraft.tags.FluidTags;
 import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
 
 public class FluidTagExistsConditionSerializer implements IConditionSerializer<FluidTagExistsCondition> {
-	public static final FluidTagExistsConditionSerializer INSTANCE = new FluidTagExistsConditionSerializer();
-
 	@Override
 	public void write(JsonObject json, FluidTagExistsCondition condition) {
 		json.addProperty("fluid_tag", condition.getTag().location().toString());
