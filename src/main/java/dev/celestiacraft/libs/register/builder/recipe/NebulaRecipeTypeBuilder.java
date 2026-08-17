@@ -12,6 +12,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
@@ -36,17 +37,17 @@ public class NebulaRecipeTypeBuilder<T extends Recipe<?>> extends NoConfigBuilde
 	}
 
 	@Override
-	protected RecipeEntry<T> createEntryWrapper(RegistryObject<RecipeType<T>> delegate) {
+	protected @NotNull RecipeEntry<T> createEntryWrapper(@NotNull RegistryObject<RecipeType<T>> type) {
 		return new RecipeEntry<>(
 				getOwner(),
 				ResourceLocation.fromNamespaceAndPath(getOwner().getModid(), getName()),
-				delegate,
+				type,
 				serializer
-	);
+		);
 	}
 
 	@Override
-	public RecipeEntry<T> register() {
+	public @NotNull RecipeEntry<T> register() {
 		return (RecipeEntry<T>) super.register();
 	}
 }
