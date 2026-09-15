@@ -1,13 +1,19 @@
 package dev.celestiacraft.libs.compat.jei;
 
+import dev.celestiacraft.libs.NebulaLibs;
 import dev.celestiacraft.libs.common.recipe.anvil_craft.AnvilCraftRecipe;
 import dev.celestiacraft.libs.common.register.NebulaRecipe;
+import dev.celestiacraft.libs.compat.ICheckModLoaded;
 import dev.celestiacraft.libs.compat.jei.api.NebulaJeiRecipeType;
 import dev.celestiacraft.libs.compat.jei.categoty.AnvilCraftCategory;
+import dev.celestiacraft.libs.compat.kubejs.event.NebulaEventJS;
+import dev.celestiacraft.libs.compat.kubejs.event.client.jei.RegisterIngredientAliasesEventJS;
+import dev.latvian.mods.kubejs.script.ScriptType;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.helpers.IJeiHelpers;
+import mezz.jei.api.registration.IIngredientAliasRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
@@ -16,7 +22,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeManager;
 import org.jetbrains.annotations.NotNull;
-import dev.celestiacraft.libs.NebulaLibs;
 
 import java.util.List;
 
@@ -25,6 +30,16 @@ public class NebulaJeiPlugin implements IModPlugin {
 	@Override
 	public @NotNull ResourceLocation getPluginUid() {
 		return NebulaLibs.loadResource("jei_plugin");
+	}
+
+	@Override
+	public void registerIngredientAliases(@NotNull IIngredientAliasRegistration registration) {
+		if (ICheckModLoaded.hasKubeJS()) {
+			NebulaEventJS.JEI_ALIASES_EVENT.post(
+					ScriptType.CLIENT,
+					RegisterIngredientAliasesEventJS.of(registration)
+			);
+		}
 	}
 
 	@Override

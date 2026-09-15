@@ -32,7 +32,7 @@ java {
 	withSourcesJar()
 }
 
-//jarJar.enable()
+jarJar.enable()
 
 minecraft {
 	mappings channel: 'parchment', version: '2023.09.03-1.20.1'
@@ -137,6 +137,7 @@ dependencies {
 	implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
 	compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.4.1"))
 	implementation("io.github.llamalad7:mixinextras-forge:0.4.1")
+	jarJar(group: "com.tterrag.registrate", name: "Registrate", version: "[${registrate_version}]")
 
 	// KubeJS
 	implementation fg.deobf("dev.architectury:architectury-forge:9.2.14")
@@ -152,9 +153,9 @@ dependencies {
 	compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:5.14.1+1.20.1")
 	runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:5.14.1+1.20.1")
 	// Jei
-	compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:15.20.0.103")
-	compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:15.20.0.103")
-	runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:15.20.0.103")
+	compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:15.57.0.208")
+	compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:15.57.0.208")
+	runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:15.57.0.208")
 	// ftb quests
 	compileOnly fg.deobf("curse.maven:ftb-quests-forge-289412:7608804")
 	// FTB Library (FTB Quests 的 UI 基础库)

@@ -367,36 +367,63 @@ public class BasicBlock extends Block implements IFluidInteractable {
 	/**
 	 * 创建一个基于 {@link #LIT} 状态的亮度函数.
 	 * <p>
-	 * 当方块处于点亮状态时, 返回指定的亮度等级,
-	 * 否则返回 {@code 0}.
+	 * 点亮时返回指定亮度等级, 熄灭时返回 {@code 0}.
 	 *
 	 * @param litLevel 点亮时的亮度等级, 会被限制在 {@code [0, 15]} 范围内
 	 * @return 方块亮度函数
 	 */
 	public static ToIntFunction<BlockState> litBlockEmission(int litLevel) {
-		return litBlockEmission(litLevel, 0);
+		return litBlockEmission(LIT, litLevel, 0);
 	}
 
 	/**
 	 * 创建一个基于 {@link #LIT} 状态的亮度函数.
 	 * <p>
-	 * 当方块处于点亮状态时返回 {@code litLevel},
-	 * 熄灭状态时返回 {@code extinguishLevel}.
-	 * <p>
-	 * 两个亮度值都会自动限制在 {@code [0, 15]} 范围内.
+	 * 点亮时返回 {@code litLevel}, 熄灭时返回 {@code extinguishLevel}.
 	 *
 	 * @param litLevel        点亮时的亮度等级
 	 * @param extinguishLevel 熄灭时的亮度等级
 	 * @return 方块亮度函数
 	 */
 	public static ToIntFunction<BlockState> litBlockEmission(int litLevel, int extinguishLevel) {
+		return litBlockEmission(LIT, litLevel, extinguishLevel);
+	}
+
+	/**
+	 * 创建一个基于 {@link BooleanProperty} 状态的亮度函数.
+	 * <p>
+	 * 属性为 {@code true} 时返回指定亮度等级, 为 {@code false} 时返回 {@code 0}.
+	 *
+	 * @param property 用于判断点亮状态的布尔属性
+	 * @param litLevel 点亮时的亮度等级, 会被限制在 {@code [0, 15]} 范围内
+	 * @return 方块亮度函数
+	 */
+	public static ToIntFunction<BlockState> litBlockEmission(BooleanProperty property, int litLevel) {
+		return litBlockEmission(property, litLevel, 0);
+	}
+
+	/**
+	 * 创建一个基于 {@link BooleanProperty} 状态的亮度函数.
+	 * <p>
+	 * 属性为 {@code true} 时返回 {@code litLevel},
+	 * 为 {@code false} 时返回 {@code extinguishLevel}.
+	 * <p>
+	 * 两个亮度值都会自动限制在 {@code [0, 15]} 范围内.
+	 *
+	 * @param property        用于判断点亮状态的布尔属性
+	 * @param litLevel        点亮时的亮度等级
+	 * @param extinguishLevel 熄灭时的亮度等级
+	 * @return 方块亮度函数
+	 */
+	public static ToIntFunction<BlockState> litBlockEmission(BooleanProperty property, int litLevel, int extinguishLevel) {
 		litLevel = Math.min(15, Math.max(0, litLevel));
 		extinguishLevel = Math.min(15, Math.max(0, extinguishLevel));
 
 		int finalLitLevel = litLevel;
 		int finalExtinguishLevel = extinguishLevel;
+
 		return (state) -> {
-			return state.getValue(LIT)
+			return state.getValue(property)
 					? finalLitLevel
 					: finalExtinguishLevel;
 		};

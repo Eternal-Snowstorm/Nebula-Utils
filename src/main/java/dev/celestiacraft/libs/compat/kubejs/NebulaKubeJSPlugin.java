@@ -14,6 +14,7 @@ import dev.celestiacraft.libs.common.material.Material;
 import dev.celestiacraft.libs.compat.ICheckModLoaded;
 import dev.celestiacraft.libs.compat.curios.ICuriosHelper;
 import dev.celestiacraft.libs.compat.jade.util.CommonJadeTipProvider;
+import dev.celestiacraft.libs.compat.kubejs.event.NebulaEventJS;
 import dev.celestiacraft.libs.compat.kubejs.recipe.AnvilCraftSchema;
 import dev.celestiacraft.libs.compat.patchouli.multiblock.*;
 import dev.celestiacraft.libs.compat.tconstruct.util.SimpleTConUtils;
@@ -51,6 +52,11 @@ public class NebulaKubeJSPlugin extends KubeJSPlugin {
 	public void registerRecipeSchemas(RegisterRecipeSchemasEvent event) {
 		event.namespace(NebulaLibs.MODID)
 				.register("anvil_craft", AnvilCraftSchema.SCHEMA);
+	}
+
+	@Override
+	public void registerEvents() {
+		NebulaEventJS.init();
 	}
 
 	public void registerBindings(BindingsEvent event) {

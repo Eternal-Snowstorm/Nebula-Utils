@@ -29,8 +29,8 @@ public class AnvilCraftCategory {
 							.setStandardSlotBackground();
 				})
 				.setExtra((builder, recipe, group) -> {
-					builder.addRecipePlusSign().setPosition(27, 3);
-					builder.addRecipeArrow().setPosition(76, 1);
+					builder.addRecipePlusSignWidget().setPosition(27, 3);
+					builder.addRecipeArrowWidget().setPosition(76, 1);
 
 					builder.addText(Component.literal(
 									"Debug Info"
