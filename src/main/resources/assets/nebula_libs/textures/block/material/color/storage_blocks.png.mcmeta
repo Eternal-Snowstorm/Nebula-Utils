@@ -1,0 +1,9 @@
+{
+    "ctm": {
+        "ctm_version": 1,
+        "type": "ctm",
+        "textures": [
+            "nebula_libs:block/material/color/storage_blocks_ctm"
+        ]
+    }
+}

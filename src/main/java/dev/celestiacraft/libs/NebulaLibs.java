@@ -3,7 +3,7 @@ package dev.celestiacraft.libs;
 import dev.celestiacraft.libs.api.recipe.condition.NebulaConditionIds;
 import dev.celestiacraft.libs.client.tooltip.InlineItemClientTooltipComponent;
 import dev.celestiacraft.libs.client.tooltip.InlineItemTooltipComponent;
-import dev.celestiacraft.libs.common.material.Material;
+import dev.celestiacraft.libs.common.material.MaterialManager;
 import dev.celestiacraft.libs.common.register.NebulaItem;
 import dev.celestiacraft.libs.common.register.NebulaRecipe;
 import dev.celestiacraft.libs.compat.ICheckModLoaded;
@@ -34,12 +34,12 @@ public class NebulaLibs {
 	public static final Logger LOGGER = LogManager.getLogger("Nebula");
 	public static final NebulaRegistrate REGISTRATE = NebulaRegistrate.create(MODID);
 
-	public static final Material MATERIAL = new Material(MODID);
-
 	public NebulaLibs(FMLJavaModLoadingContext context) {
 		IEventBus bus = context.getModEventBus();
 
 		REGISTRATE.registerEventListeners(bus);
+
+		MaterialManager.bootstrap(bus);
 
 		NebulaItem.register();
 		NebulaRecipe.register();
