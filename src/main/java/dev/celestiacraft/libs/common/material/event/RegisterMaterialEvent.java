@@ -1,9 +1,6 @@
 package dev.celestiacraft.libs.common.material.event;
 
-import dev.celestiacraft.libs.common.material.NebulaMaterial;
-import dev.celestiacraft.libs.common.material.MaterialManager;
-import dev.celestiacraft.libs.common.material.IMiningLevel;
-import dev.celestiacraft.libs.common.material.MiningLevels;
+import dev.celestiacraft.libs.common.material.*;
 import dev.latvian.mods.kubejs.typings.Info;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.Event;
@@ -48,6 +45,45 @@ import java.util.List;
  *     }
  * }
  * }</pre>
+ *
+ * <h3>如何在别处引用材料</h3>
+ *
+ * <p>
+ * 材料是运行期创建的对象, 所以"静态引用"要自己保存: 把 {@link #register(String, IMiningLevel)}
+ * 的返回值赋值给自己的静态字段即可(推荐把字段和监听器放在同一个类里, 一个文件搞定),
+ * 之后就能写 {@code CmiMaterials.CHROMIUM.getIngot()}:
+ * </p>
+ *
+ * <pre>{@code
+ * @Mod.EventBusSubscriber(modid = "cmi")
+ * public final class CmiMaterials {
+ *     public static NebulaMaterial CHROMIUM;
+ *     public static NebulaMaterial TITANIUM;
+ *
+ *     @SubscribeEvent
+ *     public static void onRegisterMaterial(RegisterMaterialEvent event) {
+ *         CHROMIUM = event.register("cmi:chromium", MiningLevels.IRON).color(...).metal().ingot();
+ *         TITANIUM = event.register("cmi:titanium", MiningLevels.DIAMOND).color(...).metal().ingot();
+ *     }
+ * }
+ *
+ * // 别处
+ * Item ingot = CmiMaterials.CHROMIUM.getIngot();
+ * }</pre>
+ *
+ * <p>也可以不持有对象, 按 ID 查:</p>
+ *
+ * <ul>
+ *     <li>{@code MaterialManager.get(id)} - 找不到返回 null</li>
+ *     <li>{@code MaterialManager.require(id)} - 找不到直接抛异常, 适合"写错就该炸"的场合</li>
+ * </ul>
+ *
+ * <p>
+ * 时序: 材料对象本身在 {@link RegisterMaterialEvent} 时就有了, 但 {@code getIngot()} 这类查询要等
+ * {@code RegisterEvent} 把物品真正写进注册表(也就是 {@code FMLCommonSetupEvent} 之前)才有效;
+ * 需要在更早的阶段(例如同一批材料之间、或数据包里)引用时, 用
+ * {@link NebulaMaterial#id(IMaterialType)} 拿 {@code ResourceLocation}.
+ * </p>
  *
  * @see MaterialManager
  */

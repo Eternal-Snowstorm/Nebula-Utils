@@ -49,9 +49,6 @@ public class MaterialManager {
 		BY_ID = new LinkedHashMap<>();
 	}
 
-	private MaterialManager() {
-	}
-
 	/**
 	 * 初始化材料系统
 	 *
@@ -125,6 +122,28 @@ public class MaterialManager {
 	@Nullable
 	public static NebulaMaterial get(ResourceLocation id) {
 		return BY_ID.get(id);
+	}
+
+	/**
+	 * 按 ID 查找材料, 找不到时抛异常
+	 *
+	 * <p>
+	 * 适合"这个材料必须存在, 不存在就是写错了"的场合(例如配方代码里按 ID 取材料);
+	 * 想自己处理缺失就用 {@link #get(ResourceLocation)}.
+	 * </p>
+	 *
+	 * @param id 材料 ID
+	 * @return 材料
+	 * @throws IllegalStateException 材料不存在时抛出
+	 */
+	public static NebulaMaterial require(ResourceLocation id) {
+		NebulaMaterial material = BY_ID.get(id);
+
+		if (material == null) {
+			throw new IllegalStateException("材料 %s 不存在(材料必须在 RegisterMaterialEvent / NebulaEvents.registerMaterial 里定义)".formatted(id));
+		}
+
+		return material;
 	}
 
 	/**
