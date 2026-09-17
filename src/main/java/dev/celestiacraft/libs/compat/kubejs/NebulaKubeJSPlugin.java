@@ -10,7 +10,7 @@ import com.simibubi.create.foundation.utility.CreateLang;
 import dev.celestiacraft.libs.NebulaLibs;
 import dev.celestiacraft.libs.api.register.tool.tier.TierBuilder;
 import dev.celestiacraft.libs.client.NebulaLang;
-import dev.celestiacraft.libs.common.material.Material;
+import dev.celestiacraft.libs.common.material.NebulaMaterial;
 import dev.celestiacraft.libs.common.material.IMaterialKind;
 import dev.celestiacraft.libs.common.material.MaterialKinds;
 import dev.celestiacraft.libs.common.material.MaterialManager;
@@ -97,8 +97,7 @@ public class NebulaKubeJSPlugin extends KubeJSPlugin {
 		event.add("Gson", Gson.class);
 		event.add("GsonBuilder", GsonBuilder.class);
 		event.add("GsonBuildConfig", GsonBuildConfig.class);
-		event.add("NebulaMaterial", Material.class);
-		event.add("Material", Material.class);
+		event.add("NebulaMaterial", NebulaMaterial.class);
 		event.add("IMaterialType", IMaterialType.class);
 		event.add("MaterialTypes", MaterialTypes.class);
 		event.add("IMaterialKind", IMaterialKind.class);

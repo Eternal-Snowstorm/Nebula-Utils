@@ -1,7 +1,7 @@
 package dev.celestiacraft.libs.compat.kubejs.event;
 
 import dev.celestiacraft.libs.common.material.IMiningLevel;
-import dev.celestiacraft.libs.common.material.Material;
+import dev.celestiacraft.libs.common.material.NebulaMaterial;
 import dev.celestiacraft.libs.common.material.event.RegisterMaterialEvent;
 import dev.latvian.mods.kubejs.event.StartupEventJS;
 import dev.latvian.mods.kubejs.typings.Info;
@@ -20,7 +20,7 @@ import java.util.List;
  *
  * <pre>{@code
  * // startup_scripts/xxx.js
- * NebulaEvents.registerMaterial(event => {
+ * NebulaEvents.registerMaterial((event) => {
  *     event.namespace("cmi")                 // 只写一次, 之后 create 可以只给材料名
  *
  *     event.create("chromium", MiningLevels.IRON)
@@ -80,7 +80,7 @@ public class RegisterMaterialEventJS extends StartupEventJS {
 	 * @return 材料定义
 	 */
 	@Info("创建一个材料, 例如 event.create('chromium')")
-	public Material create(String name) {
+	public NebulaMaterial create(String name) {
 		applyNamespace();
 		return event.register(name);
 	}
@@ -93,7 +93,7 @@ public class RegisterMaterialEventJS extends StartupEventJS {
 	 * @return 材料定义
 	 */
 	@Info("创建一个材料, 第二个参数是挖掘等级, 例如 event.create('chromium', MiningLevels.IRON)")
-	public Material create(String name, IMiningLevel level) {
+	public NebulaMaterial create(String name, IMiningLevel level) {
 		applyNamespace();
 		return event.register(name, level);
 	}
@@ -105,7 +105,7 @@ public class RegisterMaterialEventJS extends StartupEventJS {
 	 * @return 材料定义
 	 */
 	@Info("create(name) 的别名")
-	public Material register(String name) {
+	public NebulaMaterial register(String name) {
 		return create(name);
 	}
 
@@ -117,14 +117,14 @@ public class RegisterMaterialEventJS extends StartupEventJS {
 	 * @return 材料定义
 	 */
 	@Info("create(name, level) 的别名")
-	public Material register(String name, IMiningLevel level) {
+	public NebulaMaterial register(String name, IMiningLevel level) {
 		return create(name, level);
 	}
 
 	/**
 	 * @return 已经创建的所有材料
 	 */
-	public List<Material> materials() {
+	public List<NebulaMaterial> materials() {
 		return event.materials();
 	}
 

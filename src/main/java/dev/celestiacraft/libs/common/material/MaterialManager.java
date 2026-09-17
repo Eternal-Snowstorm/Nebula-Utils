@@ -39,8 +39,8 @@ import java.util.Map;
  * </p>
  */
 public class MaterialManager {
-	private static final List<Material> MATERIALS;
-	private static final Map<ResourceLocation, Material> BY_ID;
+	private static final List<NebulaMaterial> MATERIALS;
+	private static final Map<ResourceLocation, NebulaMaterial> BY_ID;
 
 	private static boolean initialized;
 
@@ -74,7 +74,7 @@ public class MaterialManager {
 		MinecraftForge.EVENT_BUS.post(materialEvent);
 		MaterialKubeJSHook.post(materialEvent);
 
-		for (Material material : materialEvent.materials()) {
+		for (NebulaMaterial material : materialEvent.materials()) {
 			accept(material);
 		}
 
@@ -83,7 +83,7 @@ public class MaterialManager {
 			return;
 		}
 
-		for (Material material : MATERIALS) {
+		for (NebulaMaterial material : MATERIALS) {
 			MaterialRegistrar.register(material);
 		}
 
@@ -96,9 +96,9 @@ public class MaterialManager {
 		MaterialRegistration.flush(event);
 	}
 
-	private static void accept(Material material) {
+	private static void accept(NebulaMaterial material) {
 		ResourceLocation id = material.id();
-		Material previous = BY_ID.get(id);
+		NebulaMaterial previous = BY_ID.get(id);
 
 		if (previous != null) {
 			NebulaLibs.LOGGER.error("材料 {} 被重复定义, 后一个定义已被忽略", id);
@@ -112,7 +112,7 @@ public class MaterialManager {
 	/**
 	 * @return 所有已注册的材料
 	 */
-	public static List<Material> materials() {
+	public static List<NebulaMaterial> materials() {
 		return Collections.unmodifiableList(MATERIALS);
 	}
 
@@ -123,7 +123,7 @@ public class MaterialManager {
 	 * @return 材料, 不存在时返回 null
 	 */
 	@Nullable
-	public static Material get(ResourceLocation id) {
+	public static NebulaMaterial get(ResourceLocation id) {
 		return BY_ID.get(id);
 	}
 
@@ -133,10 +133,10 @@ public class MaterialManager {
 	 * @param namespace 命名空间(mod id)
 	 * @return 材料列表
 	 */
-	public static List<Material> materials(String namespace) {
-		List<Material> result = new ArrayList<>();
+	public static List<NebulaMaterial> materials(String namespace) {
+		List<NebulaMaterial> result = new ArrayList<>();
 
-		for (Material material : MATERIALS) {
+		for (NebulaMaterial material : MATERIALS) {
 			if (material.namespace().equals(namespace)) {
 				result.add(material);
 			}

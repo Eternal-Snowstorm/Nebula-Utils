@@ -26,7 +26,7 @@ import java.util.List;
  *     <li><b>同分类的新类型</b>(例如本模组没有的"弹簧"): 用 {@link MaterialTypes#item(String)} 等工厂声明即可,
  *     注册流程会按 {@link #kind()} 自动选择</li>
  *     <li><b>新分类</b>(例如气体): 用 {@link MaterialKinds#of(String)} 建一个分类, 再覆盖
- *     {@link #register(Material)} 实现自己的注册流程(也可以直接复用
+ *     {@link #register(NebulaMaterial)} 实现自己的注册流程(也可以直接复用
  *     {@link MaterialRegistrar} 里现成的流程)</li>
  *     <li><b>完全自定义</b>: 直接实现本接口, 覆盖需要的方法</li>
  * </ul>
@@ -130,7 +130,7 @@ public interface IMaterialType {
 	 * @param material 材料
 	 * @return 注册 ID
 	 */
-	default ResourceLocation id(Material material) {
+	default ResourceLocation id(NebulaMaterial material) {
 		return ResourceLocation.fromNamespaceAndPath(material.namespace(), namePattern().formatted(material.name()));
 	}
 
@@ -140,7 +140,7 @@ public interface IMaterialType {
 	 * @param material 材料
 	 * @return 物品实例
 	 */
-	default Item createItem(Material material) {
+	default Item createItem(NebulaMaterial material) {
 		return new Item(new Item.Properties());
 	}
 
@@ -151,7 +151,7 @@ public interface IMaterialType {
 	 * @param properties 已经按材料设置好的方块属性(硬度 / 抗性 / 音效)
 	 * @return 方块实例
 	 */
-	default Block createBlock(Material material, BlockBehaviour.Properties properties) {
+	default Block createBlock(NebulaMaterial material, BlockBehaviour.Properties properties) {
 		return new Block(properties);
 	}
 
@@ -161,7 +161,7 @@ public interface IMaterialType {
 	 * @param material 材料
 	 * @return 流体类型
 	 */
-	default FluidType createFluidType(Material material) {
+	default FluidType createFluidType(NebulaMaterial material) {
 		return new MoltenType(
 				FluidType.Properties.create(),
 				material.primaryColor(),
@@ -181,7 +181,7 @@ public interface IMaterialType {
 	 * @param material 材料
 	 * @return 是否真的注册了内容; 返回 false 时不会为该类型生成标签
 	 */
-	default boolean register(Material material) {
+	default boolean register(NebulaMaterial material) {
 		return MaterialRegistrar.registerType(material, this);
 	}
 }

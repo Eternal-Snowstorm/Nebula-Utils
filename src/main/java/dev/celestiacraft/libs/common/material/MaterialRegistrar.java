@@ -26,15 +26,15 @@ import java.util.concurrent.atomic.AtomicReference;
  * </p>
  *
  * <p>
- * 每个 {@link IMaterialType} 自己决定怎么注册({@link IMaterialType#register(Material)}),
+ * 每个 {@link IMaterialType} 自己决定怎么注册({@link IMaterialType#register(NebulaMaterial)}),
  * 默认实现会按 {@link IMaterialType#kind()} 选择这里的内置流程:
  * </p>
  *
  * <ul>
- *     <li>{@link MaterialKinds#ITEM} → {@link #registerItem(Material, IMaterialType)}</li>
- *     <li>{@link MaterialKinds#BLOCK} → {@link #registerBlock(Material, IMaterialType)}</li>
- *     <li>{@link MaterialKinds#FLUID} → {@link #registerFluid(Material, IMaterialType)}</li>
- *     <li>{@link MaterialKinds#SLURRY} → {@link #registerSlurry(Material, IMaterialType)}</li>
+ *     <li>{@link MaterialKinds#ITEM} → {@link #registerItem(NebulaMaterial, IMaterialType)}</li>
+ *     <li>{@link MaterialKinds#BLOCK} → {@link #registerBlock(NebulaMaterial, IMaterialType)}</li>
+ *     <li>{@link MaterialKinds#FLUID} → {@link #registerFluid(NebulaMaterial, IMaterialType)}</li>
+ *     <li>{@link MaterialKinds#SLURRY} → {@link #registerSlurry(NebulaMaterial, IMaterialType)}</li>
  * </ul>
  *
  * <p>
@@ -49,7 +49,7 @@ public class MaterialRegistrar {
 	 *
 	 * @param material 材料
 	 */
-	public static void register(Material material) {
+	public static void register(NebulaMaterial material) {
 		if (material.typeCount() == 0) {
 			NebulaLibs.LOGGER.warn("材料 {} 没有声明任何类型, 已跳过", material.id());
 			return;
@@ -73,7 +73,7 @@ public class MaterialRegistrar {
 	 * @param type     类型
 	 * @return 是否注册成功
 	 */
-	public static boolean registerType(Material material, IMaterialType type) {
+	public static boolean registerType(NebulaMaterial material, IMaterialType type) {
 		IMaterialKind kind = type.kind();
 
 		if (kind == MaterialKinds.ITEM) {
@@ -95,7 +95,7 @@ public class MaterialRegistrar {
 			return registerSlurry(material, type);
 		}
 
-		throw new IllegalStateException("材料类型 %s 使用了自定义分类 %s, 需要覆盖 IMaterialType#register(Material)".formatted(type.id(), kind.id()));
+		throw new IllegalStateException("材料类型 %s 使用了自定义分类 %s, 需要覆盖 IMaterialType#register(NebulaMaterial)".formatted(type.id(), kind.id()));
 	}
 
 	/**
@@ -104,7 +104,7 @@ public class MaterialRegistrar {
 	 * @param material 材料
 	 * @param type     类型
 	 */
-	public static void registerItem(Material material, IMaterialType type) {
+	public static void registerItem(NebulaMaterial material, IMaterialType type) {
 		ResourceLocation id = material.id(type);
 
 		MaterialRegistration.add(Registries.ITEM, id, () -> type.createItem(material));
@@ -118,7 +118,7 @@ public class MaterialRegistrar {
 	 * @param material 材料
 	 * @param type     类型
 	 */
-	public static void registerBlock(Material material, IMaterialType type) {
+	public static void registerBlock(NebulaMaterial material, IMaterialType type) {
 		ResourceLocation id = material.id(type);
 		Block block = type.createBlock(material, BlockBehaviour.Properties.of()
 				.strength(material.hardness(), material.resistance())
@@ -149,7 +149,7 @@ public class MaterialRegistrar {
 	 * @param material 材料
 	 * @param type     类型
 	 */
-	public static void registerFluid(Material material, IMaterialType type) {
+	public static void registerFluid(NebulaMaterial material, IMaterialType type) {
 		ResourceLocation id = material.id(type);
 		ResourceLocation flowingId = flowingFluidId(id);
 		ResourceLocation bucketId = bucketId(id);
@@ -213,7 +213,7 @@ public class MaterialRegistrar {
 	 * @param type     类型
 	 * @return 是否注册成功(没有加载 Mekanism 时返回 false, 此时不会生成标签)
 	 */
-	public static boolean registerSlurry(Material material, IMaterialType type) {
+	public static boolean registerSlurry(NebulaMaterial material, IMaterialType type) {
 		if (!ICheckModLoaded.hasMekanism()) {
 			NebulaLibs.LOGGER.warn("材料 {} 声明了 {}, 但当前没有加载 Mekanism, 已跳过", material.id(), type.id());
 			return false;
@@ -223,7 +223,7 @@ public class MaterialRegistrar {
 		return true;
 	}
 
-	private static SoundType blockSound(Material material) {
+	private static SoundType blockSound(NebulaMaterial material) {
 		SoundType sound = material.sound();
 		return sound == null ? SoundType.METAL : sound;
 	}

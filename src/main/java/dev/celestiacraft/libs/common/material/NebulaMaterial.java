@@ -14,10 +14,11 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
- * <h2>Material</h2>
+ * <h2>NebulaMaterial</h2>
  *
  * <p>
  * 一个材料(金属 / 非金属)的定义.
@@ -61,11 +62,12 @@ import java.util.Map;
  *
  * @see MaterialTypes
  */
-public class Material {
+public class NebulaMaterial {
 	private final ResourceLocation id;
 	private final Map<String, IMaterialType> types;
 	private final Map<String, Boolean> overlays;
 	private final Map<String, ResourceLocation> models;
+	private final Map<String, List<ResourceLocation>> typeTextures;
 
 	private int primaryColor;
 	private int secondaryColor;
@@ -82,11 +84,12 @@ public class Material {
 	@Nullable
 	private ResourceLocation moltenFlowing;
 
-	public Material(ResourceLocation id) {
+	public NebulaMaterial(ResourceLocation id) {
 		this.id = id;
 		types = new LinkedHashMap<>();
 		overlays = new LinkedHashMap<>();
 		models = new LinkedHashMap<>();
+		typeTextures = new LinkedHashMap<>();
 		primaryColor = 0xFFFFFF;
 		secondaryColor = 0xFFFFFF;
 		metal = false;
@@ -123,7 +126,7 @@ public class Material {
 	 * @return 当前材料
 	 */
 	@Info("设置材料颜色, 同时作为主色与副色")
-	public Material color(int color) {
+	public NebulaMaterial color(int color) {
 		return color(color, color);
 	}
 
@@ -135,7 +138,7 @@ public class Material {
 	 * @return 当前材料
 	 */
 	@Info("设置材料颜色, primary 对应 layer0, secondary 对应 layer1")
-	public Material color(int primary, int secondary) {
+	public NebulaMaterial color(int primary, int secondary) {
 		primaryColor = withAlpha(primary);
 		secondaryColor = withAlpha(secondary);
 		return this;
@@ -151,7 +154,7 @@ public class Material {
 	 * @return 当前材料
 	 */
 	@Info("将该材料标记为金属, 生成的物品与方块会加入 <namespace>:metals 标签")
-	public Material metal() {
+	public NebulaMaterial metal() {
 		metal = true;
 		return this;
 	}
@@ -162,7 +165,7 @@ public class Material {
 	 * @return 当前材料
 	 */
 	@Info("metal() 的别名")
-	public Material isMetal() {
+	public NebulaMaterial isMetal() {
 		return metal();
 	}
 
@@ -173,7 +176,7 @@ public class Material {
 	 * @return 当前材料
 	 */
 	@Info("设置方块挖掘等级, 例如 MiningLevels.IRON")
-	public Material level(IMiningLevel level) {
+	public NebulaMaterial level(IMiningLevel level) {
 		this.level = level == null ? MiningLevels.NONE : level;
 		return this;
 	}
@@ -184,7 +187,7 @@ public class Material {
 	 * @param hardness 硬度
 	 * @return 当前材料
 	 */
-	public Material hardness(float hardness) {
+	public NebulaMaterial hardness(float hardness) {
 		this.hardness = hardness;
 		return this;
 	}
@@ -195,7 +198,7 @@ public class Material {
 	 * @param resistance 爆炸抗性
 	 * @return 当前材料
 	 */
-	public Material resistance(float resistance) {
+	public NebulaMaterial resistance(float resistance) {
 		this.resistance = resistance;
 		return this;
 	}
@@ -208,7 +211,7 @@ public class Material {
 	 * @return 当前材料
 	 */
 	@Info("同时设置方块硬度与爆炸抗性")
-	public Material destroy(float hardness, float resistance) {
+	public NebulaMaterial destroy(float hardness, float resistance) {
 		return hardness(hardness).resistance(resistance);
 	}
 
@@ -219,7 +222,7 @@ public class Material {
 	 * @return 当前材料
 	 */
 	@Info("设置方块音效, 例如 SoundType.METAL")
-	public Material sound(SoundType sound) {
+	public NebulaMaterial sound(SoundType sound) {
 		this.sound = sound;
 		return this;
 	}
@@ -236,7 +239,7 @@ public class Material {
 	 * @return 当前材料
 	 */
 	@Info("覆盖贴图命名空间, 默认使用模组自带的 nebula_libs 贴图")
-	public Material textures(String namespace) {
+	public NebulaMaterial textures(String namespace) {
 		textureNamespace = namespace;
 		return this;
 	}
@@ -254,151 +257,216 @@ public class Material {
 	 * @return 当前材料
 	 */
 	@Info("覆盖熔融流体的静止/流动贴图")
-	public Material fluidTextures(ResourceLocation still, ResourceLocation flowing) {
+	public NebulaMaterial fluidTextures(ResourceLocation still, ResourceLocation flowing) {
 		moltenStill = still;
 		moltenFlowing = flowing;
 		return this;
 	}
 
 	@Info("注册锭")
-	public Material ingot() {
+	public NebulaMaterial ingot() {
 		return type(MaterialTypes.INGOT, true);
 	}
 
 	@Info("注册锭, overlay 为 false 时不生成亮层")
-	public Material ingot(boolean overlay) {
+	public NebulaMaterial ingot(boolean overlay) {
 		return type(MaterialTypes.INGOT, overlay);
 	}
 
+	@Info("注册锭, 并使用指定的模型, 例如 immersiveengineering:item/ingot_steel")
+	public NebulaMaterial ingot(ResourceLocation model) {
+		return type(MaterialTypes.INGOT, false).model(MaterialTypes.INGOT, model);
+	}
+
 	@Info("注册板")
-	public Material plate() {
+	public NebulaMaterial plate() {
 		return type(MaterialTypes.PLATE, true);
 	}
 
 	@Info("注册板, overlay 为 false 时不生成亮层")
-	public Material plate(boolean overlay) {
+	public NebulaMaterial plate(boolean overlay) {
 		return type(MaterialTypes.PLATE, overlay);
 	}
 
+	@Info("注册板, 并使用指定的模型, 例如 immersiveengineering:item/ingot_steel")
+	public NebulaMaterial plate(ResourceLocation model) {
+		return type(MaterialTypes.PLATE, false).model(MaterialTypes.PLATE, model);
+	}
+
 	@Info("注册粒")
-	public Material nugget() {
+	public NebulaMaterial nugget() {
 		return type(MaterialTypes.NUGGET, true);
 	}
 
 	@Info("注册粒, overlay 为 false 时不生成亮层")
-	public Material nugget(boolean overlay) {
+	public NebulaMaterial nugget(boolean overlay) {
 		return type(MaterialTypes.NUGGET, overlay);
 	}
 
+	@Info("注册粒, 并使用指定的模型, 例如 immersiveengineering:item/ingot_steel")
+	public NebulaMaterial nugget(ResourceLocation model) {
+		return type(MaterialTypes.NUGGET, false).model(MaterialTypes.NUGGET, model);
+	}
+
 	@Info("注册粉")
-	public Material dust() {
+	public NebulaMaterial dust() {
 		return type(MaterialTypes.DUST, true);
 	}
 
 	@Info("注册粉, overlay 为 false 时不生成亮层")
-	public Material dust(boolean overlay) {
+	public NebulaMaterial dust(boolean overlay) {
 		return type(MaterialTypes.DUST, overlay);
 	}
 
+	@Info("注册粉, 并使用指定的模型, 例如 immersiveengineering:item/ingot_steel")
+	public NebulaMaterial dust(ResourceLocation model) {
+		return type(MaterialTypes.DUST, false).model(MaterialTypes.DUST, model);
+	}
+
 	@Info("注册杆")
-	public Material rod() {
+	public NebulaMaterial rod() {
 		return type(MaterialTypes.ROD, true);
 	}
 
 	@Info("注册杆, overlay 为 false 时不生成亮层")
-	public Material rod(boolean overlay) {
+	public NebulaMaterial rod(boolean overlay) {
 		return type(MaterialTypes.ROD, overlay);
 	}
 
+	@Info("注册杆, 并使用指定的模型, 例如 immersiveengineering:item/ingot_steel")
+	public NebulaMaterial rod(ResourceLocation model) {
+		return type(MaterialTypes.ROD, false).model(MaterialTypes.ROD, model);
+	}
+
 	@Info("注册齿轮")
-	public Material gear() {
+	public NebulaMaterial gear() {
 		return type(MaterialTypes.GEAR, true);
 	}
 
 	@Info("注册齿轮, overlay 为 false 时不生成亮层")
-	public Material gear(boolean overlay) {
+	public NebulaMaterial gear(boolean overlay) {
 		return type(MaterialTypes.GEAR, overlay);
 	}
 
+	@Info("注册齿轮, 并使用指定的模型, 例如 immersiveengineering:item/ingot_steel")
+	public NebulaMaterial gear(ResourceLocation model) {
+		return type(MaterialTypes.GEAR, false).model(MaterialTypes.GEAR, model);
+	}
+
 	@Info("注册线材")
-	public Material wire() {
+	public NebulaMaterial wire() {
 		return type(MaterialTypes.WIRE, true);
 	}
 
 	@Info("注册线材, overlay 为 false 时不生成亮层")
-	public Material wire(boolean overlay) {
+	public NebulaMaterial wire(boolean overlay) {
 		return type(MaterialTypes.WIRE, overlay);
 	}
 
+	@Info("注册线材, 并使用指定的模型, 例如 immersiveengineering:item/ingot_steel")
+	public NebulaMaterial wire(ResourceLocation model) {
+		return type(MaterialTypes.WIRE, false).model(MaterialTypes.WIRE, model);
+	}
+
 	@Info("注册棱镜")
-	public Material prism() {
+	public NebulaMaterial prism() {
 		return type(MaterialTypes.PRISM, true);
 	}
 
 	@Info("注册棱镜, overlay 为 false 时不生成亮层")
-	public Material prism(boolean overlay) {
+	public NebulaMaterial prism(boolean overlay) {
 		return type(MaterialTypes.PRISM, overlay);
 	}
 
+	@Info("注册棱镜, 并使用指定的模型, 例如 immersiveengineering:item/ingot_steel")
+	public NebulaMaterial prism(ResourceLocation model) {
+		return type(MaterialTypes.PRISM, false).model(MaterialTypes.PRISM, model);
+	}
+
 	@Info("注册粗矿")
-	public Material rawOre() {
+	public NebulaMaterial rawOre() {
 		return type(MaterialTypes.RAW_ORE, true);
 	}
 
+	@Info("注册粗矿, 并使用指定的模型")
+	public NebulaMaterial rawOre(ResourceLocation model) {
+		return type(MaterialTypes.RAW_ORE, true).model(MaterialTypes.RAW_ORE, model);
+	}
+
 	@Info("注册 Mekanism 脏粉")
-	public Material dirty() {
+	public NebulaMaterial dirty() {
 		return type(MaterialTypes.DIRTY_DUST, false);
 	}
 
+	@Info("注册 Mekanism 脏粉, 并使用指定的模型")
+	public NebulaMaterial dirty(ResourceLocation model) {
+		return type(MaterialTypes.DIRTY_DUST, false).model(MaterialTypes.DIRTY_DUST, model);
+	}
+
 	@Info("注册 Mekanism 团块")
-	public Material clump() {
+	public NebulaMaterial clump() {
 		return type(MaterialTypes.CLUMP, false);
 	}
 
+	@Info("注册 Mekanism 团块, 并使用指定的模型")
+	public NebulaMaterial clump(ResourceLocation model) {
+		return type(MaterialTypes.CLUMP, false).model(MaterialTypes.CLUMP, model);
+	}
+
 	@Info("注册 Mekanism 碎片")
-	public Material shard() {
+	public NebulaMaterial shard() {
 		return type(MaterialTypes.SHARD, false);
 	}
 
+	@Info("注册 Mekanism 碎片, 并使用指定的模型")
+	public NebulaMaterial shard(ResourceLocation model) {
+		return type(MaterialTypes.SHARD, false).model(MaterialTypes.SHARD, model);
+	}
+
 	@Info("注册 Mekanism 晶体")
-	public Material crystal() {
+	public NebulaMaterial crystal() {
 		return type(MaterialTypes.CRYSTAL, false);
 	}
 
+	@Info("注册 Mekanism 晶体, 并使用指定的模型")
+	public NebulaMaterial crystal(ResourceLocation model) {
+		return type(MaterialTypes.CRYSTAL, false).model(MaterialTypes.CRYSTAL, model);
+	}
+
 	@Info("注册 Mekanism 矿浆")
-	public Material slurry() {
+	public NebulaMaterial slurry() {
 		return type(MaterialTypes.SLURRY, false);
 	}
 
 	@Info("注册 Mekanism 脏矿浆")
-	public Material dirtySlurry() {
+	public NebulaMaterial dirtySlurry() {
 		return type(MaterialTypes.DIRTY_SLURRY, false);
 	}
 
 	@Info("注册金属块, 使用默认的彩色方块贴图")
-	public Material block() {
+	public NebulaMaterial block() {
 		return type(MaterialTypes.BLOCK, true);
 	}
 
 	@Info("注册金属块, 并使用指定的方块模型, 例如ResourceLocation.parse(immersiveengineering:block/storage_steel")
-	public Material block(ResourceLocation model) {
+	public NebulaMaterial block(ResourceLocation model) {
 		return type(MaterialTypes.BLOCK, true)
 				.model(MaterialTypes.BLOCK, model);
 	}
 
 	@Info("注册粗矿块, 使用默认的彩色方块贴图")
-	public Material rawBlock() {
+	public NebulaMaterial rawBlock() {
 		return type(MaterialTypes.RAW_BLOCK, true);
 	}
 
 	@Info("注册粗矿块, 并使用指定的方块模型")
-	public Material rawBlock(ResourceLocation model) {
+	public NebulaMaterial rawBlock(ResourceLocation model) {
 		return type(MaterialTypes.RAW_BLOCK, true)
 				.model(MaterialTypes.RAW_BLOCK, model);
 	}
 
 	@Info("注册熔融流体")
-	public Material molten() {
+	public NebulaMaterial molten() {
 		return type(MaterialTypes.MOLTEN, false);
 	}
 
@@ -409,7 +477,7 @@ public class Material {
 	 * @return 当前材料
 	 */
 	@Info("声明一种材料类型, 默认生成亮层")
-	public Material type(IMaterialType type) {
+	public NebulaMaterial type(IMaterialType type) {
 		return type(type, true);
 	}
 
@@ -421,7 +489,7 @@ public class Material {
 	 * @return 当前材料
 	 */
 	@Info("声明一种材料类型, 例如 MaterialTypes.INGOT")
-	public Material type(IMaterialType type, boolean overlay) {
+	public NebulaMaterial type(IMaterialType type, boolean overlay) {
 		types.put(type.id(), type);
 		overlays.put(type.id(), overlay && type.hasOverlay());
 		return this;
@@ -434,9 +502,48 @@ public class Material {
 	 * @param model 模型 ID, 例如 {@code immersiveengineering:block/storage_steel}
 	 * @return 当前材料
 	 */
-	public Material model(IMaterialType type, ResourceLocation model) {
+	public NebulaMaterial model(IMaterialType type, ResourceLocation model) {
 		models.put(type.id(), model);
 		return this;
+	}
+
+	/**
+	 * 覆盖某个类型的贴图层(仍然自动生成模型)
+	 *
+	 * <p>
+	 * 依次对应 layer0 / layer1 / ..., 亮层也算一层; 传的比该类型的层数少时,
+	 * 剩下的层继续用默认贴图. 贴图 ID 是完整 ID, 例如
+	 * {@code ResourceLocation.fromNamespaceAndPath("cmi", "item/material/color/ingot/ingot")}.
+	 * </p>
+	 *
+	 * @param type     类型
+	 * @param textures 贴图, 依次覆盖 layer0, layer1, ...
+	 * @return 当前材料
+	 */
+	@Info("覆盖某个类型的贴图层, 依次对应 layer0 / layer1 / ...")
+	public NebulaMaterial textures(IMaterialType type, ResourceLocation... textures) {
+		typeTextures.put(type.id(), List.of(textures));
+		return this;
+	}
+
+	/**
+	 * 覆盖某个类型的主贴图(layer0)
+	 *
+	 * @param type    类型
+	 * @param texture 贴图
+	 * @return 当前材料
+	 */
+	@Info("覆盖某个类型的主贴图(layer0)")
+	public NebulaMaterial texture(IMaterialType type, ResourceLocation texture) {
+		return textures(type, texture);
+	}
+
+	/**
+	 * @param type 类型
+	 * @return 该类型被覆盖的贴图层, 没有覆盖时返回空列表
+	 */
+	public List<ResourceLocation> typeTextures(IMaterialType type) {
+		return typeTextures.getOrDefault(type.id(), List.of());
 	}
 
 	/**
@@ -588,11 +695,6 @@ public class Material {
 		return ForgeRegistries.ITEMS.getValue(MaterialRegistrar.bucketId(id(MaterialTypes.MOLTEN)));
 	}
 
-	// ---------------------------------------------------------------- 常用类型快捷查询
-	//
-	// 下面这些方法等价于 getItem(MaterialTypes.XXX) / getBlock(MaterialTypes.XXX),
-	// 只是省去手动指定类型; 材料没有声明对应类型时返回 AIR.
-
 	/**
 	 * @return 锭
 	 */
@@ -731,7 +833,7 @@ public class Material {
 
 	@Override
 	public String toString() {
-		return "Material[" + id + "]";
+		return "NebulaMaterial[" + id + "]";
 	}
 
 	private static int withAlpha(int color) {

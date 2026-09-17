@@ -69,9 +69,6 @@ public class MaterialKinds {
 		BY_ID = Map.copyOf(byId);
 	}
 
-	private MaterialKinds() {
-	}
-
 	/**
 	 * @return 所有内置材料分类
 	 */

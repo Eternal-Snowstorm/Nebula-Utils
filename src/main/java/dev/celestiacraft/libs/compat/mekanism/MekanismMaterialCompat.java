@@ -1,7 +1,7 @@
 package dev.celestiacraft.libs.compat.mekanism;
 
 import dev.celestiacraft.libs.common.material.IMaterialType;
-import dev.celestiacraft.libs.common.material.Material;
+import dev.celestiacraft.libs.common.material.NebulaMaterial;
 import dev.celestiacraft.libs.common.material.MaterialRegistration;
 import dev.celestiacraft.libs.common.material.MaterialTypes;
 import mekanism.api.MekanismAPI;
@@ -37,7 +37,7 @@ public final class MekanismMaterialCompat {
 	 * @param material 材料
 	 * @param type     {@link dev.celestiacraft.libs.common.material.MaterialKinds#SLURRY} 分类的类型
 	 */
-	public static void register(Material material, IMaterialType type) {
+	public static void register(NebulaMaterial material, IMaterialType type) {
 		ResourceLocation id = material.id(type);
 		ResourceLocation texture = type.slurryTexture();
 		int tint = material.primaryColor() & 0xFFFFFF;
@@ -61,7 +61,7 @@ public final class MekanismMaterialCompat {
 	 * @return 矿浆, 材料没有声明该类型(或没装 Mekanism)时返回 null
 	 */
 	@Nullable
-	public static Slurry getSlurry(Material material, IMaterialType type) {
+	public static Slurry getSlurry(NebulaMaterial material, IMaterialType type) {
 		return MekanismAPI.slurryRegistry().getValue(material.id(type));
 	}
 
@@ -70,7 +70,7 @@ public final class MekanismMaterialCompat {
 	 * @return 干净矿浆, 没有声明 {@code slurry()} 时返回 null
 	 */
 	@Nullable
-	public static Slurry getSlurry(Material material) {
+	public static Slurry getSlurry(NebulaMaterial material) {
 		return getSlurry(material, MaterialTypes.SLURRY);
 	}
 
@@ -79,7 +79,7 @@ public final class MekanismMaterialCompat {
 	 * @return 脏矿浆, 没有声明 {@code dirtySlurry()} 时返回 null
 	 */
 	@Nullable
-	public static Slurry getDirtySlurry(Material material) {
+	public static Slurry getDirtySlurry(NebulaMaterial material) {
 		return getSlurry(material, MaterialTypes.DIRTY_SLURRY);
 	}
 }

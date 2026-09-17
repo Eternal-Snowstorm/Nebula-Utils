@@ -113,18 +113,37 @@ public class MaterialAssets {
 	 * @param material 材料
 	 * @param type     类型
 	 */
-	public static void itemModel(Material material, IMaterialType type) {
+	public static void itemModel(NebulaMaterial material, IMaterialType type) {
 		ResourceLocation itemId = material.id(type);
+		ResourceLocation custom = material.model(type);
+
+		// 指定了自定义模型: 直接 parent 过去(贴图由该模型决定)
+		if (custom != null) {
+			JsonObject customModel = new JsonObject();
+			customModel.addProperty("parent", custom.toString());
+			assets(itemModelId(itemId), customModel);
+			return;
+		}
 
 		JsonObject textures = new JsonObject();
 		List<String> layers = type.layers();
+		List<ResourceLocation> overrides = material.typeTextures(type);
+		boolean overlay = type.overlay() != null && material.overlay(type);
+		int count = layers.size() + (overlay ? 1 : 0);
 
-		for (int i = 0; i < layers.size(); i++) {
-			textures.addProperty("layer" + i, itemTexture(material, layers.get(i)).toString());
-		}
+		for (int i = 0; i < count; i++) {
+			ResourceLocation texture;
 
-		if (type.overlay() != null && material.overlay(type)) {
-			textures.addProperty("layer" + layers.size(), itemTexture(material, type.overlay()).toString());
+			if (i < overrides.size()) {
+				// 材料覆盖了这一层
+				texture = overrides.get(i);
+			} else if (i < layers.size()) {
+				texture = itemTexture(material, layers.get(i));
+			} else {
+				texture = itemTexture(material, type.overlay());
+			}
+
+			textures.addProperty("layer" + i, texture.toString());
 		}
 
 		JsonObject model = new JsonObject();
@@ -239,7 +258,7 @@ public class MaterialAssets {
 	 * @param material 材料
 	 * @param type     类型
 	 */
-	public static void blockAssets(Material material, IMaterialType type) {
+	public static void blockAssets(NebulaMaterial material, IMaterialType type) {
 		ResourceLocation blockId = material.id(type);
 		ResourceLocation custom = material.model(type);
 		ResourceLocation modelId = custom != null
@@ -274,7 +293,7 @@ public class MaterialAssets {
 	 * @param material 材料
 	 * @param type     流体类型(决定流体的注册 ID)
 	 */
-	public static void bucketModel(Material material, IMaterialType type) {
+	public static void bucketModel(NebulaMaterial material, IMaterialType type) {
 		ResourceLocation fluidId = material.id(type);
 		ResourceLocation bucketId = MaterialRegistrar.bucketId(fluidId);
 
@@ -297,7 +316,7 @@ public class MaterialAssets {
 	 * @param material 材料
 	 * @param type     类型
 	 */
-	public static void tags(Material material, IMaterialType type) {
+	public static void tags(NebulaMaterial material, IMaterialType type) {
 		List<String> directories = type.kind().tagDirectories();
 
 		if (directories.isEmpty()) {
@@ -378,12 +397,21 @@ public class MaterialAssets {
 		}
 	}
 
-	private static JsonObject cubeModel(Material material, IMaterialType type) {
-		String texture = type.texture() == null ? "block/material/color/storage_blocks" : type.texture();
+	private static JsonObject cubeModel(NebulaMaterial material, IMaterialType type) {
+		List<ResourceLocation> overrides = material.typeTextures(type);
+		ResourceLocation texture;
+
+		if (!overrides.isEmpty()) {
+			// 材料覆盖了该类型的贴图
+			texture = overrides.get(0);
+		} else {
+			String path = type.texture() == null ? "block/material/color/storage_blocks" : type.texture();
+			texture = ResourceLocation.fromNamespaceAndPath(material.textureNamespace(), path);
+		}
 
 		JsonObject textures = new JsonObject();
 		textures.addProperty("particle", "#all");
-		textures.addProperty("all", ResourceLocation.fromNamespaceAndPath(material.textureNamespace(), texture).toString());
+		textures.addProperty("all", texture.toString());
 
 		JsonArray elements = new JsonArray();
 		elements.add(cubeElement());
@@ -433,7 +461,7 @@ public class MaterialAssets {
 		return element;
 	}
 
-	private static ResourceLocation itemTexture(Material material, String layer) {
+	private static ResourceLocation itemTexture(NebulaMaterial material, String layer) {
 		return ResourceLocation.fromNamespaceAndPath(material.textureNamespace(), "item/material/color/" + layer);
 	}
 

@@ -1,6 +1,6 @@
 package dev.celestiacraft.libs.common.material.event;
 
-import dev.celestiacraft.libs.common.material.Material;
+import dev.celestiacraft.libs.common.material.NebulaMaterial;
 import dev.celestiacraft.libs.common.material.MaterialManager;
 import dev.celestiacraft.libs.common.material.IMiningLevel;
 import dev.celestiacraft.libs.common.material.MiningLevels;
@@ -52,7 +52,7 @@ import java.util.List;
  * @see MaterialManager
  */
 public class RegisterMaterialEvent extends Event {
-	private final List<Material> materials;
+	private final List<NebulaMaterial> materials;
 	private String namespace;
 
 	public RegisterMaterialEvent() {
@@ -95,7 +95,7 @@ public class RegisterMaterialEvent extends Event {
 	 * @return 材料定义
 	 */
 	@Info("创建一个材料, 名称可以是 modid:name")
-	public Material register(String name) {
+	public NebulaMaterial register(String name) {
 		return register(name, null);
 	}
 
@@ -107,8 +107,8 @@ public class RegisterMaterialEvent extends Event {
 	 * @return 材料定义
 	 */
 	@Info("创建一个材料, 第二个参数为挖掘等级, 例如 MiningLevels.IRON")
-	public Material register(String name, @Nullable IMiningLevel level) {
-		Material material = new Material(resolve(name));
+	public NebulaMaterial register(String name, @Nullable IMiningLevel level) {
+		NebulaMaterial material = new NebulaMaterial(resolve(name));
 
 		if (level != null) {
 			material.level(level);
@@ -121,7 +121,7 @@ public class RegisterMaterialEvent extends Event {
 	/**
 	 * @return 本次事件中声明的所有材料
 	 */
-	public List<Material> materials() {
+	public List<NebulaMaterial> materials() {
 		return Collections.unmodifiableList(materials);
 	}
 

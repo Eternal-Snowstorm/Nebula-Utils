@@ -272,9 +272,9 @@ public class MaterialTypes {
 		private ResourceLocation slurryTexture;
 		private boolean tintsSecondary;
 
-		private Function<Material, Item> itemFactory;
-		private BiFunction<Material, BlockBehaviour.Properties, Block> blockFactory;
-		private Function<Material, FluidType> fluidTypeFactory;
+		private Function<NebulaMaterial, Item> itemFactory;
+		private BiFunction<NebulaMaterial, BlockBehaviour.Properties, Block> blockFactory;
+		private Function<NebulaMaterial, FluidType> fluidTypeFactory;
 
 		private Builder(IMaterialKind kind, String id) {
 			this.kind = Objects.requireNonNull(kind, "kind");
@@ -324,17 +324,17 @@ public class MaterialTypes {
 			return secondaryTint(false);
 		}
 
-		public Builder itemFactory(Function<Material, Item> factory) {
+		public Builder itemFactory(Function<NebulaMaterial, Item> factory) {
 			itemFactory = factory;
 			return this;
 		}
 
-		public Builder blockFactory(BiFunction<Material, BlockBehaviour.Properties, Block> factory) {
+		public Builder blockFactory(BiFunction<NebulaMaterial, BlockBehaviour.Properties, Block> factory) {
 			blockFactory = factory;
 			return this;
 		}
 
-		public Builder fluidTypeFactory(Function<Material, FluidType> factory) {
+		public Builder fluidTypeFactory(Function<NebulaMaterial, FluidType> factory) {
 			fluidTypeFactory = factory;
 			return this;
 		}
@@ -361,9 +361,9 @@ public class MaterialTypes {
 		private final String texture;
 		private final ResourceLocation slurryTexture;
 		private final boolean tintsSecondary;
-		private final Function<Material, Item> itemFactory;
-		private final BiFunction<Material, BlockBehaviour.Properties, Block> blockFactory;
-		private final Function<Material, FluidType> fluidTypeFactory;
+		private final Function<NebulaMaterial, Item> itemFactory;
+		private final BiFunction<NebulaMaterial, BlockBehaviour.Properties, Block> blockFactory;
+		private final Function<NebulaMaterial, FluidType> fluidTypeFactory;
 
 		private BuiltinType(Builder builder) {
 			kind = builder.kind;
@@ -429,17 +429,17 @@ public class MaterialTypes {
 		}
 
 		@Override
-		public Item createItem(Material material) {
+		public Item createItem(NebulaMaterial material) {
 			return itemFactory == null ? IMaterialType.super.createItem(material) : itemFactory.apply(material);
 		}
 
 		@Override
-		public Block createBlock(Material material, BlockBehaviour.Properties properties) {
+		public Block createBlock(NebulaMaterial material, BlockBehaviour.Properties properties) {
 			return blockFactory == null ? IMaterialType.super.createBlock(material, properties) : blockFactory.apply(material, properties);
 		}
 
 		@Override
-		public FluidType createFluidType(Material material) {
+		public FluidType createFluidType(NebulaMaterial material) {
 			return fluidTypeFactory == null ? IMaterialType.super.createFluidType(material) : fluidTypeFactory.apply(material);
 		}
 

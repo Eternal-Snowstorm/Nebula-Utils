@@ -22,7 +22,7 @@ import java.util.List;
  * <p>
  * 本模组内置的分类见 {@link MaterialKinds}; 需要新分类(例如 Mekanism 气体)时,
  * 用 {@link MaterialKinds#of(String)} 创建, 并在自己的 {@link IMaterialType} 里覆盖
- * {@link IMaterialType#register(Material)} 实现对应的注册流程.
+ * {@link IMaterialType#register(NebulaMaterial)} 实现对应的注册流程.
  * </p>
  *
  * @see MaterialKinds

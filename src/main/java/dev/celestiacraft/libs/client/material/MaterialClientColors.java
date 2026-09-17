@@ -2,7 +2,7 @@ package dev.celestiacraft.libs.client.material;
 
 import dev.celestiacraft.libs.NebulaLibs;
 import dev.celestiacraft.libs.common.material.IMaterialType;
-import dev.celestiacraft.libs.common.material.Material;
+import dev.celestiacraft.libs.common.material.NebulaMaterial;
 import dev.celestiacraft.libs.common.material.MaterialManager;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -40,7 +40,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class MaterialClientColors {
 	@SubscribeEvent
 	public static void onItemColors(RegisterColorHandlersEvent.Item event) {
-		for (Material material : MaterialManager.materials()) {
+		for (NebulaMaterial material : MaterialManager.materials()) {
 			int primary = material.primaryColor();
 			int secondary = material.secondaryColor();
 
@@ -66,7 +66,7 @@ public class MaterialClientColors {
 
 	@SubscribeEvent
 	public static void onBlockColors(RegisterColorHandlersEvent.Block event) {
-		for (Material material : MaterialManager.materials()) {
+		for (NebulaMaterial material : MaterialManager.materials()) {
 			int color = material.primaryColor();
 
 			for (IMaterialType type : material.types()) {
