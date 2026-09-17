@@ -276,7 +276,7 @@ public class MaterialAssets {
 	 */
 	public static void bucketModel(Material material, IMaterialType type) {
 		ResourceLocation fluidId = material.id(type);
-		ResourceLocation bucketId = ResourceLocation.fromNamespaceAndPath(fluidId.getNamespace(), fluidId.getPath() + "_bucket");
+		ResourceLocation bucketId = MaterialRegistrar.bucketId(fluidId);
 
 		JsonObject model = new JsonObject();
 		model.addProperty("parent", "forge:item/bucket_drip");

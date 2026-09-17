@@ -565,10 +565,168 @@ public class Material {
 	}
 
 	/**
-	 * @return 熔融流体
+	 * @return 熔融流体(源), 没有声明 {@code molten()} 时返回 {@code Fluids.EMPTY}
 	 */
+	@Info("获取熔融流体, 等价于 getMolten()")
+	public Fluid getFluid() {
+		return getMolten();
+	}
+
+	/**
+	 * @return 熔融流体(源), 没有声明 {@code molten()} 时返回 {@code Fluids.EMPTY}
+	 */
+	@Info("获取熔融流体")
 	public Fluid getMolten() {
 		return getFluid(MaterialTypes.MOLTEN);
+	}
+
+	/**
+	 * @return 熔融流体的桶, 没有声明 {@code molten()} 时返回 {@code Items.AIR}
+	 */
+	@Info("获取熔融流体的桶")
+	public Item getBucket() {
+		return ForgeRegistries.ITEMS.getValue(MaterialRegistrar.bucketId(id(MaterialTypes.MOLTEN)));
+	}
+
+	// ---------------------------------------------------------------- 常用类型快捷查询
+	//
+	// 下面这些方法等价于 getItem(MaterialTypes.XXX) / getBlock(MaterialTypes.XXX),
+	// 只是省去手动指定类型; 材料没有声明对应类型时返回 AIR.
+
+	/**
+	 * @return 锭
+	 */
+	@Info("获取锭")
+	public Item getIngot() {
+		return getItem(MaterialTypes.INGOT);
+	}
+
+	/**
+	 * @return 板
+	 */
+	@Info("获取板")
+	public Item getPlate() {
+		return getItem(MaterialTypes.PLATE);
+	}
+
+	/**
+	 * @return 粒
+	 */
+	@Info("获取粒")
+	public Item getNugget() {
+		return getItem(MaterialTypes.NUGGET);
+	}
+
+	/**
+	 * @return 粉
+	 */
+	@Info("获取粉")
+	public Item getDust() {
+		return getItem(MaterialTypes.DUST);
+	}
+
+	/**
+	 * @return 杆
+	 */
+	@Info("获取杆")
+	public Item getRod() {
+		return getItem(MaterialTypes.ROD);
+	}
+
+	/**
+	 * @return 齿轮
+	 */
+	@Info("获取齿轮")
+	public Item getGear() {
+		return getItem(MaterialTypes.GEAR);
+	}
+
+	/**
+	 * @return 线材
+	 */
+	@Info("获取线材")
+	public Item getWire() {
+		return getItem(MaterialTypes.WIRE);
+	}
+
+	/**
+	 * @return 棱镜
+	 */
+	@Info("获取棱镜")
+	public Item getPrism() {
+		return getItem(MaterialTypes.PRISM);
+	}
+
+	/**
+	 * @return 粗矿({@code raw_<材料名>})
+	 */
+	@Info("获取粗矿")
+	public Item getRawOre() {
+		return getItem(MaterialTypes.RAW_ORE);
+	}
+
+	/**
+	 * @return Mekanism 脏粉
+	 */
+	@Info("获取 Mekanism 脏粉")
+	public Item getDirtyDust() {
+		return getItem(MaterialTypes.DIRTY_DUST);
+	}
+
+	/**
+	 * @return Mekanism 团块
+	 */
+	@Info("获取 Mekanism 团块")
+	public Item getClump() {
+		return getItem(MaterialTypes.CLUMP);
+	}
+
+	/**
+	 * @return Mekanism 碎片
+	 */
+	@Info("获取 Mekanism 碎片")
+	public Item getShard() {
+		return getItem(MaterialTypes.SHARD);
+	}
+
+	/**
+	 * @return Mekanism 晶体
+	 */
+	@Info("获取 Mekanism 晶体")
+	public Item getCrystal() {
+		return getItem(MaterialTypes.CRYSTAL);
+	}
+
+	/**
+	 * @return 金属块
+	 */
+	@Info("获取金属块")
+	public Block getBlock() {
+		return getBlock(MaterialTypes.BLOCK);
+	}
+
+	/**
+	 * @return 金属块的物品形式
+	 */
+	@Info("获取金属块的物品形式")
+	public Item getBlockItem() {
+		return getItem(MaterialTypes.BLOCK);
+	}
+
+	/**
+	 * @return 粗矿块
+	 */
+	@Info("获取粗矿块")
+	public Block getRawBlock() {
+		return getBlock(MaterialTypes.RAW_BLOCK);
+	}
+
+	/**
+	 * @return 粗矿块的物品形式
+	 */
+	@Info("获取粗矿块的物品形式")
+	public Item getRawBlockItem() {
+		return getItem(MaterialTypes.RAW_BLOCK);
 	}
 
 	@Override

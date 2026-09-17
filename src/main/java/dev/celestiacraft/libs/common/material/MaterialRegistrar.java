@@ -151,8 +151,8 @@ public class MaterialRegistrar {
 	 */
 	public static void registerFluid(Material material, IMaterialType type) {
 		ResourceLocation id = material.id(type);
-		ResourceLocation flowingId = ResourceLocation.fromNamespaceAndPath(id.getNamespace(), id.getPath() + "_flowing");
-		ResourceLocation bucketId = ResourceLocation.fromNamespaceAndPath(id.getNamespace(), id.getPath() + "_bucket");
+		ResourceLocation flowingId = flowingFluidId(id);
+		ResourceLocation bucketId = bucketId(id);
 
 		FluidType fluidType = type.createFluidType(material);
 
@@ -184,6 +184,26 @@ public class MaterialRegistrar {
 
 		MaterialAssets.bucketModel(material, type);
 		MaterialAssets.itemName(bucketId);
+	}
+
+	/**
+	 * 流体"流动形态"的 ID 规则: 在原 ID 后追加 {@code _flowing}
+	 *
+	 * @param fluidId 源流体 ID
+	 * @return 流动流体 ID
+	 */
+	public static ResourceLocation flowingFluidId(ResourceLocation fluidId) {
+		return ResourceLocation.fromNamespaceAndPath(fluidId.getNamespace(), fluidId.getPath() + "_flowing");
+	}
+
+	/**
+	 * 流体桶的 ID 规则: 在原 ID 后追加 {@code _bucket}
+	 *
+	 * @param fluidId 源流体 ID
+	 * @return 桶的物品 ID
+	 */
+	public static ResourceLocation bucketId(ResourceLocation fluidId) {
+		return ResourceLocation.fromNamespaceAndPath(fluidId.getNamespace(), fluidId.getPath() + "_bucket");
 	}
 
 	/**
