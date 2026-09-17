@@ -3,6 +3,7 @@ package dev.celestiacraft.libs.common.material;
 import dev.celestiacraft.libs.NebulaLibs;
 import dev.celestiacraft.libs.common.material.event.RegisterMaterialEvent;
 import dev.latvian.mods.kubejs.typings.Info;
+import dev.latvian.mods.rhino.util.RemapForJS;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -274,8 +275,10 @@ public class NebulaMaterial {
 	}
 
 	@Info("注册锭, 并使用指定的模型, 例如 immersiveengineering:item/ingot_steel")
+	@RemapForJS("ingotWithModel")
 	public NebulaMaterial ingot(ResourceLocation model) {
-		return type(MaterialTypes.INGOT, false).model(MaterialTypes.INGOT, model);
+		return type(MaterialTypes.INGOT, false)
+				.model(MaterialTypes.INGOT, model);
 	}
 
 	@Info("注册板")
@@ -289,8 +292,10 @@ public class NebulaMaterial {
 	}
 
 	@Info("注册板, 并使用指定的模型, 例如 immersiveengineering:item/ingot_steel")
+	@RemapForJS("plateWithModel")
 	public NebulaMaterial plate(ResourceLocation model) {
-		return type(MaterialTypes.PLATE, false).model(MaterialTypes.PLATE, model);
+		return type(MaterialTypes.PLATE, false)
+				.model(MaterialTypes.PLATE, model);
 	}
 
 	@Info("注册粒")
@@ -304,8 +309,10 @@ public class NebulaMaterial {
 	}
 
 	@Info("注册粒, 并使用指定的模型, 例如 immersiveengineering:item/ingot_steel")
+	@RemapForJS("nuggetWithModel")
 	public NebulaMaterial nugget(ResourceLocation model) {
-		return type(MaterialTypes.NUGGET, false).model(MaterialTypes.NUGGET, model);
+		return type(MaterialTypes.NUGGET, false)
+				.model(MaterialTypes.NUGGET, model);
 	}
 
 	@Info("注册粉")
@@ -319,8 +326,10 @@ public class NebulaMaterial {
 	}
 
 	@Info("注册粉, 并使用指定的模型, 例如 immersiveengineering:item/ingot_steel")
+	@RemapForJS("dustWithModel")
 	public NebulaMaterial dust(ResourceLocation model) {
-		return type(MaterialTypes.DUST, false).model(MaterialTypes.DUST, model);
+		return type(MaterialTypes.DUST, false)
+				.model(MaterialTypes.DUST, model);
 	}
 
 	@Info("注册杆")
@@ -334,8 +343,10 @@ public class NebulaMaterial {
 	}
 
 	@Info("注册杆, 并使用指定的模型, 例如 immersiveengineering:item/ingot_steel")
+	@RemapForJS("rodWithModel")
 	public NebulaMaterial rod(ResourceLocation model) {
-		return type(MaterialTypes.ROD, false).model(MaterialTypes.ROD, model);
+		return type(MaterialTypes.ROD, false)
+				.model(MaterialTypes.ROD, model);
 	}
 
 	@Info("注册齿轮")
@@ -349,8 +360,10 @@ public class NebulaMaterial {
 	}
 
 	@Info("注册齿轮, 并使用指定的模型, 例如 immersiveengineering:item/ingot_steel")
+	@RemapForJS("gearWithModel")
 	public NebulaMaterial gear(ResourceLocation model) {
-		return type(MaterialTypes.GEAR, false).model(MaterialTypes.GEAR, model);
+		return type(MaterialTypes.GEAR, false)
+				.model(MaterialTypes.GEAR, model);
 	}
 
 	@Info("注册线材")
@@ -364,8 +377,10 @@ public class NebulaMaterial {
 	}
 
 	@Info("注册线材, 并使用指定的模型, 例如 immersiveengineering:item/ingot_steel")
+	@RemapForJS("wireWithModel")
 	public NebulaMaterial wire(ResourceLocation model) {
-		return type(MaterialTypes.WIRE, false).model(MaterialTypes.WIRE, model);
+		return type(MaterialTypes.WIRE, false)
+				.model(MaterialTypes.WIRE, model);
 	}
 
 	@Info("注册棱镜")
@@ -379,8 +394,10 @@ public class NebulaMaterial {
 	}
 
 	@Info("注册棱镜, 并使用指定的模型, 例如 immersiveengineering:item/ingot_steel")
+	@RemapForJS("prismWithModel")
 	public NebulaMaterial prism(ResourceLocation model) {
-		return type(MaterialTypes.PRISM, false).model(MaterialTypes.PRISM, model);
+		return type(MaterialTypes.PRISM, false)
+				.model(MaterialTypes.PRISM, model);
 	}
 
 	@Info("注册粗矿")
@@ -389,28 +406,34 @@ public class NebulaMaterial {
 	}
 
 	@Info("注册粗矿, 并使用指定的模型")
+	@RemapForJS("rawOreWithModel")
 	public NebulaMaterial rawOre(ResourceLocation model) {
-		return type(MaterialTypes.RAW_ORE, true).model(MaterialTypes.RAW_ORE, model);
+		return type(MaterialTypes.RAW_ORE, true)
+				.model(MaterialTypes.RAW_ORE, model);
 	}
 
-	@Info("注册 Mekanism 脏粉")
+	@Info("注册 Mekanism 污浊粉")
 	public NebulaMaterial dirty() {
 		return type(MaterialTypes.DIRTY_DUST, false);
 	}
 
-	@Info("注册 Mekanism 脏粉, 并使用指定的模型")
+	@Info("注册 Mekanism 污浊粉, 并使用指定的模型")
+	@RemapForJS("dirtyWithModel")
 	public NebulaMaterial dirty(ResourceLocation model) {
-		return type(MaterialTypes.DIRTY_DUST, false).model(MaterialTypes.DIRTY_DUST, model);
+		return type(MaterialTypes.DIRTY_DUST, false)
+				.model(MaterialTypes.DIRTY_DUST, model);
 	}
 
-	@Info("注册 Mekanism 团块")
+	@Info("注册 Mekanism 碎块")
 	public NebulaMaterial clump() {
 		return type(MaterialTypes.CLUMP, false);
 	}
 
-	@Info("注册 Mekanism 团块, 并使用指定的模型")
+	@Info("注册 Mekanism 碎块, 并使用指定的模型")
+	@RemapForJS("clumpWithModel")
 	public NebulaMaterial clump(ResourceLocation model) {
-		return type(MaterialTypes.CLUMP, false).model(MaterialTypes.CLUMP, model);
+		return type(MaterialTypes.CLUMP, false)
+				.model(MaterialTypes.CLUMP, model);
 	}
 
 	@Info("注册 Mekanism 碎片")
@@ -419,26 +442,30 @@ public class NebulaMaterial {
 	}
 
 	@Info("注册 Mekanism 碎片, 并使用指定的模型")
+	@RemapForJS("shardWithModel")
 	public NebulaMaterial shard(ResourceLocation model) {
-		return type(MaterialTypes.SHARD, false).model(MaterialTypes.SHARD, model);
+		return type(MaterialTypes.SHARD, false)
+				.model(MaterialTypes.SHARD, model);
 	}
 
-	@Info("注册 Mekanism 晶体")
+	@Info("注册 Mekanism 结晶")
 	public NebulaMaterial crystal() {
 		return type(MaterialTypes.CRYSTAL, false);
 	}
 
-	@Info("注册 Mekanism 晶体, 并使用指定的模型")
+	@Info("注册 Mekanism 结晶, 并使用指定的模型")
+	@RemapForJS("crystalWithModel")
 	public NebulaMaterial crystal(ResourceLocation model) {
-		return type(MaterialTypes.CRYSTAL, false).model(MaterialTypes.CRYSTAL, model);
+		return type(MaterialTypes.CRYSTAL, false)
+				.model(MaterialTypes.CRYSTAL, model);
 	}
 
-	@Info("注册 Mekanism 矿浆")
+	@Info("注册 Mekanism 浆液")
 	public NebulaMaterial slurry() {
 		return type(MaterialTypes.SLURRY, false);
 	}
 
-	@Info("注册 Mekanism 脏矿浆")
+	@Info("注册 Mekanism 污浊浆液")
 	public NebulaMaterial dirtySlurry() {
 		return type(MaterialTypes.DIRTY_SLURRY, false);
 	}
@@ -448,7 +475,7 @@ public class NebulaMaterial {
 		return type(MaterialTypes.BLOCK, true);
 	}
 
-	@Info("注册金属块, 并使用指定的方块模型, 例如ResourceLocation.parse(immersiveengineering:block/storage_steel")
+	@Info("注册金属块, 并使用指定的方块模型")
 	public NebulaMaterial block(ResourceLocation model) {
 		return type(MaterialTypes.BLOCK, true)
 				.model(MaterialTypes.BLOCK, model);
@@ -768,17 +795,17 @@ public class NebulaMaterial {
 	}
 
 	/**
-	 * @return Mekanism 脏粉
+	 * @return Mekanism 污浊粉
 	 */
-	@Info("获取 Mekanism 脏粉")
+	@Info("获取 Mekanism 污浊粉")
 	public Item getDirtyDust() {
 		return getItem(MaterialTypes.DIRTY_DUST);
 	}
 
 	/**
-	 * @return Mekanism 团块
+	 * @return Mekanism 碎块
 	 */
-	@Info("获取 Mekanism 团块")
+	@Info("获取 Mekanism 碎块")
 	public Item getClump() {
 		return getItem(MaterialTypes.CLUMP);
 	}
@@ -792,9 +819,9 @@ public class NebulaMaterial {
 	}
 
 	/**
-	 * @return Mekanism 晶体
+	 * @return Mekanism 结晶
 	 */
-	@Info("获取 Mekanism 晶体")
+	@Info("获取 Mekanism 结晶")
 	public Item getCrystal() {
 		return getItem(MaterialTypes.CRYSTAL);
 	}
