@@ -7,9 +7,7 @@ import dev.latvian.mods.rhino.util.RemapForJS;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -17,11 +15,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <h2>NebulaMaterial</h2>
@@ -300,18 +294,6 @@ public class NebulaMaterial {
 	public NebulaMaterial setCreativeTab(ResourceLocation tab) {
 		creativeTab = tab;
 		return this;
-	}
-
-	/**
-	 * 设置该材料生成的物品放进哪个创造模式标签页
-	 *
-	 * @param tab 标签页的 {@link ResourceKey}
-	 * @return 当前材料
-	 */
-	@Info("设置材料的创造模式标签页")
-	@RemapForJS("setCreativeTabKey")
-	public NebulaMaterial setCreativeTab(ResourceKey<CreativeModeTab> tab) {
-		return setCreativeTab(tab.location());
 	}
 
 	/**
