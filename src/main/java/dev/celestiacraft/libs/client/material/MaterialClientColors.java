@@ -1,5 +1,6 @@
 package dev.celestiacraft.libs.client.material;
 
+import lombok.experimental.UtilityClass;
 import dev.celestiacraft.libs.NebulaLibs;
 import dev.celestiacraft.libs.common.material.IMaterialType;
 import dev.celestiacraft.libs.common.material.NebulaMaterial;
@@ -37,6 +38,7 @@ import net.minecraftforge.registries.ForgeRegistries;
  * </p>
  */
 @Mod.EventBusSubscriber(modid = NebulaLibs.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@UtilityClass
 public class MaterialClientColors {
 	@SubscribeEvent
 	public static void onItemColors(RegisterColorHandlersEvent.Item event) {

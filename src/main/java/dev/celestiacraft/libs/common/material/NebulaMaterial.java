@@ -4,7 +4,12 @@ import dev.celestiacraft.libs.NebulaLibs;
 import dev.celestiacraft.libs.common.material.event.RegisterMaterialEvent;
 import dev.latvian.mods.kubejs.typings.Info;
 import dev.latvian.mods.rhino.util.RemapForJS;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -63,41 +68,76 @@ import java.util.Map;
  *
  * @see MaterialTypes
  */
+@Accessors(fluent = true)
+@RequiredArgsConstructor
 public class NebulaMaterial {
 	private final ResourceLocation id;
-	private final Map<String, IMaterialType> types;
-	private final Map<String, Boolean> overlays;
-	private final Map<String, ResourceLocation> models;
-	private final Map<String, List<ResourceLocation>> typeTextures;
+	private final Map<String, IMaterialType> types = new LinkedHashMap<>();
+	private final Map<String, Boolean> overlays = new LinkedHashMap<>();
+	private final Map<String, ResourceLocation> models = new LinkedHashMap<>();
+	private final Map<String, List<ResourceLocation>> typeTextures = new LinkedHashMap<>();
 
-	private int primaryColor;
-	private int secondaryColor;
+	/**
+	 * 主色(layer0 / tint 0)
+	 */
+	@Getter
+	private int primaryColor = 0xFFFFFF;
+
+	/**
+	 * 副色(layer1 / tint 1)
+	 */
+	@Getter
+	private int secondaryColor = 0xFFFFFF;
+
 	private boolean metal;
-	private IMiningLevel level;
-	private float hardness;
-	private float resistance;
+
+	/**
+	 * 方块挖掘等级
+	 */
+	@Getter
+	private IMiningLevel level = MiningLevels.STONE;
+
+	/**
+	 * 方块硬度
+	 */
+	@Getter
+	private float hardness = 5.0F;
+
+	/**
+	 * 方块爆炸抗性
+	 */
+	@Getter
+	private float resistance = 5.0F;
+
 	private String textureNamespace;
 
+	/**
+	 * 方块音效, 没有设置时为 null
+	 */
+	@Getter
 	@Nullable
 	private SoundType sound;
+
+	/**
+	 * 熔融流体的静止贴图, 没有覆盖时为 null
+	 */
+	@Getter
 	@Nullable
 	private ResourceLocation moltenStill;
+
+	/**
+	 * 熔融流体的流动贴图, 没有覆盖时为 null
+	 */
+	@Getter
 	@Nullable
 	private ResourceLocation moltenFlowing;
 
-	public NebulaMaterial(ResourceLocation id) {
-		this.id = id;
-		types = new LinkedHashMap<>();
-		overlays = new LinkedHashMap<>();
-		models = new LinkedHashMap<>();
-		typeTextures = new LinkedHashMap<>();
-		primaryColor = 0xFFFFFF;
-		secondaryColor = 0xFFFFFF;
-		metal = false;
-		level = MiningLevels.STONE;
-		hardness = 5.0F;
-		resistance = 5.0F;
-	}
+	/**
+	 * 创造模式标签页, 没有设置时为 null
+	 */
+	@Getter
+	@Nullable
+	private ResourceLocation creativeTab;
 
 	/**
 	 * @return 材料的完整 ID, 例如 {@code cmi:chromium}
@@ -243,6 +283,35 @@ public class NebulaMaterial {
 	public NebulaMaterial textures(String namespace) {
 		textureNamespace = namespace;
 		return this;
+	}
+
+	/**
+	 * 设置该材料生成的物品放进哪个创造模式标签页
+	 *
+	 * <p>
+	 * 不设置时使用 {@link RegisterMaterialEvent#setCreativeTab(ResourceLocation)} 上的默认值;
+	 * 两边都没设置就哪个标签页都不进(仍然可以通过数据包 / {@code BuildCreativeModeTabContentsEvent} 自己加).
+	 * </p>
+	 *
+	 * @param tab 标签页 ID, 例如 {@code cmi:main} 或原版的 {@code minecraft:ingredients}
+	 * @return 当前材料
+	 */
+	@Info("设置材料的创造模式标签页")
+	public NebulaMaterial setCreativeTab(ResourceLocation tab) {
+		creativeTab = tab;
+		return this;
+	}
+
+	/**
+	 * 设置该材料生成的物品放进哪个创造模式标签页
+	 *
+	 * @param tab 标签页的 {@link ResourceKey}
+	 * @return 当前材料
+	 */
+	@Info("设置材料的创造模式标签页")
+	@RemapForJS("setCreativeTabKey")
+	public NebulaMaterial setCreativeTab(ResourceKey<CreativeModeTab> tab) {
+		return setCreativeTab(tab.location());
 	}
 
 	/**
@@ -616,49 +685,11 @@ public class NebulaMaterial {
 		return type.id(this);
 	}
 
-	public int primaryColor() {
-		return primaryColor;
-	}
-
-	public int secondaryColor() {
-		return secondaryColor;
-	}
-
+	/**
+	 * @return 是否为金属材料
+	 */
 	public boolean isMetallic() {
 		return metal;
-	}
-
-	public IMiningLevel level() {
-		return level;
-	}
-
-	public float hardness() {
-		return hardness;
-	}
-
-	public float resistance() {
-		return resistance;
-	}
-
-	@Nullable
-	public SoundType sound() {
-		return sound;
-	}
-
-	/**
-	 * @return 熔融流体的静止贴图, 没有覆盖时返回 null
-	 */
-	@Nullable
-	public ResourceLocation moltenStill() {
-		return moltenStill;
-	}
-
-	/**
-	 * @return 熔融流体的流动贴图, 没有覆盖时返回 null
-	 */
-	@Nullable
-	public ResourceLocation moltenFlowing() {
-		return moltenFlowing;
 	}
 
 	/**

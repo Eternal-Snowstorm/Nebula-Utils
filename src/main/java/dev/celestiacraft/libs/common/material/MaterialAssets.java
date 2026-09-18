@@ -1,5 +1,6 @@
 package dev.celestiacraft.libs.common.material;
 
+import lombok.experimental.UtilityClass;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -37,58 +38,53 @@ import java.util.Set;
  * 所以自定义分类(例如气体)也能正确生成标签.
  * </p>
  */
+@UtilityClass
 public class MaterialAssets {
 	/**
 	 * 物品标签目录
 	 */
-	public static final String ITEM_TAG_DIRECTORY = "tags/items";
+	public final String ITEM_TAG_DIRECTORY = "tags/items";
 	/**
 	 * 方块标签目录
 	 */
-	public static final String BLOCK_TAG_DIRECTORY = "tags/blocks";
+	public final String BLOCK_TAG_DIRECTORY = "tags/blocks";
 	/**
 	 * 流体标签目录
 	 */
-	public static final String FLUID_TAG_DIRECTORY = "tags/fluids";
+	public final String FLUID_TAG_DIRECTORY = "tags/fluids";
 	/**
 	 * Mekanism 矿浆标签目录(非原版注册表使用 {@code tags/<注册表命名空间>/<注册表路径>})
 	 */
-	public static final String SLURRY_TAG_DIRECTORY = "tags/mekanism/slurry";
+	public final String SLURRY_TAG_DIRECTORY = "tags/mekanism/slurry";
 
-	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+	private final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
-	private static final Map<ResourceLocation, byte[]> ASSETS;
-	private static final Map<ResourceLocation, byte[]> DATA;
+	private final Map<ResourceLocation, byte[]> ASSETS = new LinkedHashMap<>();
+	private final Map<ResourceLocation, byte[]> DATA = new LinkedHashMap<>();
 
 	/**
 	 * 目录 -&gt; 标签 -&gt; 内容
 	 */
-	private static final Map<String, Map<ResourceLocation, Set<ResourceLocation>>> TAGS;
+	private final Map<String, Map<ResourceLocation, Set<ResourceLocation>>> TAGS = new LinkedHashMap<>();
 
 	/**
 	 * 命名空间 -&gt; 翻译键 -&gt; 默认名称(自动生成的 en_us)
 	 */
-	private static final Map<String, Map<String, String>> LANG;
+	private final Map<String, Map<String, String>> LANG = new LinkedHashMap<>();
 
-	public static final String PACK_META;
+	public final String PACK_META = createPackMeta();
 
-	static {
-		ASSETS = new LinkedHashMap<>();
-		DATA = new LinkedHashMap<>();
-		TAGS = new LinkedHashMap<>();
-		LANG = new LinkedHashMap<>();
-
+	private String createPackMeta() {
 		JsonObject pack = new JsonObject();
 		pack.addProperty("pack_format", 15);
 		pack.addProperty("description", "Nebula Libs generated material resources");
 
 		JsonObject root = new JsonObject();
 		root.add("pack", pack);
-		PACK_META = GSON.toJson(root);
+
+		return GSON.toJson(root);
 	}
 
-	private MaterialAssets() {
-	}
 
 	/**
 	 * 获取指定类型的生成文件
@@ -96,14 +92,14 @@ public class MaterialAssets {
 	 * @param type 资源包类型
 	 * @return 文件表(路径 -&gt; 内容)
 	 */
-	public static Map<ResourceLocation, byte[]> files(PackType type) {
+	public Map<ResourceLocation, byte[]> files(PackType type) {
 		return type == PackType.CLIENT_RESOURCES ? ASSETS : DATA;
 	}
 
 	/**
 	 * @return 指定资源包类型是否有任何生成内容
 	 */
-	public static boolean isEmpty(PackType type) {
+	public boolean isEmpty(PackType type) {
 		return files(type).isEmpty();
 	}
 
@@ -113,7 +109,7 @@ public class MaterialAssets {
 	 * @param material 材料
 	 * @param type     类型
 	 */
-	public static void itemModel(NebulaMaterial material, IMaterialType type) {
+	public void itemModel(NebulaMaterial material, IMaterialType type) {
 		ResourceLocation itemId = material.id(type);
 		ResourceLocation custom = material.model(type);
 
@@ -163,7 +159,7 @@ public class MaterialAssets {
 	 *
 	 * @param blockId 方块 ID
 	 */
-	public static void blockLootTable(ResourceLocation blockId) {
+	public void blockLootTable(ResourceLocation blockId) {
 		JsonObject entry = new JsonObject();
 		entry.addProperty("type", "minecraft:item");
 		entry.addProperty("name", blockId.toString());
@@ -198,7 +194,7 @@ public class MaterialAssets {
 	 *
 	 * @param itemId 物品 ID
 	 */
-	public static void itemName(ResourceLocation itemId) {
+	public void itemName(ResourceLocation itemId) {
 		name("item." + itemId.getNamespace() + "." + itemId.getPath(), itemId);
 	}
 
@@ -211,11 +207,11 @@ public class MaterialAssets {
 	 *
 	 * @param blockId 方块 ID
 	 */
-	public static void blockName(ResourceLocation blockId) {
+	public void blockName(ResourceLocation blockId) {
 		name("block." + blockId.getNamespace() + "." + blockId.getPath(), blockId);
 	}
 
-	private static void name(String key, ResourceLocation id) {
+	private void name(String key, ResourceLocation id) {
 		LANG.computeIfAbsent(id.getNamespace(), namespace -> new LinkedHashMap<>())
 				.putIfAbsent(key, defaultName(id.getPath()));
 	}
@@ -226,7 +222,7 @@ public class MaterialAssets {
 	 * @param path ID 路径
 	 * @return 默认名称
 	 */
-	public static String defaultName(String path) {
+	public String defaultName(String path) {
 		StringBuilder builder = new StringBuilder();
 
 		for (String word : path.split("_")) {
@@ -244,7 +240,7 @@ public class MaterialAssets {
 		return builder.toString();
 	}
 
-	private static void bakeLang() {
+	private void bakeLang() {
 		LANG.forEach((namespace, entries) -> {
 			JsonObject json = new JsonObject();
 			entries.forEach(json::addProperty);
@@ -258,7 +254,7 @@ public class MaterialAssets {
 	 * @param material 材料
 	 * @param type     类型
 	 */
-	public static void blockAssets(NebulaMaterial material, IMaterialType type) {
+	public void blockAssets(NebulaMaterial material, IMaterialType type) {
 		ResourceLocation blockId = material.id(type);
 		ResourceLocation custom = material.model(type);
 		ResourceLocation modelId = custom != null
@@ -293,7 +289,7 @@ public class MaterialAssets {
 	 * @param material 材料
 	 * @param type     流体类型(决定流体的注册 ID)
 	 */
-	public static void bucketModel(NebulaMaterial material, IMaterialType type) {
+	public void bucketModel(NebulaMaterial material, IMaterialType type) {
 		ResourceLocation fluidId = material.id(type);
 		ResourceLocation bucketId = MaterialRegistrar.bucketId(fluidId);
 
@@ -316,7 +312,7 @@ public class MaterialAssets {
 	 * @param material 材料
 	 * @param type     类型
 	 */
-	public static void tags(NebulaMaterial material, IMaterialType type) {
+	public void tags(NebulaMaterial material, IMaterialType type) {
 		List<String> directories = type.kind().tagDirectories();
 
 		if (directories.isEmpty()) {
@@ -401,12 +397,12 @@ public class MaterialAssets {
 		List<ResourceLocation> overrides = material.typeTextures(type);
 		ResourceLocation texture;
 
-		if (!overrides.isEmpty()) {
-			// 材料覆盖了该类型的贴图
-			texture = overrides.get(0);
-		} else {
+		if (overrides.isEmpty()) {
 			String path = type.texture() == null ? "block/material/color/storage_blocks" : type.texture();
 			texture = ResourceLocation.fromNamespaceAndPath(material.textureNamespace(), path);
+		} else {
+			// 材料覆盖了该类型的贴图
+			texture = overrides.get(0);
 		}
 
 		JsonObject textures = new JsonObject();

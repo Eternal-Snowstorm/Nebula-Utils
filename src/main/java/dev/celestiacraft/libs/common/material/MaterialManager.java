@@ -1,10 +1,15 @@
 package dev.celestiacraft.libs.common.material;
 
+import lombok.experimental.UtilityClass;
 import dev.celestiacraft.libs.NebulaLibs;
 import dev.celestiacraft.libs.common.material.event.RegisterMaterialEvent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.NewRegistryEvent;
 import net.minecraftforge.registries.RegisterEvent;
 import org.jetbrains.annotations.Nullable;
@@ -38,28 +43,25 @@ import java.util.Map;
  * 只需要一个监听 {@link RegisterMaterialEvent} 的 {@code @Mod.EventBusSubscriber}.
  * </p>
  */
+@UtilityClass
 public class MaterialManager {
-	private static final List<NebulaMaterial> MATERIALS;
-	private static final Map<ResourceLocation, NebulaMaterial> BY_ID;
+	private final List<NebulaMaterial> MATERIALS = new ArrayList<>();
+	private final Map<ResourceLocation, NebulaMaterial> BY_ID = new LinkedHashMap<>();
 
-	private static boolean initialized;
-
-	static {
-		MATERIALS = new ArrayList<>();
-		BY_ID = new LinkedHashMap<>();
-	}
+	private boolean initialized;
 
 	/**
 	 * 初始化材料系统
 	 *
 	 * @param modBus Nebula Libs 的模组事件总线
 	 */
-	public static void bootstrap(IEventBus modBus) {
+	public void bootstrap(IEventBus modBus) {
 		modBus.addListener(MaterialManager::onNewRegistry);
 		modBus.addListener(MaterialManager::onRegister);
+		modBus.addListener(MaterialManager::onBuildCreativeTabContents);
 	}
 
-	private static void onNewRegistry(NewRegistryEvent event) {
+	private void onNewRegistry(NewRegistryEvent event) {
 		if (initialized) {
 			return;
 		}
@@ -72,6 +74,11 @@ public class MaterialManager {
 		MaterialKubeJSHook.post(materialEvent);
 
 		for (NebulaMaterial material : materialEvent.materials()) {
+			// 材料自己没指定标签页时, 用事件上的默认值
+			if (material.creativeTab() == null && materialEvent.creativeTab() != null) {
+				material.setCreativeTab(materialEvent.creativeTab());
+			}
+
 			accept(material);
 		}
 
@@ -89,11 +96,48 @@ public class MaterialManager {
 		NebulaLibs.LOGGER.info("已处理 {} 个材料, 共 {} 项注册内容", MATERIALS.size(), MaterialRegistration.total());
 	}
 
-	private static void onRegister(RegisterEvent event) {
+	private void onRegister(RegisterEvent event) {
 		MaterialRegistration.flush(event);
 	}
 
-	private static void accept(NebulaMaterial material) {
+	/**
+	 * 把材料生成的物品放进对应的创造模式标签页
+	 *
+	 * <p>
+	 * 标签页由 {@link NebulaMaterial#setCreativeTab(ResourceLocation)} 或
+	 * {@link RegisterMaterialEvent#setCreativeTab(ResourceLocation)} 指定;
+	 * 没指定的材料不会进任何标签页. 该事件只在客户端触发.
+	 * </p>
+	 *
+	 * @param event 标签页内容事件
+	 */
+	private void onBuildCreativeTabContents(BuildCreativeModeTabContentsEvent event) {
+		ResourceLocation tab = event.getTabKey().location();
+
+		for (NebulaMaterial material : MATERIALS) {
+			if (!tab.equals(material.creativeTab())) {
+				continue;
+			}
+
+			// 按声明顺序加入各个类型的物品
+			for (IMaterialType type : material.types()) {
+				Item item = ForgeRegistries.ITEMS.getValue(material.id(type));
+
+				if (item != null && item != Items.AIR) {
+					event.accept(item);
+				}
+			}
+
+			// 熔融流体的桶
+			Item bucket = material.getBucket();
+
+			if (bucket != null && bucket != Items.AIR) {
+				event.accept(bucket);
+			}
+		}
+	}
+
+	private void accept(NebulaMaterial material) {
 		ResourceLocation id = material.id();
 		NebulaMaterial previous = BY_ID.get(id);
 
@@ -109,7 +153,7 @@ public class MaterialManager {
 	/**
 	 * @return 所有已注册的材料
 	 */
-	public static List<NebulaMaterial> materials() {
+	public List<NebulaMaterial> materials() {
 		return Collections.unmodifiableList(MATERIALS);
 	}
 
@@ -120,7 +164,7 @@ public class MaterialManager {
 	 * @return 材料, 不存在时返回 null
 	 */
 	@Nullable
-	public static NebulaMaterial get(ResourceLocation id) {
+	public NebulaMaterial get(ResourceLocation id) {
 		return BY_ID.get(id);
 	}
 
@@ -136,7 +180,7 @@ public class MaterialManager {
 	 * @return 材料
 	 * @throws IllegalStateException 材料不存在时抛出
 	 */
-	public static NebulaMaterial require(ResourceLocation id) {
+	public NebulaMaterial require(ResourceLocation id) {
 		NebulaMaterial material = BY_ID.get(id);
 
 		if (material == null) {
@@ -152,7 +196,7 @@ public class MaterialManager {
 	 * @param namespace 命名空间(mod id)
 	 * @return 材料列表
 	 */
-	public static List<NebulaMaterial> materials(String namespace) {
+	public List<NebulaMaterial> materials(String namespace) {
 		List<NebulaMaterial> result = new ArrayList<>();
 
 		for (NebulaMaterial material : MATERIALS) {

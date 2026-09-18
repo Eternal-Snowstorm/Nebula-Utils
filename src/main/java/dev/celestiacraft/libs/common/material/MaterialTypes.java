@@ -1,5 +1,11 @@
 package dev.celestiacraft.libs.common.material;
 
+import lombok.experimental.UtilityClass;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -47,125 +53,126 @@ import java.util.function.Function;
  *
  * @see IMaterialType
  */
+@UtilityClass
 public class MaterialTypes {
-	public static final IMaterialType INGOT = item("ingot")
+	public final IMaterialType INGOT = item("ingot")
 			.namePattern("%s_ingot")
 			.layers("ingot/ingot", "ingot/ingot_secondary")
 			.overlay("ingot/ingot_overlay")
 			.tags("forge:ingots", "forge:ingots/%s")
 			.build();
 
-	public static final IMaterialType PLATE = item("plate")
+	public final IMaterialType PLATE = item("plate")
 			.namePattern("%s_plate")
 			.layers("plate/plate", "plate/plate_secondary")
 			.overlay("plate/plate_overlay")
 			.tags("forge:plates", "forge:plates/%s")
 			.build();
 
-	public static final IMaterialType NUGGET = item("nugget")
+	public final IMaterialType NUGGET = item("nugget")
 			.namePattern("%s_nugget")
 			.layers("nugget/nugget", "nugget/nugget_secondary")
 			.overlay("nugget/nugget_overlay")
 			.tags("forge:nuggets", "forge:nuggets/%s")
 			.build();
 
-	public static final IMaterialType DUST = item("dust")
+	public final IMaterialType DUST = item("dust")
 			.namePattern("%s_dust")
 			.layers("dust/dust", "dust/dust_secondary")
 			.overlay("dust/dust_overlay")
 			.tags("forge:dusts", "forge:dusts/%s")
 			.build();
 
-	public static final IMaterialType ROD = item("rod")
+	public final IMaterialType ROD = item("rod")
 			.namePattern("%s_rod")
 			.layers("rod/rod", "rod/rod_secondary")
 			.overlay("rod/rod_overlay")
 			.tags("forge:rods", "forge:rods/%s")
 			.build();
 
-	public static final IMaterialType GEAR = item("gear")
+	public final IMaterialType GEAR = item("gear")
 			.namePattern("%s_gear")
 			.layers("gear/gear", "gear/gear_secondary")
 			.overlay("gear/gear_overlay")
 			.tags("forge:gears", "forge:gears/%s")
 			.build();
 
-	public static final IMaterialType WIRE = item("wire")
+	public final IMaterialType WIRE = item("wire")
 			.namePattern("%s_wire")
 			.layers("wire/wire", "wire/wire_secondary")
 			.overlay("wire/wire_overlay")
 			.tags("forge:wires", "forge:wires/%s")
 			.build();
 
-	public static final IMaterialType PRISM = item("prism")
+	public final IMaterialType PRISM = item("prism")
 			.namePattern("%s_prism")
 			.layers("prism/prism", "prism/prism_secondary")
 			.overlay("prism/prism_overlay")
 			.tags("forge:prisms", "forge:prisms/%s")
 			.build();
 
-	public static final IMaterialType RAW_ORE = item("raw_ore")
+	public final IMaterialType RAW_ORE = item("raw_ore")
 			.namePattern("raw_%s")
 			.layers("raw_ore")
 			.tags("forge:raw_materials", "forge:raw_materials/%s")
 			.build();
 
-	public static final IMaterialType DIRTY_DUST = item("dirty")
+	public final IMaterialType DIRTY_DUST = item("dirty")
 			.namePattern("dirty_%s_dust")
 			.layers("dirty/0", "dirty/1")
 			.noSecondaryTint()
 			.tags("mekanism:dirty_dusts", "mekanism:dirty_dusts/%s")
 			.build();
 
-	public static final IMaterialType CLUMP = item("clump")
+	public final IMaterialType CLUMP = item("clump")
 			.namePattern("%s_clump")
 			.layers("clump")
 			.tags("mekanism:clumps", "mekanism:clumps/%s")
 			.build();
 
-	public static final IMaterialType SHARD = item("shard")
+	public final IMaterialType SHARD = item("shard")
 			.namePattern("%s_shard")
 			.layers("shard")
 			.tags("mekanism:shards", "mekanism:shards/%s")
 			.build();
 
-	public static final IMaterialType CRYSTAL = item("crystal")
+	public final IMaterialType CRYSTAL = item("crystal")
 			.namePattern("%s_crystal")
 			.layers("crystal")
 			.tags("mekanism:crystals", "mekanism:crystals/%s")
 			.build();
 
-	public static final IMaterialType BLOCK = block("block")
+	public final IMaterialType BLOCK = block("block")
 			.namePattern("%s_block")
 			.texture("block/material/color/storage_blocks")
 			.tags("forge:storage_blocks", "forge:storage_blocks/%s")
 			.build();
 
-	public static final IMaterialType RAW_BLOCK = block("raw_block")
+	public final IMaterialType RAW_BLOCK = block("raw_block")
 			.namePattern("raw_%s_block")
 			.texture("block/material/color/storage_blocks")
 			.tags("forge:storage_blocks", "forge:storage_blocks/raw_%s")
 			.build();
 
-	public static final IMaterialType MOLTEN = fluid("molten")
+	public final IMaterialType MOLTEN = fluid("molten")
 			.namePattern("molten_%s")
 			.tags("forge:molten_materials", "forge:molten_%s", "tconstruct:molten_%s")
 			.build();
 
-	public static final IMaterialType SLURRY = slurry("slurry")
+	public final IMaterialType SLURRY = slurry("slurry")
 			.namePattern("%s_slurry")
 			.slurryTexture("mekanism:slurry/clean")
 			.tags("mekanism:clean", "mekanism:clean/%s")
 			.build();
 
-	public static final IMaterialType DIRTY_SLURRY = slurry("dirty_slurry")
+	public final IMaterialType DIRTY_SLURRY = slurry("dirty_slurry")
 			.namePattern("dirty_%s_slurry")
 			.slurryTexture("mekanism:slurry/dirty")
 			.tags("mekanism:dirty", "mekanism:dirty/%s")
 			.build();
 
-	private static final List<IMaterialType> VALUES;
-	private static final Map<String, IMaterialType> BY_ID;
+	private final List<IMaterialType> VALUES;
+	private final Map<String, IMaterialType> BY_ID;
 
 	static {
 		VALUES = List.of(
@@ -185,13 +192,11 @@ public class MaterialTypes {
 		BY_ID = Map.copyOf(byId);
 	}
 
-	private MaterialTypes() {
-	}
 
 	/**
 	 * @return 所有内置材料类型
 	 */
-	public static List<IMaterialType> values() {
+	public List<IMaterialType> values() {
 		return VALUES;
 	}
 
@@ -202,7 +207,7 @@ public class MaterialTypes {
 	 * @return 材料类型, 不存在时返回 null
 	 */
 	@Nullable
-	public static IMaterialType byId(String id) {
+	public IMaterialType byId(String id) {
 		return BY_ID.get(id);
 	}
 
@@ -212,7 +217,7 @@ public class MaterialTypes {
 	 * @param id 类型 ID
 	 * @return 类型构造器
 	 */
-	public static Builder item(String id) {
+	public Builder item(String id) {
 		return of(MaterialKinds.ITEM, id);
 	}
 
@@ -222,7 +227,7 @@ public class MaterialTypes {
 	 * @param id 类型 ID
 	 * @return 类型构造器
 	 */
-	public static Builder block(String id) {
+	public Builder block(String id) {
 		return of(MaterialKinds.BLOCK, id);
 	}
 
@@ -232,7 +237,7 @@ public class MaterialTypes {
 	 * @param id 类型 ID
 	 * @return 类型构造器
 	 */
-	public static Builder fluid(String id) {
+	public Builder fluid(String id) {
 		return of(MaterialKinds.FLUID, id);
 	}
 
@@ -242,7 +247,7 @@ public class MaterialTypes {
 	 * @param id 类型 ID
 	 * @return 类型构造器
 	 */
-	public static Builder slurry(String id) {
+	public Builder slurry(String id) {
 		return of(MaterialKinds.SLURRY, id);
 	}
 
@@ -253,22 +258,30 @@ public class MaterialTypes {
 	 * @param id   类型 ID
 	 * @return 类型构造器
 	 */
-	public static Builder of(IMaterialKind kind, String id) {
+	public Builder of(IMaterialKind kind, String id) {
 		return new Builder(kind, id);
 	}
 
 	/**
 	 * 材料类型构造器
+	 *
+	 * <p>
+	 * 除了 {@link #layers(String...)} / {@link #tags(String...)} 这种可变参数方法,
+	 * 其余设置项都由 Lombok 生成(链式, 方法名与字段同名).
+	 * </p>
 	 */
-	public static class Builder {
+	@Setter
+	@Accessors(chain = true, fluent = true)
+	public class Builder {
 		private final IMaterialKind kind;
 		private final String id;
-		private final List<String> layers;
-		private final List<String> tags;
+		private final List<String> layers = new ArrayList<>();
+		private final List<String> tags = new ArrayList<>();
 
 		private String namePattern;
 		private String overlay;
 		private String texture;
+		@Setter(AccessLevel.NONE)
 		private ResourceLocation slurryTexture;
 		private boolean tintsSecondary;
 
@@ -280,33 +293,11 @@ public class MaterialTypes {
 			this.kind = Objects.requireNonNull(kind, "kind");
 			this.id = Objects.requireNonNull(id, "id");
 			namePattern = "%s_" + id;
-			layers = new ArrayList<>();
-			tags = new ArrayList<>();
 			tintsSecondary = true;
-		}
-
-		public Builder namePattern(String namePattern) {
-			this.namePattern = namePattern;
-			return this;
 		}
 
 		public Builder layers(String... layers) {
 			this.layers.addAll(Arrays.asList(layers));
-			return this;
-		}
-
-		public Builder overlay(String overlay) {
-			this.overlay = overlay;
-			return this;
-		}
-
-		public Builder texture(String texture) {
-			this.texture = texture;
-			return this;
-		}
-
-		public Builder slurryTexture(String texture) {
-			slurryTexture = ResourceLocation.parse(texture);
 			return this;
 		}
 
@@ -315,28 +306,19 @@ public class MaterialTypes {
 			return this;
 		}
 
-		public Builder secondaryTint(boolean secondaryTint) {
-			tintsSecondary = secondaryTint;
+		/**
+		 * 设置矿浆贴图(字符串形式, 方便脚本调用)
+		 *
+		 * @param texture 贴图 ID, 例如 {@code mekanism:slurry/dirty}
+		 * @return 当前构造器
+		 */
+		public Builder slurryTexture(String texture) {
+			slurryTexture = ResourceLocation.parse(texture);
 			return this;
 		}
 
 		public Builder noSecondaryTint() {
-			return secondaryTint(false);
-		}
-
-		public Builder itemFactory(Function<NebulaMaterial, Item> factory) {
-			itemFactory = factory;
-			return this;
-		}
-
-		public Builder blockFactory(BiFunction<NebulaMaterial, BlockBehaviour.Properties, Block> factory) {
-			blockFactory = factory;
-			return this;
-		}
-
-		public Builder fluidTypeFactory(Function<NebulaMaterial, FluidType> factory) {
-			fluidTypeFactory = factory;
-			return this;
+			return tintsSecondary(false);
 		}
 
 		public IMaterialType build() {
@@ -348,12 +330,16 @@ public class MaterialTypes {
 	 * 工厂生成的材料类型实现
 	 *
 	 * <p>
-	 * 相等性基于 {@link IMaterialType#id()}, 因此同 ID 的类型可以安全地作为 Map 的键.
+	 * 本工厂生成的类型之间按 {@link IMaterialType#id()} 判等, 因此同 ID 的类型可以安全地作为 Map 的键.
 	 * </p>
 	 */
-	private static class BuiltinType implements IMaterialType {
-		private final IMaterialKind kind;
+	@Getter
+	@Accessors(fluent = true)
+	@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+	private class BuiltinType implements IMaterialType {
+		@EqualsAndHashCode.Include
 		private final String id;
+		private final IMaterialKind kind;
 		private final String namePattern;
 		private final List<String> layers;
 		private final List<String> tags;
@@ -366,8 +352,8 @@ public class MaterialTypes {
 		private final Function<NebulaMaterial, FluidType> fluidTypeFactory;
 
 		private BuiltinType(Builder builder) {
-			kind = builder.kind;
 			id = builder.id;
+			kind = builder.kind;
 			namePattern = builder.namePattern;
 			layers = List.copyOf(builder.layers);
 			tags = List.copyOf(builder.tags);
@@ -378,54 +364,6 @@ public class MaterialTypes {
 			itemFactory = builder.itemFactory;
 			blockFactory = builder.blockFactory;
 			fluidTypeFactory = builder.fluidTypeFactory;
-		}
-
-		@Override
-		public String id() {
-			return id;
-		}
-
-		@Override
-		public IMaterialKind kind() {
-			return kind;
-		}
-
-		@Override
-		public String namePattern() {
-			return namePattern;
-		}
-
-		@Override
-		public List<String> layers() {
-			return layers;
-		}
-
-		@Nullable
-		@Override
-		public String overlay() {
-			return overlay;
-		}
-
-		@Nullable
-		@Override
-		public String texture() {
-			return texture;
-		}
-
-		@Nullable
-		@Override
-		public ResourceLocation slurryTexture() {
-			return slurryTexture;
-		}
-
-		@Override
-		public List<String> tags() {
-			return tags;
-		}
-
-		@Override
-		public boolean tintsSecondary() {
-			return tintsSecondary;
 		}
 
 		@Override
@@ -441,16 +379,6 @@ public class MaterialTypes {
 		@Override
 		public FluidType createFluidType(NebulaMaterial material) {
 			return fluidTypeFactory == null ? IMaterialType.super.createFluidType(material) : fluidTypeFactory.apply(material);
-		}
-
-		@Override
-		public boolean equals(Object object) {
-			return this == object || object instanceof IMaterialType type && id.equals(type.id());
-		}
-
-		@Override
-		public int hashCode() {
-			return id.hashCode();
 		}
 
 		@Override

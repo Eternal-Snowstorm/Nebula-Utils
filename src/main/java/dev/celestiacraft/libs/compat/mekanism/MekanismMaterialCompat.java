@@ -1,5 +1,6 @@
 package dev.celestiacraft.libs.compat.mekanism;
 
+import lombok.experimental.UtilityClass;
 import dev.celestiacraft.libs.common.material.IMaterialType;
 import dev.celestiacraft.libs.common.material.NebulaMaterial;
 import dev.celestiacraft.libs.common.material.MaterialRegistration;
@@ -22,14 +23,13 @@ import org.jetbrains.annotations.Nullable;
  * 贴图由 {@link IMaterialType#slurryTexture()} 提供, 所以自定义的矿浆类型也能用.
  * </p>
  */
-public final class MekanismMaterialCompat {
+@UtilityClass
+public class MekanismMaterialCompat {
 	/**
 	 * 没有指定贴图时使用的默认矿浆贴图
 	 */
-	public static final ResourceLocation DEFAULT_SLURRY_TEXTURE = ResourceLocation.parse("mekanism:slurry/clean");
+	public final ResourceLocation DEFAULT_SLURRY_TEXTURE = ResourceLocation.parse("mekanism:slurry/clean");
 
-	private MekanismMaterialCompat() {
-	}
 
 	/**
 	 * 注册材料的矿浆
@@ -37,7 +37,7 @@ public final class MekanismMaterialCompat {
 	 * @param material 材料
 	 * @param type     {@link dev.celestiacraft.libs.common.material.MaterialKinds#SLURRY} 分类的类型
 	 */
-	public static void register(NebulaMaterial material, IMaterialType type) {
+	public void register(NebulaMaterial material, IMaterialType type) {
 		ResourceLocation id = material.id(type);
 		ResourceLocation texture = type.slurryTexture();
 		int tint = material.primaryColor() & 0xFFFFFF;
@@ -45,7 +45,9 @@ public final class MekanismMaterialCompat {
 		SlurryBuilder builder = SlurryBuilder.builder(texture == null ? DEFAULT_SLURRY_TEXTURE : texture)
 				.tint(tint);
 
-		MaterialRegistration.add(MekanismAPI.SLURRY_REGISTRY_NAME, id, () -> new Slurry(builder));
+		MaterialRegistration.add(MekanismAPI.SLURRY_REGISTRY_NAME, id, () -> {
+			return new Slurry(builder);
+		});
 	}
 
 	/**
@@ -61,7 +63,7 @@ public final class MekanismMaterialCompat {
 	 * @return 矿浆, 材料没有声明该类型(或没装 Mekanism)时返回 null
 	 */
 	@Nullable
-	public static Slurry getSlurry(NebulaMaterial material, IMaterialType type) {
+	public Slurry getSlurry(NebulaMaterial material, IMaterialType type) {
 		return MekanismAPI.slurryRegistry().getValue(material.id(type));
 	}
 
@@ -70,7 +72,7 @@ public final class MekanismMaterialCompat {
 	 * @return 干净矿浆, 没有声明 {@code slurry()} 时返回 null
 	 */
 	@Nullable
-	public static Slurry getSlurry(NebulaMaterial material) {
+	public Slurry getSlurry(NebulaMaterial material) {
 		return getSlurry(material, MaterialTypes.SLURRY);
 	}
 
@@ -79,7 +81,7 @@ public final class MekanismMaterialCompat {
 	 * @return 脏矿浆, 没有声明 {@code dirtySlurry()} 时返回 null
 	 */
 	@Nullable
-	public static Slurry getDirtySlurry(NebulaMaterial material) {
+	public Slurry getDirtySlurry(NebulaMaterial material) {
 		return getSlurry(material, MaterialTypes.DIRTY_SLURRY);
 	}
 }

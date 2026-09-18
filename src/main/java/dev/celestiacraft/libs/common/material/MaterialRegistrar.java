@@ -1,5 +1,6 @@
 package dev.celestiacraft.libs.common.material;
 
+import lombok.experimental.UtilityClass;
 import dev.celestiacraft.libs.NebulaLibs;
 import dev.celestiacraft.libs.compat.ICheckModLoaded;
 import dev.celestiacraft.libs.compat.mekanism.MekanismMaterialCompat;
@@ -43,13 +44,14 @@ import java.util.concurrent.atomic.AtomicReference;
  * 并在 {@code RegisterEvent} 中真正写入注册表.
  * </p>
  */
+@UtilityClass
 public class MaterialRegistrar {
 	/**
 	 * 注册单个材料声明的全部内容
 	 *
 	 * @param material 材料
 	 */
-	public static void register(NebulaMaterial material) {
+	public void register(NebulaMaterial material) {
 		if (material.typeCount() == 0) {
 			NebulaLibs.LOGGER.warn("材料 {} 没有声明任何类型, 已跳过", material.id());
 			return;
@@ -73,7 +75,7 @@ public class MaterialRegistrar {
 	 * @param type     类型
 	 * @return 是否注册成功
 	 */
-	public static boolean registerType(NebulaMaterial material, IMaterialType type) {
+	public boolean registerType(NebulaMaterial material, IMaterialType type) {
 		IMaterialKind kind = type.kind();
 
 		if (kind == MaterialKinds.ITEM) {
@@ -104,7 +106,7 @@ public class MaterialRegistrar {
 	 * @param material 材料
 	 * @param type     类型
 	 */
-	public static void registerItem(NebulaMaterial material, IMaterialType type) {
+	public void registerItem(NebulaMaterial material, IMaterialType type) {
 		ResourceLocation id = material.id(type);
 
 		MaterialRegistration.add(Registries.ITEM, id, () -> type.createItem(material));
@@ -118,7 +120,7 @@ public class MaterialRegistrar {
 	 * @param material 材料
 	 * @param type     类型
 	 */
-	public static void registerBlock(NebulaMaterial material, IMaterialType type) {
+	public void registerBlock(NebulaMaterial material, IMaterialType type) {
 		ResourceLocation id = material.id(type);
 		Block block = type.createBlock(material, BlockBehaviour.Properties.of()
 				.strength(material.hardness(), material.resistance())
@@ -149,7 +151,7 @@ public class MaterialRegistrar {
 	 * @param material 材料
 	 * @param type     类型
 	 */
-	public static void registerFluid(NebulaMaterial material, IMaterialType type) {
+	public void registerFluid(NebulaMaterial material, IMaterialType type) {
 		ResourceLocation id = material.id(type);
 		ResourceLocation flowingId = flowingFluidId(id);
 		ResourceLocation bucketId = bucketId(id);
@@ -192,7 +194,7 @@ public class MaterialRegistrar {
 	 * @param fluidId 源流体 ID
 	 * @return 流动流体 ID
 	 */
-	public static ResourceLocation flowingFluidId(ResourceLocation fluidId) {
+	public ResourceLocation flowingFluidId(ResourceLocation fluidId) {
 		return ResourceLocation.fromNamespaceAndPath(fluidId.getNamespace(), fluidId.getPath() + "_flowing");
 	}
 
@@ -202,7 +204,7 @@ public class MaterialRegistrar {
 	 * @param fluidId 源流体 ID
 	 * @return 桶的物品 ID
 	 */
-	public static ResourceLocation bucketId(ResourceLocation fluidId) {
+	public ResourceLocation bucketId(ResourceLocation fluidId) {
 		return ResourceLocation.fromNamespaceAndPath(fluidId.getNamespace(), fluidId.getPath() + "_bucket");
 	}
 
@@ -213,7 +215,7 @@ public class MaterialRegistrar {
 	 * @param type     类型
 	 * @return 是否注册成功(没有加载 Mekanism 时返回 false, 此时不会生成标签)
 	 */
-	public static boolean registerSlurry(NebulaMaterial material, IMaterialType type) {
+	public boolean registerSlurry(NebulaMaterial material, IMaterialType type) {
 		if (!ICheckModLoaded.hasMekanism()) {
 			NebulaLibs.LOGGER.warn("材料 {} 声明了 {}, 但当前没有加载 Mekanism, 已跳过", material.id(), type.id());
 			return false;
@@ -223,7 +225,7 @@ public class MaterialRegistrar {
 		return true;
 	}
 
-	private static SoundType blockSound(NebulaMaterial material) {
+	private SoundType blockSound(NebulaMaterial material) {
 		SoundType sound = material.sound();
 		return sound == null ? SoundType.METAL : sound;
 	}

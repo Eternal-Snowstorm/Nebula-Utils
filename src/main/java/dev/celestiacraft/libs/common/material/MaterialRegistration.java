@@ -1,5 +1,6 @@
 package dev.celestiacraft.libs.common.material;
 
+import lombok.experimental.UtilityClass;
 import dev.celestiacraft.libs.NebulaLibs;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
@@ -30,17 +31,11 @@ import java.util.function.Supplier;
  * 队列会在 Nebula Libs 自己的 {@link RegisterEvent} 中被消费, 消费后立即清空.
  * </p>
  */
+@UtilityClass
 public class MaterialRegistration {
-	private static final Map<ResourceKey<? extends Registry<?>>, List<Entry<?>>> PENDING;
-	private static final Set<ResourceKey<? extends Registry<?>>> FLUSHED;
+	private final Map<ResourceKey<? extends Registry<?>>, List<Entry<?>>> PENDING = new LinkedHashMap<>();
+	private final Set<ResourceKey<? extends Registry<?>>> FLUSHED = new LinkedHashSet<>();
 
-	static {
-		PENDING = new LinkedHashMap<>();
-		FLUSHED = new LinkedHashSet<>();
-	}
-
-	private MaterialRegistration() {
-	}
 
 	/**
 	 * 将一个注册项加入队列
@@ -49,7 +44,7 @@ public class MaterialRegistration {
 	 * @param id       注册 ID
 	 * @param supplier 实例工厂(只会被调用一次)
 	 */
-	public static <T> void add(ResourceKey<? extends Registry<T>> key, ResourceLocation id, Supplier<? extends T> supplier) {
+	public <T> void add(ResourceKey<? extends Registry<T>> key, ResourceLocation id, Supplier<? extends T> supplier) {
 		if (FLUSHED.contains(key)) {
 			NebulaLibs.LOGGER.error("注册表 {} 的事件已经结束, {} 无法再被注册(材料必须在 RegisterMaterialEvent 中定义)", key.location(), id);
 			return;
@@ -61,14 +56,14 @@ public class MaterialRegistration {
 	/**
 	 * @return 队列是否为空
 	 */
-	public static boolean isEmpty() {
+	public boolean isEmpty() {
 		return PENDING.isEmpty();
 	}
 
 	/**
 	 * @return 指定注册表中排队的注册项数量
 	 */
-	public static int size(ResourceKey<? extends Registry<?>> key) {
+	public int size(ResourceKey<? extends Registry<?>> key) {
 		List<Entry<?>> entries = PENDING.get(key);
 		return entries == null ? 0 : entries.size();
 	}
@@ -76,7 +71,7 @@ public class MaterialRegistration {
 	/**
 	 * @return 队列中所有注册项的总数
 	 */
-	public static int total() {
+	public int total() {
 		int total = 0;
 
 		for (List<Entry<?>> entries : PENDING.values()) {
@@ -91,7 +86,7 @@ public class MaterialRegistration {
 	 *
 	 * @param event 注册事件
 	 */
-	public static void flush(RegisterEvent event) {
+	public void flush(RegisterEvent event) {
 		FLUSHED.add(event.getRegistryKey());
 
 		List<Entry<?>> entries = PENDING.remove(event.getRegistryKey());
@@ -105,7 +100,7 @@ public class MaterialRegistration {
 		}
 	}
 
-	private static void register(RegisterEvent event, Entry<?> entry) {
+	private void register(RegisterEvent event, Entry<?> entry) {
 		event.register((ResourceKey) event.getRegistryKey(), entry.id(), (Supplier) entry.supplier());
 	}
 

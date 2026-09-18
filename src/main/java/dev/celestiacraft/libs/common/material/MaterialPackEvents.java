@@ -1,5 +1,6 @@
 package dev.celestiacraft.libs.common.material;
 
+import lombok.experimental.UtilityClass;
 import dev.celestiacraft.libs.NebulaLibs;
 import net.minecraft.server.packs.PackType;
 import net.minecraftforge.event.AddPackFindersEvent;
@@ -16,9 +17,10 @@ import net.minecraftforge.fml.common.Mod;
  * @see MaterialPackSource
  */
 @Mod.EventBusSubscriber(modid = NebulaLibs.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@UtilityClass
 public class MaterialPackEvents {
 	@SubscribeEvent
-	public static void onAddPackFinders(AddPackFindersEvent event) {
+	public void onAddPackFinders(AddPackFindersEvent event) {
 		PackType type = event.getPackType();
 
 		if (!type.equals(PackType.CLIENT_RESOURCES) && !type.equals(PackType.SERVER_DATA)) {

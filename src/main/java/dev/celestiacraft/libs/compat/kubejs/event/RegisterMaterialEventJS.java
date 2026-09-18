@@ -6,6 +6,10 @@ import dev.celestiacraft.libs.common.material.event.RegisterMaterialEvent;
 import dev.latvian.mods.kubejs.event.StartupEventJS;
 import dev.latvian.mods.kubejs.typings.Info;
 import lombok.Getter;
+import lombok.experimental.Accessors;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -35,9 +39,13 @@ import java.util.List;
  *
  * @see RegisterMaterialEvent
  */
+@Accessors(fluent = true)
 public class RegisterMaterialEventJS extends StartupEventJS {
 	private final RegisterMaterialEvent event;
 
+	/**
+	 * 当前设置的默认命名空间, 没有则为 null
+	 */
 	@Nullable
 	@Getter
 	private String namespace;
@@ -62,15 +70,6 @@ public class RegisterMaterialEventJS extends StartupEventJS {
 		this.namespace = namespace;
 		event.namespace(namespace);
 		return this;
-	}
-
-	/**
-	 * @return 当前设置的默认命名空间, 没有则为 null
-	 */
-	@Nullable
-	@Info("当前默认命名空间")
-	public String namespace() {
-		return namespace;
 	}
 
 	/**
@@ -119,6 +118,38 @@ public class RegisterMaterialEventJS extends StartupEventJS {
 	@Info("create(name, level) 的别名")
 	public NebulaMaterial register(String name, IMiningLevel level) {
 		return create(name, level);
+	}
+
+	/**
+	 * 设置本次创建的材料的默认创造模式标签页
+	 *
+	 * <pre>{@code
+	 * NebulaEvents.registerMaterial(event => {
+	 *     event.namespace("cmi")
+	 *     event.setCreativeTab("cmi:main")
+	 *     event.create("chromium", MiningLevels.IRON).ingot()
+	 * })
+	 * }</pre>
+	 *
+	 * @param tab 标签页 ID, 例如 {@code cmi:main}
+	 * @return 当前事件
+	 */
+	@Info("设置本次材料默认放进的创造模式标签页, 例如 cmi:main")
+	public RegisterMaterialEventJS setCreativeTab(ResourceLocation tab) {
+		event.setCreativeTab(tab);
+		return this;
+	}
+
+	/**
+	 * 设置本次创建的材料的默认创造模式标签页
+	 *
+	 * @param tab 标签页的 {@link ResourceKey}
+	 * @return 当前事件
+	 */
+	@Info("设置本次材料默认放进的创造模式标签页(ResourceKey)")
+	public RegisterMaterialEventJS setCreativeTab(ResourceKey<CreativeModeTab> tab) {
+		event.setCreativeTab(tab);
+		return this;
 	}
 
 	/**

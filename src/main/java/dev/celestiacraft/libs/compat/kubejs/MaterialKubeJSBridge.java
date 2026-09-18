@@ -1,5 +1,6 @@
 package dev.celestiacraft.libs.compat.kubejs;
 
+import lombok.experimental.UtilityClass;
 import dev.celestiacraft.libs.common.material.event.RegisterMaterialEvent;
 import dev.celestiacraft.libs.compat.kubejs.event.NebulaEventJS;
 import dev.celestiacraft.libs.compat.kubejs.event.RegisterMaterialEventJS;
@@ -20,8 +21,9 @@ import dev.latvian.mods.kubejs.script.ScriptType;
  * })
  * }</pre>
  */
+@UtilityClass
 public class MaterialKubeJSBridge {
-	public static void post(RegisterMaterialEvent event) {
+	public void post(RegisterMaterialEvent event) {
 		EventHandler handler = NebulaEventJS.REGISTER_MATERIAL_EVENT;
 
 		if (!handler.hasListeners()) {

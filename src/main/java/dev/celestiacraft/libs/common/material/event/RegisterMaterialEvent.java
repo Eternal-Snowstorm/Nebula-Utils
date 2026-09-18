@@ -2,7 +2,12 @@ package dev.celestiacraft.libs.common.material.event;
 
 import dev.celestiacraft.libs.common.material.*;
 import dev.latvian.mods.kubejs.typings.Info;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.eventbus.api.Event;
 import org.jetbrains.annotations.Nullable;
 
@@ -87,16 +92,25 @@ import java.util.List;
  *
  * @see MaterialManager
  */
+@Getter
+@Accessors(fluent = true)
+@NoArgsConstructor
 public class RegisterMaterialEvent extends Event {
-	private final List<NebulaMaterial> materials;
+	private final List<NebulaMaterial> materials = new ArrayList<>();
+
+	/**
+	 * 默认命名空间(mod id), 可能为 null
+	 */
+	@Nullable
 	private String namespace;
 
-	public RegisterMaterialEvent() {
-		this(null);
-	}
+	/**
+	 * 默认创造模式标签页, 可能为 null
+	 */
+	@Nullable
+	private ResourceLocation creativeTab;
 
 	public RegisterMaterialEvent(@Nullable String namespace) {
-		materials = new ArrayList<>();
 		this.namespace = namespace;
 	}
 
@@ -117,11 +131,31 @@ public class RegisterMaterialEvent extends Event {
 	}
 
 	/**
-	 * @return 当前的默认命名空间, 可能为 null
+	 * 设置本次事件创建的材料的默认创造模式标签页
+	 *
+	 * <p>
+	 * 单个材料可以用 {@link NebulaMaterial#setCreativeTab(ResourceLocation)} 覆盖;
+	 * 两边都没设置的材料不会进入任何标签页. 与调用顺序无关(收集材料时才应用).
+	 * </p>
+	 *
+	 * @param tab 标签页 ID, 例如 {@code cmi:main} 或原版的 {@code minecraft:ingredients}
+	 * @return 当前事件
 	 */
-	@Nullable
-	public String namespace() {
-		return namespace;
+	@Info("设置本次材料默认放进的创造模式标签页, 例如 cmi:main")
+	public RegisterMaterialEvent setCreativeTab(ResourceLocation tab) {
+		creativeTab = tab;
+		return this;
+	}
+
+	/**
+	 * 设置本次事件创建的材料的默认创造模式标签页
+	 *
+	 * @param tab 标签页的 {@link ResourceKey}
+	 * @return 当前事件
+	 */
+	@Info("设置本次材料默认放进的创造模式标签页(ResourceKey)")
+	public RegisterMaterialEvent setCreativeTab(ResourceKey<CreativeModeTab> tab) {
+		return setCreativeTab(tab.location());
 	}
 
 	/**

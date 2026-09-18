@@ -1,5 +1,6 @@
 package dev.celestiacraft.libs.common.material;
 
+import lombok.experimental.UtilityClass;
 import net.minecraft.tags.BlockTags;
 import net.minecraftforge.common.Tags;
 import org.jetbrains.annotations.Nullable;
@@ -31,34 +32,35 @@ import java.util.Map;
  *
  * @see IMiningLevel
  */
+@UtilityClass
 public class MiningLevels {
 	/**
 	 * 无挖掘等级要求
 	 */
-	public static final IMiningLevel NONE = () -> null;
+	public final IMiningLevel NONE = () -> null;
 
-	public static final IMiningLevel WOODEN = IMiningLevel.of(Tags.Blocks.NEEDS_WOOD_TOOL);
-	public static final IMiningLevel STONE = IMiningLevel.of(BlockTags.NEEDS_STONE_TOOL);
-	public static final IMiningLevel GOLD = IMiningLevel.of(Tags.Blocks.NEEDS_GOLD_TOOL);
-	public static final IMiningLevel IRON = IMiningLevel.of(BlockTags.NEEDS_IRON_TOOL);
-	public static final IMiningLevel DIAMOND = IMiningLevel.of(BlockTags.NEEDS_DIAMOND_TOOL);
-	public static final IMiningLevel NETHER = IMiningLevel.of(Tags.Blocks.NEEDS_NETHERITE_TOOL);
+	public final IMiningLevel WOODEN = IMiningLevel.of(Tags.Blocks.NEEDS_WOOD_TOOL);
+	public final IMiningLevel STONE = IMiningLevel.of(BlockTags.NEEDS_STONE_TOOL);
+	public final IMiningLevel GOLD = IMiningLevel.of(Tags.Blocks.NEEDS_GOLD_TOOL);
+	public final IMiningLevel IRON = IMiningLevel.of(BlockTags.NEEDS_IRON_TOOL);
+	public final IMiningLevel DIAMOND = IMiningLevel.of(BlockTags.NEEDS_DIAMOND_TOOL);
+	public final IMiningLevel NETHER = IMiningLevel.of(Tags.Blocks.NEEDS_NETHERITE_TOOL);
 
 	/**
 	 * {@link WOODEN} 的别名
 	 */
-	public static final IMiningLevel WOOD = WOODEN;
+	public final IMiningLevel WOOD = WOODEN;
 	/**
 	 * {@link GOLD} 的别名
 	 */
-	public static final IMiningLevel GOLDEN = GOLD;
+	public final IMiningLevel GOLDEN = GOLD;
 	/**
 	 * {@link NETHER} 的别名
 	 */
-	public static final IMiningLevel NETHERITE = NETHER;
+	public final IMiningLevel NETHERITE = NETHER;
 
-	private static final List<IMiningLevel> VALUES;
-	private static final Map<String, IMiningLevel> BY_NAME;
+	private final List<IMiningLevel> VALUES;
+	private final Map<String, IMiningLevel> BY_NAME;
 
 	static {
 		VALUES = List.of(NONE, WOODEN, STONE, GOLD, IRON, DIAMOND, NETHER);
@@ -80,7 +82,7 @@ public class MiningLevels {
 	/**
 	 * @return 所有内置挖掘等级
 	 */
-	public static List<IMiningLevel> values() {
+	public List<IMiningLevel> values() {
 		return VALUES;
 	}
 
@@ -91,7 +93,7 @@ public class MiningLevels {
 	 * @return 挖掘等级, 名称为空时返回 {@link #NONE}
 	 * @throws IllegalArgumentException 名称无法识别时抛出
 	 */
-	public static IMiningLevel byName(@Nullable String name) {
+	public IMiningLevel byName(@Nullable String name) {
 		if (name == null || name.isBlank()) {
 			return NONE;
 		}

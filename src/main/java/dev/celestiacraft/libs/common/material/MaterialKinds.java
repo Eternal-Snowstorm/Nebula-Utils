@@ -1,5 +1,9 @@
 package dev.celestiacraft.libs.common.material;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.experimental.Accessors;
+import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -25,37 +29,38 @@ import java.util.Objects;
  *
  * @see IMaterialKind
  */
+@UtilityClass
 public class MaterialKinds {
 	/**
 	 * 物品: 标签写入 {@code tags/items}
 	 */
-	public static final IMaterialKind ITEM = of("item")
+	public final IMaterialKind ITEM = of("item")
 			.tagDirectories(MaterialAssets.ITEM_TAG_DIRECTORY)
 			.build();
 
 	/**
 	 * 方块 + 方块物品: 标签同时写入 {@code tags/blocks} 与 {@code tags/items}
 	 */
-	public static final IMaterialKind BLOCK = of("block")
+	public final IMaterialKind BLOCK = of("block")
 			.tagDirectories(MaterialAssets.BLOCK_TAG_DIRECTORY, MaterialAssets.ITEM_TAG_DIRECTORY)
 			.build();
 
 	/**
 	 * 流体: 标签写入 {@code tags/fluids}
 	 */
-	public static final IMaterialKind FLUID = of("fluid")
+	public final IMaterialKind FLUID = of("fluid")
 			.tagDirectories(MaterialAssets.FLUID_TAG_DIRECTORY)
 			.build();
 
 	/**
 	 * Mekanism 矿浆: 标签写入 {@code tags/mekanism/slurry}
 	 */
-	public static final IMaterialKind SLURRY = of("slurry")
+	public final IMaterialKind SLURRY = of("slurry")
 			.tagDirectories(MaterialAssets.SLURRY_TAG_DIRECTORY)
 			.build();
 
-	private static final List<IMaterialKind> VALUES;
-	private static final Map<String, IMaterialKind> BY_ID;
+	private final List<IMaterialKind> VALUES;
+	private final Map<String, IMaterialKind> BY_ID;
 
 	static {
 		VALUES = List.of(ITEM, BLOCK, FLUID, SLURRY);
@@ -72,7 +77,7 @@ public class MaterialKinds {
 	/**
 	 * @return 所有内置材料分类
 	 */
-	public static List<IMaterialKind> values() {
+	public List<IMaterialKind> values() {
 		return VALUES;
 	}
 
@@ -83,7 +88,7 @@ public class MaterialKinds {
 	 * @return 材料分类, 不存在时返回 null
 	 */
 	@Nullable
-	public static IMaterialKind byId(String id) {
+	public IMaterialKind byId(String id) {
 		return BY_ID.get(id);
 	}
 
@@ -93,14 +98,14 @@ public class MaterialKinds {
 	 * @param id 分类 ID
 	 * @return 分类构造器
 	 */
-	public static Builder of(String id) {
+	public Builder of(String id) {
 		return new Builder(id);
 	}
 
 	/**
 	 * 材料分类构造器
 	 */
-	public static class Builder {
+	public class Builder {
 		private final String id;
 		private final List<String> tagDirectories;
 
@@ -125,33 +130,17 @@ public class MaterialKinds {
 		}
 	}
 
-	private static class CustomKind implements IMaterialKind {
+	@Getter
+	@Accessors(fluent = true)
+	@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+	private class CustomKind implements IMaterialKind {
+		@EqualsAndHashCode.Include
 		private final String id;
 		private final List<String> tagDirectories;
 
 		private CustomKind(Builder builder) {
 			id = builder.id;
 			tagDirectories = List.copyOf(builder.tagDirectories);
-		}
-
-		@Override
-		public String id() {
-			return id;
-		}
-
-		@Override
-		public List<String> tagDirectories() {
-			return tagDirectories;
-		}
-
-		@Override
-		public boolean equals(Object object) {
-			return this == object || object instanceof IMaterialKind kind && id.equals(kind.id());
-		}
-
-		@Override
-		public int hashCode() {
-			return id.hashCode();
 		}
 
 		@Override
