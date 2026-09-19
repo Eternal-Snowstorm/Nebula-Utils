@@ -78,22 +78,22 @@ public class MaterialRegistrar {
 	public boolean registerType(NebulaMaterial material, IMaterialType type) {
 		IMaterialKind kind = type.kind();
 
-		if (kind == MaterialKinds.ITEM) {
+		if (MaterialKinds.ITEM.equals(kind)) {
 			registerItem(material, type);
 			return true;
 		}
 
-		if (kind == MaterialKinds.BLOCK) {
+		if (MaterialKinds.BLOCK.equals(kind)) {
 			registerBlock(material, type);
 			return true;
 		}
 
-		if (kind == MaterialKinds.FLUID) {
+		if (MaterialKinds.FLUID.equals(kind)) {
 			registerFluid(material, type);
 			return true;
 		}
 
-		if (kind == MaterialKinds.SLURRY) {
+		if (MaterialKinds.SLURRY.equals(kind)) {
 			return registerSlurry(material, type);
 		}
 
