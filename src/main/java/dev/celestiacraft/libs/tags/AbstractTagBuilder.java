@@ -159,14 +159,16 @@ public abstract class AbstractTagBuilder<T> {
 		return namespace("create");
 	}
 
+	public TagKey<T> deepTech() {
+		return namespace("deep_tech");
+	}
+
 	public TagKey<T> namespace(String namespace) {
 		if (namespace == null || namespace.isBlank()) {
 			throw new IllegalArgumentException("Tag namespace cannot be null for tag: " + name);
 		}
 
-		ResourceLocation id = ResourceLocation.fromNamespaceAndPath(namespace, name);
-
-		return create(id);
+		return create(ResourceLocation.fromNamespaceAndPath(namespace, name));
 	}
 
 	protected abstract TagKey<T> create(ResourceLocation id);
