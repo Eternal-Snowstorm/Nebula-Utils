@@ -122,24 +122,24 @@ public class MaterialAssets {
 		}
 
 		JsonObject textures = new JsonObject();
-		List<String> layers = type.layers();
 		List<ResourceLocation> overrides = material.typeTextures(type);
-		boolean overlay = type.overlay() != null && material.overlay(type);
-		int count = layers.size() + (overlay ? 1 : 0);
 
-		for (int i = 0; i < count; i++) {
-			ResourceLocation texture;
+		if (!overrides.isEmpty()) {
+			// 材料直接给定了贴图: 有几张就是几层(不再补默认的副色 / 亮层)
+			for (int i = 0; i < overrides.size(); i++) {
+				textures.addProperty("layer" + i, overrides.get(i).toString());
+			}
+		} else {
+			// 默认: 按类型声明的层生成, 亮层按材料设置决定
+			List<String> layers = type.layers();
 
-			if (i < overrides.size()) {
-				// 材料覆盖了这一层
-				texture = overrides.get(i);
-			} else if (i < layers.size()) {
-				texture = itemTexture(material, layers.get(i));
-			} else {
-				texture = itemTexture(material, type.overlay());
+			for (int i = 0; i < layers.size(); i++) {
+				textures.addProperty("layer" + i, itemTexture(material, layers.get(i)).toString());
 			}
 
-			textures.addProperty("layer" + i, texture.toString());
+			if (type.overlay() != null && material.overlay(type)) {
+				textures.addProperty("layer" + layers.size(), itemTexture(material, type.overlay()).toString());
+			}
 		}
 
 		JsonObject model = new JsonObject();

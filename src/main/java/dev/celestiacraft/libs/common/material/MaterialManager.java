@@ -6,9 +6,9 @@ import dev.celestiacraft.libs.common.material.event.RegisterMaterialEvent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModLoader;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.NewRegistryEvent;
 import net.minecraftforge.registries.RegisterEvent;
@@ -70,7 +70,11 @@ public class MaterialManager {
 
 		RegisterMaterialEvent materialEvent = new RegisterMaterialEvent();
 
-		MinecraftForge.EVENT_BUS.post(materialEvent);
+		// 必须走 mod bus: Forge 事件总线(MinecraftForge.EVENT_BUS)是带 startShutdown() 创建的,
+		// 要等整个模组加载结束才会 start(), 在那之前 post 会被静默丢弃(不触发监听器也不报错).
+		// 见 RegisterMaterialEvent 的类注释.
+		ModLoader.get().postEventWrapContainerInModOrder(materialEvent);
+
 		MaterialKubeJSHook.post(materialEvent);
 
 		for (NebulaMaterial material : materialEvent.materials()) {
@@ -83,7 +87,9 @@ public class MaterialManager {
 		}
 
 		if (MATERIALS.isEmpty()) {
-			NebulaLibs.LOGGER.info("没有需要注册的材料");
+			NebulaLibs.LOGGER.info("没有需要注册的材料 (如果你已经用 RegisterMaterialEvent 定义过材料, 却看到这条: " +
+					"请确认监听器上的 @Mod.EventBusSubscriber 写的是 bus = Mod.EventBusSubscriber.Bus.MOD, " +
+					"因为材料事件是 mod bus 事件)");
 			return;
 		}
 

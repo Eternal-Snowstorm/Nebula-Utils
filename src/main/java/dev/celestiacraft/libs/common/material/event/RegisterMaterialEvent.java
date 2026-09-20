@@ -1,14 +1,16 @@
 package dev.celestiacraft.libs.common.material.event;
 
 import dev.celestiacraft.libs.common.material.*;
-import dev.latvian.mods.kubejs.typings.Info;
+import dev.latvian.mods.rhino.util.RemapForJS;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.fml.event.IModBusEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -24,7 +26,19 @@ import java.util.List;
  *
  * <p>
  * 该事件在 <b>所有模组构造完成之后, 注册表事件({@code RegisterEvent})之前</b> 由
- * Nebula Libs 在 Forge 事件总线上发布, 因此:
+ * Nebula Libs 在 <b>模组事件总线(mod bus)</b> 上发布(和 {@code NewRegistryEvent} 同一个时机), 因此:
+ * </p>
+ *
+ * <p>
+ * <b>监听方式:</b> 因为它是 mod bus 事件, 必须写成
+ * {@code @Mod.EventBusSubscriber(modid = "your_mod", bus = Mod.EventBusSubscriber.Bus.MOD)}.
+ * </p>
+ *
+ * <p>
+ * 顺带说明为什么不能用 Forge 事件总线: {@code MinecraftForge.EVENT_BUS} 是带着
+ * {@code startShutdown()} 创建的, 只有整个模组加载结束(客户端 {@code finishModLoading} /
+ * 服务端 {@code ServerModLoader.load} 末尾)才会 {@code start()} ——
+ * 在那之前往上 {@code post} 会被 {@code EventBus} 静默丢弃(返回 false, 一个监听器都不触发, 也不报错).
  * </p>
  *
  * <ul>
@@ -34,7 +48,7 @@ import java.util.List;
  * </ul>
  *
  * <pre>{@code
- * @Mod.EventBusSubscriber(modid = "cmi")
+ * @Mod.EventBusSubscriber(modid = "cmi", bus = Mod.EventBusSubscriber.Bus.MOD)
  * public final class CmiMaterials {
  *     @SubscribeEvent
  *     public static void onRegisterMaterial(RegisterMaterialEvent event) {
@@ -60,7 +74,7 @@ import java.util.List;
  * </p>
  *
  * <pre>{@code
- * @Mod.EventBusSubscriber(modid = "cmi")
+ * @Mod.EventBusSubscriber(modid = "cmi", bus = Mod.EventBusSubscriber.Bus.MOD)
  * public final class CmiMaterials {
  *     public static NebulaMaterial CHROMIUM;
  *     public static NebulaMaterial TITANIUM;
@@ -95,39 +109,26 @@ import java.util.List;
 @Getter
 @Accessors(fluent = true)
 @NoArgsConstructor
-public class RegisterMaterialEvent extends Event {
+public class RegisterMaterialEvent extends Event implements IModBusEvent {
 	private final List<NebulaMaterial> materials = new ArrayList<>();
 
 	/**
 	 * 默认命名空间(mod id), 可能为 null
 	 */
 	@Nullable
+	@Setter
+	@Getter
 	private String namespace;
 
 	/**
 	 * 默认创造模式标签页, 可能为 null
 	 */
 	@Nullable
+	@Getter
 	private ResourceLocation creativeTab;
 
 	public RegisterMaterialEvent(@Nullable String namespace) {
 		this.namespace = namespace;
-	}
-
-	/**
-	 * 设置默认命名空间.
-	 *
-	 * <p>
-	 * 设置之后 {@link #register(String)} 可以直接传入不带命名空间的材料名.
-	 * </p>
-	 *
-	 * @param namespace 命名空间(mod id)
-	 * @return 当前事件
-	 */
-	@Info("设置默认命名空间, 之后 create 可以只传材料名")
-	public RegisterMaterialEvent namespace(@Nullable String namespace) {
-		this.namespace = namespace;
-		return this;
 	}
 
 	/**
@@ -141,7 +142,6 @@ public class RegisterMaterialEvent extends Event {
 	 * @param tab 标签页 ID, 例如 {@code cmi:main} 或原版的 {@code minecraft:ingredients}
 	 * @return 当前事件
 	 */
-	@Info("设置本次材料默认放进的创造模式标签页, 例如 cmi:main")
 	public RegisterMaterialEvent setCreativeTab(ResourceLocation tab) {
 		creativeTab = tab;
 		return this;
@@ -153,7 +153,7 @@ public class RegisterMaterialEvent extends Event {
 	 * @param tab 标签页的 {@link ResourceKey}
 	 * @return 当前事件
 	 */
-	@Info("设置本次材料默认放进的创造模式标签页(ResourceKey)")
+	@RemapForJS("setCreativeKey")
 	public RegisterMaterialEvent setCreativeTab(ResourceKey<CreativeModeTab> tab) {
 		return setCreativeTab(tab.location());
 	}
@@ -164,7 +164,6 @@ public class RegisterMaterialEvent extends Event {
 	 * @param name 材料 ID, 可以是 {@code modid:name} 或者(设置了默认命名空间时) {@code name}
 	 * @return 材料定义
 	 */
-	@Info("创建一个材料, 名称可以是 modid:name")
 	public NebulaMaterial register(String name) {
 		return register(name, null);
 	}
@@ -176,7 +175,6 @@ public class RegisterMaterialEvent extends Event {
 	 * @param level 挖掘等级, 例如 {@link MiningLevels#IRON}
 	 * @return 材料定义
 	 */
-	@Info("创建一个材料, 第二个参数为挖掘等级, 例如 MiningLevels.IRON")
 	public NebulaMaterial register(String name, @Nullable IMiningLevel level) {
 		NebulaMaterial material = new NebulaMaterial(resolve(name));
 
