@@ -1,0 +1,19 @@
+{
+	"required": true,
+	"minVersion": "0.8",
+	"package": "dev.celestiacraft.libs.api.tab.mixin",
+	"compatibilityLevel": "JAVA_17",
+	"refmap": "nebula_libs.refmap.json",
+	"mixins": [
+		"CreativeModeTabAccessor",
+		"CreativeModeTabMixin"
+	],
+	"client": [
+		"client.CreativeModeInventoryScreenMixin",
+		"client.CustomCreativeSlotMixin",
+		"client.ItemPickerMenuMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

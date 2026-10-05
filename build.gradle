@@ -74,6 +74,7 @@ mixin {
 
 	config "${mod_id}.mixins.json"
 	config "${mod_id}.ftbquests.mixins.json"
+	config "${mod_id}.tab.mixins.json"
 }
 
 sourceSets.main.resources {

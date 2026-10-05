@@ -1,0 +1,186 @@
+package dev.celestiacraft.libs.api.tab.section;
+
+import dev.celestiacraft.libs.api.tab.creativetab.ConglomerateOfItems;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+
+/**
+ * 使用纯色横幅（背景色 + 边框色）渲染的分区。
+ *
+ * <p>
+ * 本类中的渲染实现与内部色彩计算方法属于内部 API，
+ * 仅供库内部使用，不保证对外兼容。
+ * </p>
+ *
+ * @since 4.0
+ */
+public class SectionColored extends AbstractSectionWithTitle<SectionColored> {
+	boolean collapsible = true;
+	int verticalSize = 162;
+	int horizontalSize = 18;
+	int offsetX = 0;
+	int offsetY = 0;
+	ConglomerateOfItems items = ConglomerateOfItems.create();
+	public int bannerColor = 0xFF45BB77;
+	public int bannerBorderColor = brighten(bannerColor, 0.2f);
+
+	public SectionColored create(ResourceLocation id) {
+		return new SectionColored(id);
+	}
+
+	public SectionColored(ResourceLocation id) {
+		super(id);
+	}
+
+	public SectionColored(
+			ResourceLocation id,
+			Component title,
+			int bannerColor,
+			int textColor,
+			int textOutline,
+			boolean textShadow,
+			boolean collapsible,
+			int verticalSize,
+			int horizontalSize,
+			ConglomerateOfItems items
+	) {
+		super(id);
+		this.title = title;
+		this.bannerColor = bannerColor;
+		this.textColor = textColor;
+		this.textOutline = textOutline;
+		this.textShadow = textShadow;
+		this.collapsible = collapsible;
+		this.verticalSize = verticalSize;
+		this.horizontalSize = horizontalSize;
+		this.items = items;
+	}
+
+	/**
+	 * @since 1.0
+	 */
+	public SectionColored(
+			ResourceLocation id,
+			Component title,
+			int bannerColor,
+			int textColor,
+			boolean textShadow,
+			boolean collapsible,
+			ConglomerateOfItems items
+	) {
+		this(
+				id,
+				title,
+				bannerColor,
+				textColor,
+				0x00000000,
+				textShadow,
+				collapsible,
+				162,
+				18,
+				items
+		);
+	}
+
+	/**
+	 * @since 1.0
+	 */
+	public SectionColored(ResourceLocation id, Component title, int bannerColor, int textColor, ConglomerateOfItems items) {
+		this(id, title, bannerColor, textColor, true, true, items);
+	}
+
+	private static int brighten(int argb, float amount) {
+		int a = (argb >> 24) & 0xFF;
+		int r = (argb >> 16) & 0xFF;
+		int g = (argb >> 8) & 0xFF;
+		int b = argb & 0xFF;
+		r = (int) (r + (255 - r) * amount);
+		g = (int) (g + (255 - g) * amount);
+		b = (int) (b + (255 - b) * amount);
+		return (a << 24) | (r << 16) | (g << 8) | b;
+	}
+
+	@Override
+	public void render(GuiGraphics guiGraphics, Font font, int topLeftX, int topLeftY) {
+		// 渲染边框
+		guiGraphics.fill(topLeftX + offsetX, topLeftY + offsetY, topLeftX + 162 - offsetX, topLeftY + 18 - offsetY, bannerBorderColor);
+
+		// 渲染纯色背景
+		guiGraphics.fill(topLeftX + offsetX + 1, topLeftY + offsetY + 1, topLeftX + 161 - offsetX, topLeftY + 17 - offsetY, bannerColor);
+
+		super.render(guiGraphics, font, topLeftX, topLeftY);
+	}
+
+	@Override
+	public ResourceLocation id() {
+		return super.id();
+	}
+
+	@Override
+	public ConglomerateOfItems items() {
+		return items;
+	}
+
+	public SectionColored setCollapsible(boolean collapsible) {
+		this.collapsible = collapsible;
+		return this;
+	}
+
+	public SectionColored setBannerColor(int bannerColor) {
+		this.bannerColor = bannerColor;
+		bannerBorderColor = brighten(bannerColor, 0.2f);
+		return this;
+	}
+
+	public SectionColored setVerticalSize(int verticalSize) {
+		this.verticalSize = verticalSize;
+		return this;
+	}
+
+	public SectionColored setHorizontalSize(int horizontalSize) {
+		this.horizontalSize = horizontalSize;
+		return this;
+	}
+
+	public SectionColored setItems(ConglomerateOfItems items) {
+		this.items = items;
+		return this;
+	}
+
+	/**
+	 * @since 5.0
+	 */
+	public SectionColored setBannerBorderColor(int bannerBorderColor) {
+		this.bannerBorderColor = bannerBorderColor;
+		return this;
+	}
+
+	/**
+	 * @since 5.0
+	 */
+	public SectionColored setOffsetX(int offsetX) {
+		this.offsetX = offsetX;
+		return this;
+	}
+
+	/**
+	 * @since 5.0
+	 */
+	public SectionColored setOffsetY(int offsety) {
+		offsetY = offsety;
+		return this;
+	}
+
+	/**
+	 * @since 5.0
+	 */
+	public SectionColored setTextureInsideRow() {
+		horizontalSize = 160;
+		verticalSize = 16;
+		offsetX = 1;
+		offsetY = 1;
+		return this;
+	}
+}

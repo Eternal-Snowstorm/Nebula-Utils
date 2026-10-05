@@ -20,6 +20,7 @@
 	"tip.structurally_valid": "Structurally valid",
 	"tip.structurally_invalid": "Structurally Invalid",
 	"config.jade.plugin_nebula_libs.common": "Common",
+	"nebula_libs.configuration.client.tab_configs.index_expanded": "Expanded Index",
 	"jei.category.nebula_libs.anvil_craft": "Anvil Craft",
 	"jei.category.anvil_craft.material_cost": "Material: %s",
 	"resourcePack.nebula_libs.material": "Nebula Libs Materials"

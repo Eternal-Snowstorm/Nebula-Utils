@@ -19,8 +19,9 @@ import dev.latvian.mods.kubejs.event.EventHandler;
  */
 public class NebulaEventJS {
 	private static final EventGroup GROUP;
-	public static final EventHandler JEI_ALIASES_EVENT;
-	public static final EventHandler REGISTER_MATERIAL_EVENT;
+	public static final EventHandler
+			JEI_ALIASES_EVENT,
+			REGISTER_MATERIAL_EVENT;
 
 	static {
 		GROUP = EventGroup.of("NebulaEvents");

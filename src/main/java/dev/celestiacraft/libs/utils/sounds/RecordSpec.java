@@ -1,4 +1,4 @@
-package dev.celestiacraft.libs.sounds;
+package dev.celestiacraft.libs.utils.sounds;
 
 import net.minecraft.sounds.SoundEvent;
 
