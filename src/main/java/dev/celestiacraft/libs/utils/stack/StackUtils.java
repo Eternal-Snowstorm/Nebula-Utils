@@ -1,4 +1,4 @@
-package dev.celestiacraft.libs.stack;
+package dev.celestiacraft.libs.utils.stack;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;

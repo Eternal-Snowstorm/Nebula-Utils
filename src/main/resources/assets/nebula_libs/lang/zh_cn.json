@@ -20,6 +20,7 @@
 	"tip.structurally_valid": "结构有效",
 	"tip.structurally_invalid": "结构无效",
 	"config.jade.plugin_nebula_libs.common": "Common",
+	"nebula_libs.configuration.client.tab_configs.index_expanded": "展开索引",
 	"jei.category.nebula_libs.anvil_craft": "铁砧合成",
 	"jei.category.anvil_craft.material_cost": "材料: %s",
 	"resourcePack.nebula_libs.material": "Nebula Libs材料包"

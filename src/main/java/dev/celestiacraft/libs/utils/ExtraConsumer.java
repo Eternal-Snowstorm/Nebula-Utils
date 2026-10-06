@@ -1,4 +1,4 @@
-package dev.celestiacraft.libs.api.utils;
+package dev.celestiacraft.libs.utils;
 
 import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
 import mezz.jei.api.recipe.IFocusGroup;

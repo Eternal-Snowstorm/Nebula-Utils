@@ -8,6 +8,7 @@ import dev.celestiacraft.libs.common.register.NebulaItem;
 import dev.celestiacraft.libs.common.register.NebulaRecipe;
 import dev.celestiacraft.libs.compat.ICheckModLoaded;
 import dev.celestiacraft.libs.compat.ftbquests.client.FTBQuestsClientCompat;
+import dev.celestiacraft.libs.config.ClientConfig;
 import dev.celestiacraft.libs.config.CommonConfig;
 import dev.celestiacraft.libs.debug.DebugUserManager;
 import dev.celestiacraft.libs.register.NebulaRegistrate;
@@ -67,6 +68,7 @@ public class NebulaLibs {
 
 	private static void registerConfig(FMLJavaModLoadingContext context) {
 		context.registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC, "nebula/libs/common.toml");
+		context.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC, "nebula/libs/client.toml");
 	}
 
 	/**

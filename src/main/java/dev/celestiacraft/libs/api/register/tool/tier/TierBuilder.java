@@ -62,7 +62,7 @@ public class TierBuilder {
 	}
 
 	public TierBuilder setSpeedModifier(float modifier) {
-		this.attackSpeedModifier = modifier;
+		attackSpeedModifier = modifier;
 		return this;
 	}
 
@@ -76,7 +76,7 @@ public class TierBuilder {
 	}
 
 	public TierBuilder setDamageModifier(int modifier) {
-		this.attackDamageModifier = modifier;
+		attackDamageModifier = modifier;
 		return this;
 	}
 
@@ -99,7 +99,7 @@ public class TierBuilder {
 	}
 
 	public TierBuilder setRepair(Supplier<Ingredient> supplier) {
-		this.repairIngredient = supplier;
+		repairIngredient = supplier;
 		return this;
 	}
 

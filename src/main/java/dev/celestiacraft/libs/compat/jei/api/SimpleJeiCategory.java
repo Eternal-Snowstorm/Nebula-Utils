@@ -1,6 +1,6 @@
 package dev.celestiacraft.libs.compat.jei.api;
 
-import dev.celestiacraft.libs.api.utils.ExtraConsumer;
+import dev.celestiacraft.libs.utils.ExtraConsumer;
 import dev.celestiacraft.libs.compat.jei.api.drawable.DoubleIcon;
 import dev.celestiacraft.libs.compat.jei.function.IDrawHandler;
 import dev.celestiacraft.libs.compat.jei.function.ITooltipHandler;
