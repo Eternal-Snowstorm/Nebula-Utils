@@ -1,0 +1,33 @@
+{
+  "nodes": [
+    {
+      "id": "dialogue-session:1o4bntu",
+      "type": "Decision",
+      "content": "dialogue-session session-6eb4650a-dc33-4fc6-835f-5f296007ff28 turns=1 tip=dialogue:1o4bntu:0001",
+      "metadata": {
+        "kind": "dialogue-session",
+        "record": "{\"id\":\"dialogue-session:1o4bntu\",\"name\":\"session-6eb4650a-dc33-4fc6-835f-5f296007ff28\",\"turnCount\":1,\"topicTokens\":[\"assistant\",\"fill\",\"reply\"],\"createdAt\":1791276513147,\"updatedAt\":1791276513147,\"tipTurnId\":\"dialogue:1o4bntu:0001\"}",
+        "name": "session-6eb4650a-dc33-4fc6-835f-5f296007ff28"
+      }
+    },
+    {
+      "id": "dialogue:1o4bntu:0001",
+      "type": "Decision",
+      "content": "dialogue-turn #1 Q: (assistant reply fill) | A: 改动已完成。 ## 新增：客户端专用类 [ClientTooltips.java](src/main/java/dev/celestiacraft/libs/api/client/tooltip/ClientTooltips.java) — 整体标注 `@OnlyIn(Dist.CLIENT)`，集中了原来散在两个物…",
+      "metadata": {
+        "kind": "dialogue-turn",
+        "record": "{\"id\":\"dialogue:1o4bntu:0001\",\"sessionId\":\"dialogue-session:1o4bntu\",\"seq\":1,\"userQuery\":\"(assistant reply fill)\",\"assistantReply\":\"改动已完成。 ## 新增：客户端专用类 [ClientTooltips.java](src/main/java/dev/celestiacraft/libs/api/client/tooltip/ClientTooltips.java) — 整体标注 `@OnlyIn(Dist.CLIENT)`，集中了原来散在两个物品类里的客户端逻辑：`Minecraft.getInstance().player` 与 `new TooltipContext(...)`，并提供两个 `render` 重载分别接收 `BasicItem` / `BasicBlockItem`（两者无继承关系，故各一个重载），共用一个私有实现。 ## 修改：两个物品类 [BasicItem.java](src/main/java/dev/celestiacraft/libs/api/register/item/BasicItem.java#L44-L50) 与 [BasicBlockItem.java](src/main/java/dev/celestiacraft/libs/api/register/block/BasicBlockItem.java#L46-L52) 的 `appendHoverText` 现在只保留一行： ```java DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientTooltips.render(this, stack, level, tooltip, flag)); ``` 原先的 `Minecraft.getInstance()` 调用与 `TooltipContext` 构造被移走，同时删除了 `net.minecraft.client.Minecraft`、`net.minecraft.world.entity.player.Player` 这两个客户端 import，新增 `Dist`、`DistExecutor`、`ClientTooltips`。 ## 为什么这样能修掉专用服务器崩溃 `unsafeRunWhenOn` 的字节码逻辑是先比较 `FMLEnvironment.dist`，**只有相等时才会执行 `supplier.get()`**（我用 `javap` 反汇编了 `fmlcore-1.20.1-47.4.0.jar` 里的 `DistExecutor` 确认过，签名是 `unsafeRunWhenOn(Dist, Supplier<Runnable>)`）。因此专用服务器上： - `Supplier.get()` 不会被调用 → 内层 Runnable 与其引用的 `ClientTooltips` 永不加载； - `Minecraft` / `TooltipContext` 也不会被触碰，Forge 的 dist cleaner 不会再抛 `NoClassDefFoundError`。 `addTooltips(TooltipContext)` 仍保留在 `BasicItem`/`BasicBlockItem` 上，签名不变，所以 [BasicEnergyItem.java](src/main/java/dev/celestiacraft/libs/api/register/item/energy/BasicEnergyItem.java#L47) 和 [ControllerBlockItem.java](src/main/java/dev/celestiacraft/libs/api/register/multiblock/ControllerBlockItem.java#L14) 这些既有覆写无需改动。 ## 两点说明 1. 按你的要求，**没有跑 Gradle 构建**。我曾尝试用 Gradle 校验，但沙箱禁止写 `C:\\\\Users\\\\35125\\\\.gradle`，申请放宽权限被你拒绝后即停止，不再绕过；随后做的临时 `javac` 检查也已放弃并清理（`.dsh-compile-check`、`.gradle-user-home` 均已删除，`git status` 只剩本次 3 处改动）。目前 `Dist` / `DistExecutor` 的包名与签名是对着真实 jar 反汇编确认的，import 写法与项目内已编译通过的 [GuiTextures.java](src/main/java/dev/celestiacraft/libs/client/assets/GuiTextures.java#L7-L8) 一致。 2. 顺手扫了一遍，`api` 包内还有同样隐患：`TooltipContext` 自身在方法体里调用 `Minecraft.getInstance()`（[TooltipContext.java:41](src/main/java/dev/celestiacraft/libs/api/client/context/TooltipContext.java#L41)、[TooltipContext.java:45](src/main/java/dev/celestiacraft/libs/api/client/context/TooltipContext.java#L45)）。现在它只在客户端 lambda 内被构造/使用，服务器不会再触发；如果你希望从类型层面也彻底隔离，可以再给它加上 `@OnlyIn(Dist.CLIENT)`，但那会影响 `addTooltips` 的签名引用，需要你确认后我再动。\",\"jumped\":false,\"relatedNodeIds\":[],\"createdAt\":1791276513147,\"updatedAt\":1791276513147,\"title\":\"(assistant reply fill)\",\"summary\":\"改动已完成\"}",
+        "seq": 1,
+        "sessionId": "dialogue-session:1o4bntu",
+        "jumped": false
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "dialogue:1o4bntu:0001",
+      "to": "dialogue-session:1o4bntu",
+      "relation": "part_of"
+    }
+  ]
+}
