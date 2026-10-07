@@ -19,7 +19,7 @@ import java.util.function.Function;
  *
  * @since 4.0
  */
-public class AbstractSectionWithTitle<T extends AbstractSectionWithTitle<T>> implements Section<T>, StickySection {
+public class AbstractSectionWithTitle<T extends AbstractSectionWithTitle<T>> implements ISection<T>, IStickySection {
 	final ResourceLocation id;
 	// Component.translatable("section." + id.getNamespace() + "." + id.getPath())
 	@Getter
@@ -127,7 +127,7 @@ public class AbstractSectionWithTitle<T extends AbstractSectionWithTitle<T>> imp
 	 */
 	@Override
 	public ItemStack icon() {
-		return displayItem == null ? Section.super.icon() : displayItem;
+		return displayItem == null ? ISection.super.icon() : displayItem;
 	}
 
 	/**
@@ -189,7 +189,7 @@ public class AbstractSectionWithTitle<T extends AbstractSectionWithTitle<T>> imp
 	}
 
 	/**
-	 * 每当该 Section 的 {@link Section#render(GuiGraphics, Font, int, int)} 被调用时执行代码.
+	 * 每当该 Section 的 {@link ISection#render(GuiGraphics, Font, int, int)} 被调用时执行代码.
 	 *
 	 * @since 5.0
 	 */
@@ -199,7 +199,7 @@ public class AbstractSectionWithTitle<T extends AbstractSectionWithTitle<T>> imp
 	}
 
 	/**
-	 * 设置一个消费者, 在该 Section 的 {@link Section#render(GuiGraphics, Font, int, int)} 开始时运行.
+	 * 设置一个消费者, 在该 Section 的 {@link ISection#render(GuiGraphics, Font, int, int)} 开始时运行.
 	 *
 	 * @since 6.0
 	 */

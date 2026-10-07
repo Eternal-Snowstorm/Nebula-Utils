@@ -3,8 +3,8 @@ package dev.celestiacraft.libs.api.tab;
 import dev.celestiacraft.libs.NebulaLibs;
 import dev.celestiacraft.libs.api.tab.creativetab.BannerRenderer;
 import dev.celestiacraft.libs.api.tab.mixin.CreativeModeTabAccessor;
-import dev.celestiacraft.libs.api.tab.section.Section;
-import dev.celestiacraft.libs.api.tab.section.StickySection;
+import dev.celestiacraft.libs.api.tab.section.ISection;
+import dev.celestiacraft.libs.api.tab.section.IStickySection;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.RegistryAccess;
@@ -41,14 +41,14 @@ public class FTSInternal {
 	 */
 	public static void applyItems(CreativeModeTab tab) {
 		List<ItemStack> stacksToDisplay = new ArrayList<>();
-		List<Section<?>> sections = FancyTabSections.getSections(tab);
+		List<ISection<?>> sections = FancyTabSections.getSections(tab);
 
 		// 若标签页不包含任何分节, 直接结束流程
 		if (sections.isEmpty()) {
 			return;
 		}
 
-		for (Section<?> section : sections) {
+		for (ISection<?> section : sections) {
 			// 为横幅补充一个空行
 			for (int i = 0; i < 9; i++) {
 				stacksToDisplay.add(ItemStack.EMPTY);
@@ -102,7 +102,7 @@ public class FTSInternal {
 		// 遍历每个已注册的标签页
 		FancyTabSections.REGISTERED_TABS.forEach((location, sections) -> {
 			// 遍历该标签页下的每个分节
-			for (Section<?> section : sections) {
+			for (ISection<?> section : sections) {
 				// 从物品集合中解析出物品栈
 				section.items().resolveStacks(access);
 			}
@@ -113,18 +113,18 @@ public class FTSInternal {
 	 * @return 请求的分节所在的行号；若在任何已注册标签页中都找不到该分节则返回 -1
 	 * @since 4.0
 	 */
-	public static int getRowForSection(Section<?> section) {
+	public static int getRowForSection(ISection<?> section) {
 		// 遍历已注册标签页中的每个分节列表
-		for (List<Section<?>> list : FancyTabSections.REGISTERED_TABS.values()) {
+		for (List<ISection<?>> list : FancyTabSections.REGISTERED_TABS.values()) {
 			if (list.contains(section)) {
 				int currentRow = 0;
-				for (Section<?> sectionBeingChecked : list) {
+				for (ISection<?> sectionBeingChecked : list) {
 					// 若当前检查的分节就是请求的分节
 					if (sectionBeingChecked == section) {
 						int contentRows = isCollapsed(sectionBeingChecked) ? 0 : (sectionBeingChecked.items().getStacks().size() - 1) / 9 + 1;
 						int sectionEnd = currentRow + contentRows;
 
-						if (sectionBeingChecked instanceof StickySection sticky
+						if (sectionBeingChecked instanceof IStickySection sticky
 								&& sticky.isSticky()
 								&& BannerRenderer.CURRENT_ROW >= currentRow
 								&& BannerRenderer.CURRENT_ROW <= sectionEnd
@@ -153,13 +153,13 @@ public class FTSInternal {
 	 *
 	 * @since 4.0
 	 */
-	public static final Set<Section<?>> COLLAPSED = new HashSet<>();
+	public static final Set<ISection<?>> COLLAPSED = new HashSet<>();
 
 	/**
 	 * @return 请求的分节是否已折叠
 	 * @since 4.0
 	 */
-	public static boolean isCollapsed(Section<?> section) {
+	public static boolean isCollapsed(ISection<?> section) {
 		return COLLAPSED.stream().anyMatch((section1) -> {
 			return section1.equals(section);
 		});
@@ -170,7 +170,7 @@ public class FTSInternal {
 	 *
 	 * @since 4.0
 	 */
-	public static void toggle(Section<?> section) {
+	public static void toggle(ISection<?> section) {
 		if (FTSInternal.isCollapsed(section)) {
 			expand(section, true);
 		} else {
@@ -183,7 +183,7 @@ public class FTSInternal {
 	 *
 	 * @since 4.0
 	 */
-	public static void collapse(Section<?> section, boolean playSound) {
+	public static void collapse(ISection<?> section, boolean playSound) {
 		FTSInternal.COLLAPSED.add(section);
 
 		if (FMLEnvironment.dist.isClient() && playSound) {
@@ -196,7 +196,7 @@ public class FTSInternal {
 	 *
 	 * @since 4.0
 	 */
-	public static void expand(Section<?> section, boolean playSound) {
+	public static void expand(ISection<?> section, boolean playSound) {
 		FTSInternal.COLLAPSED.removeIf((section1) -> {
 			return section1.equals(section);
 		});
@@ -211,12 +211,12 @@ public class FTSInternal {
 	 * @since 4.0
 	 */
 	public static boolean isBannerRow(ResourceLocation tab, int row) {
-		List<Section<?>> sections = FancyTabSections.REGISTERED_TABS.get(tab);
+		List<ISection<?>> sections = FancyTabSections.REGISTERED_TABS.get(tab);
 		if (sections == null) {
 			return false;
 		}
 
-		for (Section<?> section : sections) {
+		for (ISection<?> section : sections) {
 			if (getRowForSection(section) == row) return true;
 		}
 		return false;
@@ -245,13 +245,13 @@ public class FTSInternal {
 		}
 	}
 
-	public static Supplier<CreativeModeTab> registerTab(IEventBus bus, ResourceLocation location, Supplier<ItemStack> items) {
+	public static Supplier<CreativeModeTab> registerTab(IEventBus bus, ResourceLocation location, Supplier<ItemStack> icon) {
 		DeferredRegister<CreativeModeTab> deferredRegister =
 				DeferredRegister.create(Registries.CREATIVE_MODE_TAB, location.getNamespace());
 
 		Supplier<CreativeModeTab> tab = deferredRegister.register(location.getPath(), () -> {
 			return CreativeModeTab.builder()
-					.icon(items)
+					.icon(icon)
 					.title(Component.translatable("itemGroup." + location.getNamespace() + "." + location.getPath()))
 					.displayItems((params, output) -> {
 						output.accept(Items.BARRIER);

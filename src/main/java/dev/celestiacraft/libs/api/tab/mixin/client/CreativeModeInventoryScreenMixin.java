@@ -4,7 +4,7 @@ import dev.celestiacraft.libs.api.tab.FTSInternal;
 import dev.celestiacraft.libs.api.tab.FancyTabSections;
 import dev.celestiacraft.libs.api.tab.creativetab.BannerRenderer;
 import dev.celestiacraft.libs.api.tab.creativetab.IndexPanel;
-import dev.celestiacraft.libs.api.tab.section.Section;
+import dev.celestiacraft.libs.api.tab.section.ISection;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
@@ -49,7 +49,7 @@ public abstract class CreativeModeInventoryScreenMixin {
 		}
 
 		if (FancyTabSections.REGISTERED_TABS.containsKey(tab)) {
-			List<Section<?>> sections = FancyTabSections.REGISTERED_TABS.get(tab);
+			List<ISection<?>> sections = FancyTabSections.REGISTERED_TABS.get(tab);
 
 			BannerRenderer.render(self, graphics, sections, mouseX, mouseY);
 
@@ -76,7 +76,7 @@ public abstract class CreativeModeInventoryScreenMixin {
 			return;
 		}
 
-		List<Section<?>> sections = FancyTabSections.REGISTERED_TABS.get(tab);
+		List<ISection<?>> sections = FancyTabSections.REGISTERED_TABS.get(tab);
 
 		if (IndexPanel.mouseClicked(self, sections, scrollOffs, mouseX, mouseY, button)) {
 			returnable.setReturnValue(true);
@@ -93,19 +93,19 @@ public abstract class CreativeModeInventoryScreenMixin {
 
 		if (!self.getMenu().getCarried().isEmpty()) return;
 
-		for (Section<?> section : sections) {
+		for (ISection<?> section : sections) {
 			if (section.collapsible() && BannerRenderer.isInToggle(self, section, mouseX, mouseY)) {
 				// 切换全部
 				if (Screen.hasShiftDown()) {
 					if (FTSInternal.isCollapsed(section)) {
 						sections.stream()
-								.filter(Section::collapsible)
+								.filter(ISection::collapsible)
 								.forEach((section1) -> {
 									FTSInternal.expand(section1, section1.equals(section));
 								});
 					} else {
 						sections.stream()
-								.filter(Section::collapsible)
+								.filter(ISection::collapsible)
 								.forEach((section1) -> {
 									FTSInternal.collapse(section1, section1.equals(section));
 								});
@@ -134,14 +134,14 @@ public abstract class CreativeModeInventoryScreenMixin {
 			index = 2)
 	private int nebula$shiftTitleForIndexPanel(int x) {
 		ResourceLocation tab = BuiltInRegistries.CREATIVE_MODE_TAB.getKey(selectedTab);
-		List<Section<?>> sections = FancyTabSections.REGISTERED_TABS.get(tab);
+		List<ISection<?>> sections = FancyTabSections.REGISTERED_TABS.get(tab);
 		return IndexPanel.active(sections) ? IndexPanel.titleX() : x;
 	}
 
 	@Inject(method = "mouseScrolled", at = @At("HEAD"), cancellable = true)
 	private void nebula$indexPanelScroll(double mouseX, double mouseY, double delta, CallbackInfoReturnable<Boolean> cir) {
 		ResourceLocation tab = BuiltInRegistries.CREATIVE_MODE_TAB.getKey(selectedTab);
-		List<Section<?>> sections = FancyTabSections.REGISTERED_TABS.get(tab);
+		List<ISection<?>> sections = FancyTabSections.REGISTERED_TABS.get(tab);
 		if (sections == null) {
 			return;
 		}

@@ -26,7 +26,7 @@ import java.util.function.Supplier;
  *
  * @since 3.0
  */
-public interface Section<T extends Section<T>> {
+public interface ISection<T extends ISection<T>> {
 	ResourceLocation id();
 
 	default boolean collapsible() {
@@ -34,7 +34,7 @@ public interface Section<T extends Section<T>> {
 	}
 
 	/**
-	 * 让需要人类可读标签的功能(例如跳转列表)能够适用于任意 Section 实现, 
+	 * 让需要人类可读标签的功能(例如跳转列表)能够适用于任意 Section 实现,
 	 * 而无需知道其具体类型.
 	 *
 	 * @return 该分区的显示标题, 若没有则返回 null.
@@ -130,7 +130,7 @@ public interface Section<T extends Section<T>> {
 	 *
 	 * @since 4.0
 	 */
-	default void renderToggle(CreativeModeInventoryScreen screen, GuiGraphics graphics, Section<?> section, int x, int y, int w, int bannerWidth, int mouseX, int mouseY, boolean isHoveringAny) {
+	default void renderToggle(CreativeModeInventoryScreen screen, GuiGraphics graphics, ISection<?> section, int x, int y, int w, int bannerWidth, int mouseX, int mouseY, boolean isHoveringAny) {
 		if (!section.collapsible()) {
 			return;
 		}

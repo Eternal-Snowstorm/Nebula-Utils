@@ -3,7 +3,7 @@ package dev.celestiacraft.libs.api.tab.creativetab;
 import dev.celestiacraft.libs.NebulaLibs;
 import dev.celestiacraft.libs.api.tab.FTSInternal;
 import dev.celestiacraft.libs.api.tab.FancyTabSections;
-import dev.celestiacraft.libs.api.tab.section.Section;
+import dev.celestiacraft.libs.api.tab.section.ISection;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -42,13 +42,13 @@ public class BannerRenderer {
 	public static final ResourceLocation COLLAPSED_BUTTON = NebulaLibs.loadResource("textures/gui/collapse_button/collapsed_button.png");
 	public static final ResourceLocation COLLAPSED_BUTTON_HIGHLIGHT = NebulaLibs.loadResource("textures/gui/collapse_button/collapsed_button_highlight.png");
 
-	public static void render(CreativeModeInventoryScreen screen, GuiGraphics guiGraphics, List<Section<?>> sections, int mouseX, int mouseY) {
+	public static void render(CreativeModeInventoryScreen screen, GuiGraphics guiGraphics, List<ISection<?>> sections, int mouseX, int mouseY) {
 		int topLeftX = screen.getGuiLeft() + 8;
 		int top = screen.getGuiTop() + 17;
 
 		Font font = Minecraft.getInstance().font;
 
-		for (Section<?> section : sections) {
+		for (ISection<?> section : sections) {
 			int sectionRow = FTSInternal.getRowForSection(section);
 			if (sectionRow == -1) continue;
 
@@ -65,9 +65,9 @@ public class BannerRenderer {
 	}
 
 	/**
-	 * @return 给定的屏幕坐标是否落在可折叠 {@link Section} 的(可见的)折叠控件内
+	 * @return 给定的屏幕坐标是否落在可折叠 {@link ISection} 的(可见的)折叠控件内
 	 */
-	public static boolean isInToggle(CreativeModeInventoryScreen screen, Section section, double mouseX, double mouseY) {
+	public static boolean isInToggle(CreativeModeInventoryScreen screen, ISection section, double mouseX, double mouseY) {
 		if (!section.collapsible()) return false;
 
 		int sectionRow = FTSInternal.getRowForSection(section);
@@ -93,9 +93,9 @@ public class BannerRenderer {
 	 * @since 5.0
 	 */
 	public static boolean isInBanner(CreativeModeInventoryScreen screen, double mouseX, double mouseY) {
-		List<Section<?>> list = FancyTabSections.REGISTERED_TABS.getOrDefault(BannerRenderer.CURRENT_TAB, List.of());
+		List<ISection<?>> list = FancyTabSections.REGISTERED_TABS.getOrDefault(BannerRenderer.CURRENT_TAB, List.of());
 
-		for (Section<?> section : list) {
+		for (ISection<?> section : list) {
 			int sectionRow = FTSInternal.getRowForSection(section);
 			if (sectionRow == -1) continue;
 

@@ -2,7 +2,7 @@ package dev.celestiacraft.libs.api.tab.creativetab;
 
 import dev.celestiacraft.libs.NebulaLibs;
 import dev.celestiacraft.libs.api.tab.FTSInternal;
-import dev.celestiacraft.libs.api.tab.section.Section;
+import dev.celestiacraft.libs.api.tab.section.ISection;
 import dev.celestiacraft.libs.config.common.FTSConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -15,8 +15,8 @@ import net.minecraft.world.item.ItemStack;
 import java.util.List;
 
 /**
- * 创造模式物品栏界面左边缘的可折叠跳转列表, 
- * 为当前选中标签页的每个已注册 {@link Section} 显示一个图标.点击
+ * 创造模式物品栏界面左边缘的可折叠跳转列表,
+ * 为当前选中标签页的每个已注册 {@link ISection} 显示一个图标.点击
  * 图标会平滑滚动网格, 使该分区的横幅停靠在顶部.
  *
  * @since 6.0
@@ -51,7 +51,7 @@ public final class IndexPanel {
 	private static float animFrom;
 	private static float animTo;
 
-	public static boolean active(List<Section<?>> sections) {
+	public static boolean active(List<ISection<?>> sections) {
 		return sections != null && !sections.isEmpty();
 	}
 
@@ -116,7 +116,7 @@ public final class IndexPanel {
 		animStart = -1;
 	}
 
-	private static void jumpTo(CreativeModeInventoryScreen screen, Section<?> section, float currentScrollOffs) {
+	private static void jumpTo(CreativeModeInventoryScreen screen, ISection<?> section, float currentScrollOffs) {
 		int row = FTSInternal.getRowForSection(section);
 		if (row == -1) return;
 
@@ -129,7 +129,7 @@ public final class IndexPanel {
 		animStart = System.currentTimeMillis();
 	}
 
-	public static void render(CreativeModeInventoryScreen screen, GuiGraphics g, List<Section<?>> sections, int mouseX, int mouseY) {
+	public static void render(CreativeModeInventoryScreen screen, GuiGraphics g, List<ISection<?>> sections, int mouseX, int mouseY) {
 		drawToggle(screen, g, mouseX, mouseY);
 
 		if (!FTSConfig.INDEX_EXPANDED.get() || sections.isEmpty()) return;
@@ -181,7 +181,7 @@ public final class IndexPanel {
 				);
 			}
 
-			Section<?> section = sections.get(sectionIndex);
+			ISection<?> section = sections.get(sectionIndex);
 			ItemStack icon = section.icon();
 
 			g.renderItem(icon, ix + 1, iy + 1);
@@ -206,7 +206,7 @@ public final class IndexPanel {
 		}
 	}
 
-	public static boolean mouseClicked(CreativeModeInventoryScreen screen, List<Section<?>> sections, float scrollOffs, double mouseX, double mouseY, int button) {
+	public static boolean mouseClicked(CreativeModeInventoryScreen screen, List<ISection<?>> sections, float scrollOffs, double mouseX, double mouseY, int button) {
 		if (button != 0) return false;
 
 		int tx = toggleX(screen);
@@ -244,7 +244,7 @@ public final class IndexPanel {
 		return true;
 	}
 
-	public static boolean mouseScrolled(CreativeModeInventoryScreen screen, List<Section<?>> sections, double mouseX, double mouseY, double scrollY) {
+	public static boolean mouseScrolled(CreativeModeInventoryScreen screen, List<ISection<?>> sections, double mouseX, double mouseY, double scrollY) {
 		if (!FTSConfig.INDEX_EXPANDED.get() || sections.isEmpty()) {
 			cancelAnim();
 			return false;
