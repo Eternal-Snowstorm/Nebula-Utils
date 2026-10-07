@@ -83,15 +83,15 @@ import java.util.function.Consumer;
 @Mod.EventBusSubscriber(modid = NebulaLibs.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class TickScheduler {
 	/**
-	 * 当前等待执行的 Tick 任务列表。
+	 * 当前等待执行的 Tick 任务列表.
 	 */
 	private static final List<TickTask> TASKS = new LinkedList<>();
 
 	/**
-	 * 注册一个普通延迟任务。
+	 * 注册一个普通延迟任务.
 	 *
 	 * <p>
-	 * 该任务将在指定 Tick 数之后执行。
+	 * 该任务将在指定 Tick 数之后执行.
 	 * </p>
 	 *
 	 * <pre>{@code
@@ -109,10 +109,10 @@ public class TickScheduler {
 	}
 
 	/**
-	 * 注册一个服务器延迟任务。
+	 * 注册一个服务器延迟任务.
 	 *
 	 * <p>
-	 * 任务执行时会传入 MinecraftServer 实例。
+	 * 任务执行时会传入 MinecraftServer 实例.
 	 * </p>
 	 *
 	 * <pre>{@code
@@ -131,10 +131,10 @@ public class TickScheduler {
 	}
 
 	/**
-	 * 注册一个玩家延迟任务。
+	 * 注册一个玩家延迟任务.
 	 *
 	 * <p>
-	 * 任务执行时会传入 ServerPlayer 实例。
+	 * 任务执行时会传入 ServerPlayer 实例.
 	 * </p>
 	 * <pre>{@code
 	 * TickScheduler.schedulePlayer(player, 60, p -> {
@@ -152,7 +152,7 @@ public class TickScheduler {
 	}
 
 	/**
-	 * 服务器 Tick 事件处理器。
+	 * 服务器 Tick 事件处理器.
 	 *
 	 * <p>
 	 * 每个服务器 Tick 执行一次:

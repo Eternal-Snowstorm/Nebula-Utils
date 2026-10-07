@@ -518,12 +518,12 @@ public class StructureExportScreen extends Screen {
 			}
 		}
 
-		// 先让控件处理点击（输入框、按钮等）
+		// 先让控件处理点击(输入框、按钮等)
 		if (super.mouseClicked(mouseX, mouseY, button)) {
 			return true;
 		}
 
-		// 没有控件处理时，才启动预览区域拖拽
+		// 没有控件处理时, 才启动预览区域拖拽
 		if (button == 0 && mouseY > 35 && mouseY < this.height - 40) {
 			dragging = true;
 			return true;

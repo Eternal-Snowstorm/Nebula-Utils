@@ -7,10 +7,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
 /**
- * NebulaLibs 模组的语言工具类, 基于 Create 的 {@link CreateLang} 和 {@link LangBuilder} 。
+ * NebulaLibs 模组的语言工具类, 基于 Create 的 {@link CreateLang} 和 {@link LangBuilder} .
  * <p>
- * 提供便捷的方法来创建本地化文本组件, 自动添加 {@code nebula.} 命名空间前缀。
- * 支持动态参数替换({@code %s}、{@code %d} 等格式化占位符)。
+ * 提供便捷的方法来创建本地化文本组件, 自动添加 {@code nebula.} 命名空间前缀.
+ * 支持动态参数替换({@code %s}、{@code %d} 等格式化占位符).
  *
  * <h2>使用示例</h2>
  * <pre>{@code
@@ -47,10 +47,10 @@ public class NebulaLang {
 	}
 
 	/**
-	 * 翻译指定的语言键并返回 {@link LangBuilder}, 支持动态参数。
+	 * 翻译指定的语言键并返回 {@link LangBuilder}, 支持动态参数.
 	 * <p>
-	 * 自动添加 {@code nebula.} 前缀到语言键。例如, 传入 {@code "tooltip.example"}
-	 * 会查找 {@code "nebula.tooltip.example"} 键。
+	 * 自动添加 {@code nebula.} 前缀到语言键.例如, 传入 {@code "tooltip.example"}
+	 * 会查找 {@code "nebula.tooltip.example"} 键.
 	 *
 	 * @param langKey 语言键(不含 {@code nebula.} 前缀)
 	 * @param args    格式化参数, 用于替换翻译文本中的占位符(如 {@code %s})

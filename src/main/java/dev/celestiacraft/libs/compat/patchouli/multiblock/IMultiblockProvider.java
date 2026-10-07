@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
  *
  * <p>
  * 用于标记一个 BlockEntity 拥有多方块结构能力.
- * 通过组合持有 {@link MultiblockHandler}，
+ * 通过组合持有 {@link MultiblockHandler}, 
  * 统一暴露结构验证和全息预览切换逻辑.
  * </p>
  *
@@ -106,7 +106,7 @@ public interface IMultiblockProvider {
 	 *
 	 * <p>
 	 * 默认委托给 MultiblockHandler.isValid().
-	 * 该方法带 tick 缓存，避免频繁验证.
+	 * 该方法带 tick 缓存, 避免频繁验证.
 	 * </p>
 	 *
 	 * @return true 如果结构完整

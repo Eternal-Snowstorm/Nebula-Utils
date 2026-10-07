@@ -67,8 +67,8 @@ public class PropertyImmutableMap {
 	/**
 	 * 添加一个类型严格匹配的属性-值对
 	 *
-	 * @param property 方块属性（泛型类型T）
-	 * @param value    对应的值（必须是T类型的实例）
+	 * @param property 方块属性(泛型类型T)
+	 * @param value    对应的值(必须是T类型的实例)
 	 * @param <T>      属性值的类型, 必须实现Comparable
 	 * @return 构建器自身, 支持链式调用
 	 */

@@ -14,12 +14,12 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * <p>
- * 该对象用于在构件行为触发时传递运行环境信息。
+ * 该对象用于在构件行为触发时传递运行环境信息.
  * </p>
  *
  * <p>
- * Context 会根据不同的触发事件填充不同字段，
- * 因此部分字段可能为 {@code null}。
+ * Context 会根据不同的触发事件填充不同字段, 
+ * 因此部分字段可能为 {@code null}.
  * </p>
  */
 public class CuriosContext {

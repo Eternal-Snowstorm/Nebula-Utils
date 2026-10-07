@@ -130,7 +130,7 @@ public class VirtualBlockLevel extends WrappedLevel {
 	}
 
 	/**
-	 * 过滤来自 MultipartEntity 子部件的幽灵实体。
+	 * 过滤来自 MultipartEntity 子部件的幽灵实体.
 	 */
 	private static List<StructureScene.EntityInfo> filterMultipartGhosts(List<StructureScene.EntityInfo> infos) {
 		Map<String, List<StructureScene.EntityInfo>> byType = new LinkedHashMap<>();

@@ -15,9 +15,9 @@ import net.minecraft.world.item.ItemStack;
 import java.util.List;
 
 /**
- * 创造模式物品栏界面左边缘的可折叠跳转列表，
- * 为当前选中标签页的每个已注册 {@link Section} 显示一个图标。点击
- * 图标会平滑滚动网格，使该分区的横幅停靠在顶部。
+ * 创造模式物品栏界面左边缘的可折叠跳转列表, 
+ * 为当前选中标签页的每个已注册 {@link Section} 显示一个图标.点击
+ * 图标会平滑滚动网格, 使该分区的横幅停靠在顶部.
  *
  * @since 6.0
  */
@@ -64,8 +64,8 @@ public final class IndexPanel {
 	}
 
 	/**
-	 * @return 当本面板的折叠开关显示时，标签页标题为了避免与它重叠而需要偏移的 X 量
-	 * (相对于 guiLeft)。通过挂钩 renderLabels 的 mixin 生效。
+	 * @return 当本面板的折叠开关显示时, 标签页标题为了避免与它重叠而需要偏移的 X 量
+	 * (相对于 guiLeft).通过挂钩 renderLabels 的 mixin 生效.
 	 */
 	public static int titleX() {
 		return TOGGLE_LEFT + TOGGLE_SIZE + TOGGLE_TEXT_GAP;
@@ -95,9 +95,9 @@ public final class IndexPanel {
 	}
 
 	/**
-	 * 推进进行中的跳转至分区动画。
+	 * 推进进行中的跳转至分区动画.
 	 *
-	 * @return 本帧需要应用的滚动比例(0..1)，若无内容需要应用则返回 -1
+	 * @return 本帧需要应用的滚动比例(0..1), 若无内容需要应用则返回 -1
 	 */
 	public static float tick() {
 		if (animStart < 0) return -1f;

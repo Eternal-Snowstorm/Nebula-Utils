@@ -16,8 +16,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 /**
- * 创造模式物品栏分节（Section）的注册入口，
- * 负责把分节挂到指定的创造模式标签页上。
+ * 创造模式物品栏分节(Section)的注册入口,
+ * 负责把分节挂到指定的创造模式标签页上.
  */
 public class FancyTabSections {
 	public static final Map<ResourceLocation, List<Section<?>>> REGISTERED_TABS = new ConcurrentHashMap<>();
@@ -35,7 +35,6 @@ public class FancyTabSections {
 
 	/**
 	 * @return 已注册的分节列表；若请求的创造模式标签页没有任何分节则返回空列表
-	 *
 	 * @since 4.0
 	 */
 	public static List<Section<?>> getSections(CreativeModeTab tab) {
@@ -45,12 +44,11 @@ public class FancyTabSections {
 	}
 
 	/**
-	 * 使用给定的 ResourceLocation 注册一个创造模式标签页。
+	 * 使用给定的 ResourceLocation 注册一个创造模式标签页.
 	 * 标签页标题会被设置为 `itemGroup.[namespace].[path]`
 	 *
-	 * @param location 标签页的 ResourceLocation
-	 * @param displayItem      显示在标签页图标上的 ItemStack
-	 *
+	 * @param location    标签页的 ResourceLocation
+	 * @param displayItem 显示在标签页图标上的 ItemStack
 	 * @since 5.0
 	 */
 	public static Supplier<CreativeModeTab> registerCreativeModeTab(IEventBus bus, ResourceLocation location, Supplier<ItemStack> displayItem) {
@@ -58,12 +56,11 @@ public class FancyTabSections {
 	}
 
 	/**
-	 * 使用给定的 ResourceLocation 注册一个创造模式标签页。
+	 * 使用给定的 ResourceLocation 注册一个创造模式标签页.
 	 * 标签页标题会被设置为 `itemGroup.[namespace].[path]`
 	 *
-	 * @param location 标签页的 ResourceLocation
-	 * @param displayItem      显示在标签页图标上的 Item
-	 *
+	 * @param location    标签页的 ResourceLocation
+	 * @param displayItem 显示在标签页图标上的 Item
 	 * @since 5.0
 	 */
 	public static Supplier<CreativeModeTab> registerCreativeModeTab(IEventBus bus, ResourceLocation location, Item displayItem) {
@@ -71,12 +68,11 @@ public class FancyTabSections {
 	}
 
 	/**
-	 * 使用给定的 ResourceLocation 注册一个创造模式标签页。
+	 * 使用给定的 ResourceLocation 注册一个创造模式标签页.
 	 * 标签页标题会被设置为 `itemGroup.[namespace].[path]`
 	 *
-	 * @param location 标签页的 ResourceLocation
-	 * @param displayItem      显示在标签页图标上的 Item
-	 *
+	 * @param location    标签页的 ResourceLocation
+	 * @param displayItem 显示在标签页图标上的 Item
 	 * @since 5.0
 	 */
 	public static Supplier<CreativeModeTab> registerCreativeModeTab(IEventBus bus, ResourceLocation location, RegistryObject<Item> displayItem) {
@@ -86,8 +82,7 @@ public class FancyTabSections {
 	}
 
 	/**
-	 * @return 已注册的分节，若未找到任何匹配项则返回 null
-	 *
+	 * @return 已注册的分节, 若未找到任何匹配项则返回 null
 	 * @since 4.0
 	 */
 	public static Section<?> getSection(ResourceLocation id) {

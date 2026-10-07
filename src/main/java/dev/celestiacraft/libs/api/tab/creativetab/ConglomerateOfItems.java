@@ -79,7 +79,7 @@ public class ConglomerateOfItems {
 	}
 
 	/**
-	 * 向聚合体中添加一个物品。
+	 * 向聚合体中添加一个物品.
 	 * 该物品之后会通过 {@link Item#getDefaultInstance()}} 解析为 ItemStack
 	 *
 	 * @since 2.0
@@ -90,8 +90,8 @@ public class ConglomerateOfItems {
 	}
 
 	/**
-	 * 向聚合体中添加一个 ItemStack。
-	 * 该 ItemStack 不会被解析，而是直接传入。
+	 * 向聚合体中添加一个 ItemStack.
+	 * 该 ItemStack 不会被解析, 而是直接传入.
 	 *
 	 * @since 2.0
 	 */
@@ -101,8 +101,8 @@ public class ConglomerateOfItems {
 	}
 
 	/**
-	 * 向聚合体中添加一个 {@link RegistryObject}。
-	 * 即使在注册发生之前也可以调用。
+	 * 向聚合体中添加一个 {@link RegistryObject}.
+	 * 即使在注册发生之前也可以调用.
 	 * 该 RegistryObject 之后会通过 {@link RegistryObject#get()} 解析为 ItemStack
 	 *
 	 * @since 2.0
@@ -113,7 +113,7 @@ public class ConglomerateOfItems {
 	}
 
 	/**
-	 * 向聚合体中添加一个 {@link ItemLike}。
+	 * 向聚合体中添加一个 {@link ItemLike}.
 	 * 该 ItemLike 之后会通过 {@link ItemLike#asItem()} 与 {@link Item#getDefaultInstance()} 解析为 ItemStack
 	 *
 	 * @since 2.0
@@ -124,8 +124,8 @@ public class ConglomerateOfItems {
 	}
 
 	/**
-	 * 向聚合体中添加一个 ItemStack 的 Supplier。
-	 * 该 Supplier 之后会被解析，并添加其中的 ItemStack
+	 * 向聚合体中添加一个 ItemStack 的 Supplier.
+	 * 该 Supplier 之后会被解析, 并添加其中的 ItemStack
 	 *
 	 * @since 2.0
 	 */
@@ -135,7 +135,7 @@ public class ConglomerateOfItems {
 	}
 
 	/**
-	 * 向聚合体中添加一个 ItemStack 列表。
+	 * 向聚合体中添加一个 ItemStack 列表.
 	 *
 	 * @since 4.0
 	 */
@@ -145,9 +145,9 @@ public class ConglomerateOfItems {
 	}
 
 	/**
-	 * 向聚合体中添加一个 RegistryDependentEntry。
+	 * 向聚合体中添加一个 RegistryDependentEntry.
 	 * 该条目持有 {@link RegistryAccess}
-	 * 之后会被解析，添加它返回的所有 ItemStack
+	 * 之后会被解析, 添加它返回的所有 ItemStack
 	 *
 	 * @since 4.0
 	 */
@@ -157,7 +157,7 @@ public class ConglomerateOfItems {
 	}
 
 	/**
-	 * 可在解析阶段访问 {@link RegistryAccess}，并返回一组 ItemStack 的条目
+	 * 可在解析阶段访问 {@link RegistryAccess}, 并返回一组 ItemStack 的条目
 	 *
 	 * @since 4.0
 	 */

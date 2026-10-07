@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * 在滚动创造模式物品栏时同步记录当前行号，供横幅渲染定位使用。
+ * 在滚动创造模式物品栏时同步记录当前行号, 供横幅渲染定位使用.
  */
 @Mixin(CreativeModeInventoryScreen.ItemPickerMenu.class)
 public abstract class ItemPickerMenuMixin {

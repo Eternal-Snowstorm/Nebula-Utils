@@ -7,7 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 /**
- * 使用序列帧纹理横幅渲染的分区，按固定帧间隔循环播放动画。
+ * 使用序列帧纹理横幅渲染的分区, 按固定帧间隔循环播放动画.
  *
  * @since 3.0
  */
@@ -36,7 +36,7 @@ public class SectionAnimatedTextured extends SectionTextured {
 	}
 
 	/**
-	 * 使用该构建器时，纹理必须放置在 [namespace]:textures/gui/fancy_tab_section/[path].png
+	 * 使用该构建器时, 纹理必须放置在 [namespace]:textures/gui/fancy_tab_section/[path].png
 	 *
 	 * @since 3.0
 	 */

@@ -186,12 +186,12 @@ public abstract class ControllerBlockEntity extends BasicBlockEntity implements 
 	/**
 	 * 获取该结构所属的 modid
 	 *
-	 * @return modid（如 "cmi"）
+	 * @return modid(如 "cmi")
 	 */
 	protected abstract String getModId();
 
 	/**
-	 * 获取结构名称（用于拼接翻译键）
+	 * 获取结构名称(用于拼接翻译键)
 	 *
 	 * <p>
 	 * 通常使用简短标识名, 例如 "water_pump"

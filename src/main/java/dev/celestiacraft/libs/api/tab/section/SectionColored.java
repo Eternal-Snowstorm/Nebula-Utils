@@ -7,11 +7,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 /**
- * 使用纯色横幅（背景色 + 边框色）渲染的分区。
+ * 使用纯色横幅(背景色 + 边框色)渲染的分区.
  *
  * <p>
- * 本类中的渲染实现与内部色彩计算方法属于内部 API，
- * 仅供库内部使用，不保证对外兼容。
+ * 本类中的渲染实现与内部色彩计算方法属于内部 API, 
+ * 仅供库内部使用, 不保证对外兼容.
  * </p>
  *
  * @since 4.0

@@ -54,8 +54,8 @@ import java.util.function.Consumer;
 public class StructureRenderer implements AutoCloseable {
 
 	/**
-	 * 禁用视锥体裁剪的 Frustum，解决 Create 传送带等 BlockEntityRenderer
-	 * 使用玩家摄像机视锥体裁剪物品的问题（SafeBlockEntityRenderer.shouldCullItem）。
+	 * 禁用视锥体裁剪的 Frustum, 解决 Create 传送带等 BlockEntityRenderer
+	 * 使用玩家摄像机视锥体裁剪物品的问题(SafeBlockEntityRenderer.shouldCullItem).
 	 */
 	private static final Frustum NO_CULL_FRUSTUM = new Frustum(
 			new Matrix4f().identity(), new Matrix4f().identity()
@@ -503,7 +503,7 @@ public class StructureRenderer implements AutoCloseable {
 		return bakedModel.getModelData(virtualLevel, pos, state, modelData);
 	}
 
-	// 每帧渲染（BlockEntity / Entity 有动画，不缓存）
+	// 每帧渲染(BlockEntity / Entity 有动画, 不缓存)
 
 	private void renderBlockEntities(Minecraft mc, MultiBufferSource.BufferSource source) {
 		for (BlockEntity blockEntity : virtualLevel.getRenderedBlockEntities()) {

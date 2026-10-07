@@ -18,7 +18,7 @@ import java.util.function.Consumer;
  * 用于定义 Patchouli 多方块结构中某个字符位置的匹配规则Examples
  *
  * <p>
- * 在 {@link StructureBuilder#define(char, Consumer)} 中使用，
+ * 在 {@link StructureBuilder#define(char, Consumer)} 中使用, 
  * 每一个结构字符都可以通过该构建器定义其对应的方块匹配逻辑.
  * </p>
  *
@@ -41,7 +41,7 @@ import java.util.function.Consumer;
  * </ul>
  *
  * <p>
- * 该类仅作为 DSL 辅助工具，不持有任何结构逻辑，
+ * 该类仅作为 DSL 辅助工具, 不持有任何结构逻辑, 
  * 所有数据最终由 MultiblockStructureBuilder 统一收集.
  * </p>
  */

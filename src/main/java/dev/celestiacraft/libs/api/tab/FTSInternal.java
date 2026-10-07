@@ -27,15 +27,15 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
- * 本类属于内部 API，其中的方法可能会改名或被移除，强烈建议不要调用。
- * 应当只通过 {@link FancyTabSections} 与本模块交互。
+ * 本类属于内部 API, 其中的方法可能会改名或被移除, 强烈建议不要调用.
+ * 应当只通过 {@link FancyTabSections} 与本模块交互.
  *
  * @since 4.0
  */
 @Mod.EventBusSubscriber(modid = NebulaLibs.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class FTSInternal {
 	/**
-	 * 取出各分节中存放的物品，并应用到给定的创造模式标签页上
+	 * 取出各分节中存放的物品, 并应用到给定的创造模式标签页上
 	 *
 	 * @since 4.0
 	 */
@@ -43,7 +43,7 @@ public class FTSInternal {
 		List<ItemStack> stacksToDisplay = new ArrayList<>();
 		List<Section<?>> sections = FancyTabSections.getSections(tab);
 
-		// 若标签页不包含任何分节，直接结束流程
+		// 若标签页不包含任何分节, 直接结束流程
 		if (sections.isEmpty()) {
 			return;
 		}
@@ -54,14 +54,14 @@ public class FTSInternal {
 				stacksToDisplay.add(ItemStack.EMPTY);
 			}
 
-			// 若分节已折叠，则不添加物品
+			// 若分节已折叠, 则不添加物品
 			if (isCollapsed(section)) {
 				continue;
 			}
 
 			stacksToDisplay.addAll(section.items().getStacks());
 
-			// 填充空物品栈，填满整行后再进入下一个横幅
+			// 填充空物品栈, 填满整行后再进入下一个横幅
 			int usedInLastRow = stacksToDisplay.size() % 9;
 			if (usedInLastRow != 0) {
 				for (int i = 0; i < 9 - usedInLastRow; i++) {
@@ -84,7 +84,7 @@ public class FTSInternal {
 
 	/**
 	 * 在进入世界以及 /reload 时触发
-	 * 由于 ResourceListener 拿不到标签（tag），这里作为获取完整 RegistryAccess 的变通方案
+	 * 由于 ResourceListener 拿不到标签(tag), 这里作为获取完整 RegistryAccess 的变通方案
 	 *
 	 * @since 4.0
 	 */
@@ -207,7 +207,7 @@ public class FTSInternal {
 	}
 
 	/**
-	 * @return 给定行是否为某个分节的首行（即横幅行）
+	 * @return 给定行是否为某个分节的首行(即横幅行)
 	 * @since 4.0
 	 */
 	public static boolean isBannerRow(ResourceLocation tab, int row) {
@@ -223,7 +223,7 @@ public class FTSInternal {
 	}
 
 	/**
-	 * 仅客户端使用的类，负责处理音效，避免第三方直接调用不安全方法导致崩溃。
+	 * 仅客户端使用的类, 负责处理音效, 避免第三方直接调用不安全方法导致崩溃.
 	 *
 	 * @since 4.0
 	 */

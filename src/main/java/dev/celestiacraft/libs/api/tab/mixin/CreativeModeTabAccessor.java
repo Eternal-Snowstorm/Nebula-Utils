@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.Set;
 
 /**
- * 为 {@link CreativeModeTab} 中存放展示物品的字段提供访问器，供分节功能改写标签页内容。
+ * 为 {@link CreativeModeTab} 中存放展示物品的字段提供访问器, 供分节功能改写标签页内容.
  */
 @Mixin(CreativeModeTab.class)
 public interface CreativeModeTabAccessor {

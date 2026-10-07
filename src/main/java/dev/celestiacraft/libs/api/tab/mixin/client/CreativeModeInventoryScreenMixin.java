@@ -24,7 +24,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * 在创造模式物品栏界面中渲染分节横幅与索引面板，并接管对应的鼠标点击与滚轮交互。
+ * 在创造模式物品栏界面中渲染分节横幅与索引面板, 并接管对应的鼠标点击与滚轮交互.
  */
 @Mixin(CreativeModeInventoryScreen.class)
 public abstract class CreativeModeInventoryScreenMixin {

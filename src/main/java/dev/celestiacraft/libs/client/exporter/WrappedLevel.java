@@ -42,8 +42,8 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**
- * 包裹一个真实 {@link Level}，把只读查询转发给宿主世界，并屏蔽一切会影响真实存档/客户端状态的副作用
- * （声音、方块更新事件、爆破进度等）。子类可覆写读取方法以提供虚拟内容，用于离屏渲染。
+ * 包裹一个真实 {@link Level}, 把只读查询转发给宿主世界, 并屏蔽一切会影响真实存档/客户端状态的副作用
+ * (声音、方块更新事件、爆破进度等).子类可覆写读取方法以提供虚拟内容, 用于离屏渲染.
  */
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
@@ -136,14 +136,14 @@ public class WrappedLevel extends Level {
 		return host.gatherChunkSourceStats();
 	}
 
-	/* ---------- 渲染相关：恒定满亮，避免离屏世界出现暗块 ---------- */
+	/* ---------- 渲染相关：恒定满亮, 避免离屏世界出现暗块 ---------- */
 
 	@Override
 	public int getMaxLocalRawBrightness(BlockPos pos) {
 		return 15;
 	}
 
-	/* ---------- 写入：方块写入仍落到宿主，其余副作用一律屏蔽 ---------- */
+	/* ---------- 写入：方块写入仍落到宿主, 其余副作用一律屏蔽 ---------- */
 
 	@Override
 	public boolean setBlock(BlockPos pos, BlockState state, int flags) {
@@ -195,7 +195,7 @@ public class WrappedLevel extends Level {
 	@Override
 	public void setMapData(String mapId, MapItemSavedData data) {}
 
-	/* ---------- 离屏世界不持有实体/地图，统一返回空 ---------- */
+	/* ---------- 离屏世界不持有实体/地图, 统一返回空 ---------- */
 
 	@Nullable
 	@Override
@@ -220,8 +220,8 @@ public class WrappedLevel extends Level {
 	}
 
 	/*
-	 * 高度/分段方法全部锚定宿主真实高度并走原版公式，避免被 Lithium 等性能 mod 对 Level 的 Mixin
-	 * 干扰而返回错误的分段索引（否则可能导致离屏渲染时光照/分段数组越界）。
+	 * 高度/分段方法全部锚定宿主真实高度并走原版公式, 避免被 Lithium 等性能 mod 对 Level 的 Mixin
+	 * 干扰而返回错误的分段索引(否则可能导致离屏渲染时光照/分段数组越界).
 	 */
 
 	@Override

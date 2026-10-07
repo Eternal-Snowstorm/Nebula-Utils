@@ -11,9 +11,11 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.DistExecutor;
 
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * {@link BasicItem} / {@link BasicBlockItem} 的客户端 Tooltip 入口.
@@ -21,12 +23,16 @@ import java.util.function.Consumer;
  * <p>
  * 该类整体标记为 {@link OnlyIn}({@link Dist#CLIENT}), 在专用服务器上不存在.
  * 因此 <b>禁止</b> 在通用代码中直接引用它, 必须通过
- * {@link net.minecraftforge.fml.DistExecutor#unsafeRunWhenOn(Dist, java.util.function.Supplier)}
+ * {@link DistExecutor#unsafeRunWhenOn(Dist, Supplier)}
  * 包一层后再调用, 例如:
  * </p>
  *
  * <pre>{@code
- * DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientTooltips.render(this, stack, level, tooltip, flag));
+ * 	DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> {
+ * 	    return () -> {
+ * 			ClientTooltips.render(this, stack, level, tooltip, flag);
+ * 		};
+ * 	});
  * }</pre>
  *
  * <p>
@@ -35,10 +41,7 @@ import java.util.function.Consumer;
  * </p>
  */
 @OnlyIn(Dist.CLIENT)
-public final class ClientTooltips {
-	private ClientTooltips() {
-	}
-
+public class ClientTooltips {
 	/**
 	 * {@link BasicItem} 的客户端 Tooltip 渲染.
 	 *

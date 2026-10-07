@@ -7,7 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 /**
- * 使用纹理横幅渲染的分区。
+ * 使用纹理横幅渲染的分区.
  *
  * @since 3.0
  */
@@ -68,7 +68,7 @@ public class SectionTextured extends AbstractSectionWithTitle<SectionTextured> {
 	}
 
 	/**
-	 * 使用该构建器时，纹理必须放置在 [namespace]:textures/gui/fancy_tab_section/[path].png
+	 * 使用该构建器时, 纹理必须放置在 [namespace]:textures/gui/fancy_tab_section/[path].png
 	 *
 	 * @since 3.0
 	 */
@@ -87,7 +87,7 @@ public class SectionTextured extends AbstractSectionWithTitle<SectionTextured> {
 	// 设置方法
 
 	/**
-	 * 使用该构建器时，纹理必须放置在 [namespace]:textures/gui/fancy_tab_section/[path].png
+	 * 使用该构建器时, 纹理必须放置在 [namespace]:textures/gui/fancy_tab_section/[path].png
 	 *
 	 * @since 3.0
 	 */

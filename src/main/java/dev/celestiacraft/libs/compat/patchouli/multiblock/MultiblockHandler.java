@@ -28,18 +28,18 @@ import java.util.function.Supplier;
  * 多方块结构的组合式处理器.
  *
  * <p>
- * 封装了 Patchouli 多方块的 <strong>验证缓存</strong> 和 <strong>渲染切换</strong> 逻辑，
+ * 封装了 Patchouli 多方块的 <strong>验证缓存</strong> 和 <strong>渲染切换</strong> 逻辑, 
  * 供 BlockEntity 以组合方式持有和使用.
  * </p>
  *
  * <p>
- * 一个轻量级委托类，将多方块结构验证(带 tick 缓存)和
+ * 一个轻量级委托类, 将多方块结构验证(带 tick 缓存)和
  * 客户端全息预览的显示/隐藏逻辑统一封装.
  * </p>
  *
  * <ul>
- *     <li>不强制继承 - 通过组合持有，不限制 BlockEntity 的父类</li>
- *     <li>Tick 缓存 - 默认 20 tick(1秒)刷新一次，大幅减少冗余 validate 调用</li>
+ *     <li>不强制继承 - 通过组合持有, 不限制 BlockEntity 的父类</li>
+ *     <li>Tick 缓存 - 默认 20 tick(1秒)刷新一次, 大幅减少冗余 validate 调用</li>
  *     <li>一行切换 - toggleVisualization() 自动处理状态判断和 Patchouli API 调用</li>
  *     <li>Builder 配置 - 翻译 key、渲染偏移、缓存间隔均可自定义</li>
  * </ul>
@@ -119,13 +119,13 @@ import java.util.function.Supplier;
  *
  * <h3>4. 破坏结构内方块</h3>
  * <pre>{@code
- * // 破坏结构中所有方块（掉落物品）
+ * // 破坏结构中所有方块(掉落物品)
  * multiblock.destroyAll(true);
  *
  * // 仅破坏结构中指定类型的方块
  * multiblock.destroyBlock(Blocks.IRON_BLOCK, true);
  *
- * // 破坏所有属于 Tag 的方块（不掉落）
+ * // 破坏所有属于 Tag 的方块(不掉落)
  * multiblock.destroyTag(BlockTags.LOGS, false);
  *
  * // 按谓词精确控制

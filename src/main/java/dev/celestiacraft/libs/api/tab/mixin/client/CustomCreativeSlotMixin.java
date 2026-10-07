@@ -6,7 +6,7 @@ import net.minecraft.world.inventory.Slot;
 import org.spongepowered.asm.mixin.Mixin;
 
 /**
- * 让创造模式物品栏的自定义槽位跳过横幅行：横幅行不可交互，也不显示高亮。
+ * 让创造模式物品栏的自定义槽位跳过横幅行：横幅行不可交互, 也不显示高亮.
  */
 @Mixin(targets = "net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen$CustomCreativeSlot")
 public class CustomCreativeSlotMixin extends Slot {

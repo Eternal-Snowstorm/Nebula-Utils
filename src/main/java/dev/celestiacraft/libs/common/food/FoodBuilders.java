@@ -13,11 +13,11 @@ import java.util.function.Supplier;
 /**
  * 一个用于构建 {@link FoodProperties} 的链式构建器
  *
- * <p>该类提供类似 KubeJS 的 FoodBuilder 风格 API，用于简化食物属性的定义
+ * <p>该类提供类似 KubeJS 的 FoodBuilder 风格 API, 用于简化食物属性的定义
  * 通过链式调用可以设置饥饿值、饱和度、食物效果以及食用后的回调逻辑</p>
  *
- * <p>该类实现了 {@link Supplier} 接口，因此可以直接作为 {@link Supplier#get()} 传入
- * {@code Item.Properties.food(...)}，也可以手动调用 {@link #build()} 获取
+ * <p>该类实现了 {@link Supplier} 接口, 因此可以直接作为 {@link Supplier#get()} 传入
+ * {@code Item.Properties.food(...)}, 也可以手动调用 {@link #build()} 获取
  * {@link FoodProperties} 实例</p>
  *
  * <h2>基本用法</h2>
@@ -55,7 +55,7 @@ import java.util.function.Supplier;
  * <h2>食用回调</h2>
  *
  * <p>可以通过 {@link #eaten(Consumer)} 定义食物被食用时的回调逻辑
- * 该回调不会自动触发，需要在 Item 中调用对应逻辑，例如在
+ * 该回调不会自动触发, 需要在 Item 中调用对应逻辑, 例如在
  * {@code finishUsingItem()} 中手动触发</p>
  *
  * <pre>{@code
@@ -82,7 +82,7 @@ import java.util.function.Supplier;
  * </ul>
  * <h2>在 finishUsingItem 中触发 eaten 回调</h2>
  *
- * <p>由于 {@link FoodProperties} 本身不支持食用回调逻辑，因此需要在
+ * <p>由于 {@link FoodProperties} 本身不支持食用回调逻辑, 因此需要在
  * {@code Item#finishUsingItem} 中手动触发 {@link #eaten(Consumer)}</p>
  *
  * <pre>{@code

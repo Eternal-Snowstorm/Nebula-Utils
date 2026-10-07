@@ -11,6 +11,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,9 +45,14 @@ public class BasicItem extends Item {
 
 	@Override
 	public void appendHoverText(@NotNull ItemStack stack, Level level, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
-		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientTooltips.render(this, stack, level, tooltip, flag));
+		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> {
+			return () -> {
+				ClientTooltips.render(this, stack, level, tooltip, flag);
+			};
+		});
 	}
 
+	@OnlyIn(Dist.CLIENT)
 	public void addTooltips(TooltipContext context) {
 	}
 }

@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 /**
- * 创造模式标签页中的一个分区，负责承载一组物品并定义其渲染与折叠行为。
+ * 创造模式标签页中的一个分区, 负责承载一组物品并定义其渲染与折叠行为.
  *
  * @since 3.0
  */
@@ -34,10 +34,10 @@ public interface Section<T extends Section<T>> {
 	}
 
 	/**
-	 * 让需要人类可读标签的功能（例如跳转列表）能够适用于任意 Section 实现，
-	 * 而无需知道其具体类型。
+	 * 让需要人类可读标签的功能(例如跳转列表)能够适用于任意 Section 实现, 
+	 * 而无需知道其具体类型.
 	 *
-	 * @return 该分区的显示标题，若没有则返回 null。
+	 * @return 该分区的显示标题, 若没有则返回 null.
 	 * @since 6.0
 	 */
 	default Component getTitle() {
@@ -45,7 +45,7 @@ public interface Section<T extends Section<T>> {
 	}
 
 	/**
-	 * @return 该分区的显示图标，用于分区索引（Section Index）
+	 * @return 该分区的显示图标, 用于分区索引(Section Index)
 	 * @since 6.0
 	 */
 	default ItemStack icon() {
@@ -125,8 +125,8 @@ public interface Section<T extends Section<T>> {
 	}
 
 	/**
-	 * 在给定分区横幅的右侧渲染折叠切换按钮。
-	 * 若 isHoveringAny 传入 true，则在按住 Shift 时高亮悬停纹理。
+	 * 在给定分区横幅的右侧渲染折叠切换按钮.
+	 * 若 isHoveringAny 传入 true, 则在按住 Shift 时高亮悬停纹理.
 	 *
 	 * @since 4.0
 	 */
@@ -134,13 +134,13 @@ public interface Section<T extends Section<T>> {
 		if (!section.collapsible()) {
 			return;
 		}
-		// 横幅行中最右侧槽位的左上角。
+		// 横幅行中最右侧槽位的左上角.
 		int tx1 = x + w + 3;
 		int tx0 = tx1 - BannerRenderer.ROW_HEIGHT;
 		int ty0 = y - 1;
 		int ty1 = y + bannerWidth;
 
-		// 将按钮纹理居中于槽位内（每个轴 +1 以对齐网格单元）。
+		// 将按钮纹理居中于槽位内(每个轴 +1 以对齐网格单元).
 		int bx = tx0 + (BannerRenderer.ROW_HEIGHT - 16) / 2 + 1;
 		int by = ty0 + (bannerWidth - 16) / 2 + 1;
 

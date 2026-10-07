@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import java.util.List;
 
 /**
- * 包裹 {@link CreativeModeTab} 的内容构建流程：若该标签页注册过分节，则改用分节内容填充，否则执行原版逻辑。
+ * 包裹 {@link CreativeModeTab} 的内容构建流程：若该标签页注册过分节, 则改用分节内容填充, 否则执行原版逻辑.
  */
 @Mixin(CreativeModeTab.class)
 public class CreativeModeTabMixin {

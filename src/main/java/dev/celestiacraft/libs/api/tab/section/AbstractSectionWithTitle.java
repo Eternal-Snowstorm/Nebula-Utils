@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * 带标题渲染能力的抽象分区基类，标题支持滚动、居中、描边等效果。
+ * 带标题渲染能力的抽象分区基类, 标题支持滚动、居中、描边等效果.
  *
  * @since 4.0
  */
@@ -91,7 +91,7 @@ public class AbstractSectionWithTitle<T extends AbstractSectionWithTitle<T>> imp
 	}
 
 	/**
-	 * 设置标题是否渲染。
+	 * 设置标题是否渲染.
 	 *
 	 * @since 6.0
 	 */
@@ -101,7 +101,7 @@ public class AbstractSectionWithTitle<T extends AbstractSectionWithTitle<T>> imp
 	}
 
 	/**
-	 * 设置用于显示的 ItemStack。
+	 * 设置用于显示的 ItemStack.
 	 *
 	 * @since 6.0
 	 */
@@ -111,7 +111,7 @@ public class AbstractSectionWithTitle<T extends AbstractSectionWithTitle<T>> imp
 	}
 
 	/**
-	 * 触发 displayItemFunction，以便根据 RegistryAccess 设置 ItemStack
+	 * 触发 displayItemFunction, 以便根据 RegistryAccess 设置 ItemStack
 	 *
 	 * @since 6.0
 	 */
@@ -121,7 +121,7 @@ public class AbstractSectionWithTitle<T extends AbstractSectionWithTitle<T>> imp
 	}
 
 	/**
-	 * 若已设置显示物品则使用它，否则传递给父类实现
+	 * 若已设置显示物品则使用它, 否则传递给父类实现
 	 *
 	 * @since 6.0
 	 */
@@ -131,7 +131,7 @@ public class AbstractSectionWithTitle<T extends AbstractSectionWithTitle<T>> imp
 	}
 
 	/**
-	 * 调整标题渲染的偏移量。
+	 * 调整标题渲染的偏移量.
 	 * 默认值为 (5, 5)
 	 *
 	 * @since 4.0
@@ -143,7 +143,7 @@ public class AbstractSectionWithTitle<T extends AbstractSectionWithTitle<T>> imp
 	}
 
 	/**
-	 * 让分区标题居中显示（中间位置 + 偏移量）
+	 * 让分区标题居中显示(中间位置 + 偏移量)
 	 *
 	 * @since 5.0
 	 */
@@ -178,7 +178,7 @@ public class AbstractSectionWithTitle<T extends AbstractSectionWithTitle<T>> imp
 	}
 
 	/**
-	 * 调整标题渲染的偏移量。
+	 * 调整标题渲染的偏移量.
 	 * 默认值为 (5, 5)
 	 *
 	 * @since 5.0
@@ -189,7 +189,7 @@ public class AbstractSectionWithTitle<T extends AbstractSectionWithTitle<T>> imp
 	}
 
 	/**
-	 * 每当该 Section 的 {@link Section#render(GuiGraphics, Font, int, int)} 被调用时执行代码。
+	 * 每当该 Section 的 {@link Section#render(GuiGraphics, Font, int, int)} 被调用时执行代码.
 	 *
 	 * @since 5.0
 	 */
@@ -199,7 +199,7 @@ public class AbstractSectionWithTitle<T extends AbstractSectionWithTitle<T>> imp
 	}
 
 	/**
-	 * 设置一个消费者，在该 Section 的 {@link Section#render(GuiGraphics, Font, int, int)} 开始时运行。
+	 * 设置一个消费者, 在该 Section 的 {@link Section#render(GuiGraphics, Font, int, int)} 开始时运行.
 	 *
 	 * @since 6.0
 	 */
