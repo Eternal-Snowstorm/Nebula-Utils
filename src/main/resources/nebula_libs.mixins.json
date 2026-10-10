@@ -5,12 +5,15 @@
 	"compatibilityLevel": "JAVA_17",
 	"refmap": "nebula_libs.refmap.json",
 	"mixins": [
-		"AlterGroundDecoratorAccessor",
-		"AlterGroundDecoratorMixin",
-		"FluidTypeMixin"
+		"ftb.TextFieldAccessor",
+		"ftb.ViewQuestPanelMixin",
+		"vanilla.AlterGroundDecoratorAccessor",
+		"vanilla.AlterGroundDecoratorMixin",
+		"vanilla.CampfireBlockMixin",
+		"vanilla.FluidTypeMixin"
 	],
 	"client": [
-		"EntityAccessor"
+		"vanilla.EntityAccessor"
 	],
 	"injectors": {
 		"defaultRequire": 1

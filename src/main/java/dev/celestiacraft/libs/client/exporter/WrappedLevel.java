@@ -1,6 +1,6 @@
 package dev.celestiacraft.libs.client.exporter;
 
-import dev.celestiacraft.libs.mixin.EntityAccessor;
+import dev.celestiacraft.libs.mixin.vanilla.EntityAccessor;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

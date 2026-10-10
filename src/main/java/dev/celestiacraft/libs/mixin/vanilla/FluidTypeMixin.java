@@ -1,4 +1,4 @@
-package dev.celestiacraft.libs.mixin;
+package dev.celestiacraft.libs.mixin.vanilla;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import dev.celestiacraft.libs.config.common.CommonConfigs;
 
 @Mixin(value = FluidType.class, remap = false)
-public abstract class FluidTypeMixin {
+public class FluidTypeMixin {
 	/**
 	 * 判断当前 FluidState 是否在 burningFluids 配置中
 	 * 支持：
@@ -33,7 +33,7 @@ public abstract class FluidTypeMixin {
 		ResourceLocation id = ForgeRegistries.FLUIDS.getKey(fluid);
 
 		for (String entry : CommonConfigs.BURNING_FLUIDS.get()) {
-			if (entry.startsWith("#")) {
+			if (!entry.isEmpty() && entry.charAt(0) == '#') {
 				ResourceLocation tagId = ResourceLocation.tryParse(entry.substring(1));
 				if (tagId != null) {
 					TagKey<Fluid> tag = TagKey.create(

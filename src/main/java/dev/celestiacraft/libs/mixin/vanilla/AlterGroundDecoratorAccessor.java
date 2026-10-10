@@ -1,4 +1,4 @@
-package dev.celestiacraft.libs.mixin;
+package dev.celestiacraft.libs.mixin.vanilla;
 
 import net.minecraft.world.level.levelgen.feature.treedecorators.AlterGroundDecorator;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;

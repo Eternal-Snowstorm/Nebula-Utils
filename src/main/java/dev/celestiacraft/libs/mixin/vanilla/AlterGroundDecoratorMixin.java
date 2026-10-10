@@ -1,4 +1,4 @@
-package dev.celestiacraft.libs.mixin;
+package dev.celestiacraft.libs.mixin.vanilla;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Blocks;
@@ -13,8 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import dev.celestiacraft.libs.config.common.CommonConfigs;
 
 @Mixin(AlterGroundDecorator.class)
-public abstract class AlterGroundDecoratorMixin {
-
+public class AlterGroundDecoratorMixin {
 	@Inject(
 			method = "placeBlockAt",
 			at = @At("HEAD"),

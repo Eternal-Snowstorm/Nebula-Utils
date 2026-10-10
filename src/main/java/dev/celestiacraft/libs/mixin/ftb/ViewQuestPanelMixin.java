@@ -1,4 +1,4 @@
-package dev.celestiacraft.libs.mixin.client;
+package dev.celestiacraft.libs.mixin.ftb;
 
 import dev.celestiacraft.libs.client.tooltip.InlineItemPatternParser;
 import dev.celestiacraft.libs.compat.ftbquests.client.InlineItemQuestWidget;
@@ -18,10 +18,8 @@ import java.util.List;
 
 @Mixin(value = ViewQuestPanel.class, remap = false)
 public class ViewQuestPanelMixin {
-
 	@Shadow
 	private BlankPanel panelText;
-
 	@Shadow
 	private Quest quest;
 

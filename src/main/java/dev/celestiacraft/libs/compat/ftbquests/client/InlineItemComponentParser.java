@@ -1,5 +1,6 @@
 package dev.celestiacraft.libs.compat.ftbquests.client;
 
+import dev.celestiacraft.libs.mixin.ftb.ViewQuestPanelMixin;
 import dev.ftb.mods.ftblibrary.util.CustomComponentParser;
 import net.minecraft.network.chat.Component;
 
@@ -11,7 +12,7 @@ import java.util.regex.Pattern;
  * 阻止 FTB Library 的 {@link dev.ftb.mods.ftblibrary.util.TextComponentParser} 将其作为替代变量消费.
  * <p>
  * 当检测到匹配的标记时, 将花括号重新包裹回文本,
- * 使下游的 {@link dev.celestiacraft.libs.mixin.client.ViewQuestPanelMixin} 能够检测并替换为物品图标.
+ * 使下游的 {@link ViewQuestPanelMixin} 能够检测并替换为物品图标.
  */
 public class InlineItemComponentParser implements CustomComponentParser {
 

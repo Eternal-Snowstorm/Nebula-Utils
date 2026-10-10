@@ -1,4 +1,4 @@
-package dev.celestiacraft.libs.mixin;
+package dev.celestiacraft.libs.mixin.vanilla;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
