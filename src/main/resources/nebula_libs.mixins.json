@@ -13,7 +13,9 @@
 		"vanilla.FluidTypeMixin"
 	],
 	"client": [
-		"vanilla.EntityAccessor"
+		"vanilla.EntityAccessor",
+		"vanilla.FogRendererMixin",
+		"vanilla.ScreenEffectRendererMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

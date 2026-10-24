@@ -26,8 +26,7 @@ public class FluidTypeMixin {
 	 * - "modid:fluid"
 	 * <p>
 	 * - "#namespace:tag"
-	 */
-	@Unique
+	 */	@Unique
 	private static boolean nebula$isBurningFluid(FluidState state) {
 		Fluid fluid = state.getType();
 		ResourceLocation id = ForgeRegistries.FLUIDS.getKey(fluid);
