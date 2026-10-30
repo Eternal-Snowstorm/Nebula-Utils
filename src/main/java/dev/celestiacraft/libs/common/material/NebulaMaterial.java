@@ -675,51 +675,41 @@ public class NebulaMaterial {
 		return ForgeRegistries.FLUIDS.getValue(id(type));
 	}
 
-
 	public Fluid getFluid() {
 		return getMolten();
 	}
-
 
 	public Fluid getMolten() {
 		return getFluid(MaterialTypes.MOLTEN);
 	}
 
-
 	public Item getBucket() {
 		return ForgeRegistries.ITEMS.getValue(MaterialRegistrar.bucketId(id(MaterialTypes.MOLTEN)));
 	}
-
 
 	public Item getIngot() {
 		return getItem(MaterialTypes.INGOT);
 	}
 
-
 	public Item getPlate() {
 		return getItem(MaterialTypes.PLATE);
 	}
-
 
 	public Item getNugget() {
 		return getItem(MaterialTypes.NUGGET);
 	}
 
-
 	public Item getDust() {
 		return getItem(MaterialTypes.DUST);
 	}
-
 
 	public Item getRod() {
 		return getItem(MaterialTypes.ROD);
 	}
 
-
 	public Item getGear() {
 		return getItem(MaterialTypes.GEAR);
 	}
-
 
 	public Item getWire() {
 		return getItem(MaterialTypes.WIRE);
@@ -729,41 +719,33 @@ public class NebulaMaterial {
 		return getItem(MaterialTypes.PRISM);
 	}
 
-
 	public Item getRawOre() {
 		return getItem(MaterialTypes.RAW_ORE);
 	}
-
 
 	public Item getDirtyDust() {
 		return getItem(MaterialTypes.DIRTY_DUST);
 	}
 
-
 	public Item getClump() {
 		return getItem(MaterialTypes.CLUMP);
 	}
-
 
 	public Item getShard() {
 		return getItem(MaterialTypes.SHARD);
 	}
 
-
 	public Item getCrystal() {
 		return getItem(MaterialTypes.CRYSTAL);
 	}
-
 
 	public Block getBlock() {
 		return getBlock(MaterialTypes.BLOCK);
 	}
 
-
 	public Item getBlockItem() {
 		return getItem(MaterialTypes.BLOCK);
 	}
-
 
 	public Block getRawBlock() {
 		return getBlock(MaterialTypes.RAW_BLOCK);

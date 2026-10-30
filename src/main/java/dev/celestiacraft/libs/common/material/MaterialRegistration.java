@@ -36,7 +36,6 @@ public class MaterialRegistration {
 	private final Map<ResourceKey<? extends Registry<?>>, List<Entry<?>>> PENDING = new LinkedHashMap<>();
 	private final Set<ResourceKey<? extends Registry<?>>> FLUSHED = new LinkedHashSet<>();
 
-
 	/**
 	 * 将一个注册项加入队列
 	 *
