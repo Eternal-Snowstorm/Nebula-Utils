@@ -322,7 +322,7 @@ public class MaterialAssets {
 		ResourceLocation id = material.id(type);
 
 		for (String raw : type.tags()) {
-			ResourceLocation tag = ResourceLocation.parse(raw.formatted(material.name()));
+			ResourceLocation tag = MaterialTags.resolve(material, raw);
 
 			for (String directory : directories) {
 				tag(directory, tag, id);
@@ -330,7 +330,7 @@ public class MaterialAssets {
 		}
 
 		if (material.isMetallic()) {
-			ResourceLocation metals = ResourceLocation.fromNamespaceAndPath(material.namespace(), "metals");
+			ResourceLocation metals = ResourceLocation.fromNamespaceAndPath(material.getNamespace(), "metals");
 
 			for (String directory : directories) {
 				tag(directory, metals, id);

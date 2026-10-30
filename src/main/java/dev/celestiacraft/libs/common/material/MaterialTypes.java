@@ -47,7 +47,8 @@ import java.util.function.Function;
  *         .namePattern("%s_spring")
  *         .layers("spring/spring", "spring/spring_secondary")
  *         .overlay("spring/spring_overlay")
- *         .tags("mymod:springs", "mymod:springs/%s")
+ *         .commonTags("mymod:springs")
+ *         .specificTags("mymod:springs/%s")
  *         .build();
  * }</pre>
  *
@@ -59,116 +60,134 @@ public class MaterialTypes {
 			.namePattern("%s_ingot")
 			.layers("ingot/ingot", "ingot/ingot_secondary")
 			.overlay("ingot/ingot_overlay")
-			.tags("forge:ingots", "forge:ingots/%s")
+			.commonTags("forge:ingots")
+			.specificTags("forge:ingots/%s")
 			.build();
 
 	public final IMaterialType PLATE = item("plate")
 			.namePattern("%s_plate")
 			.layers("plate/plate", "plate/plate_secondary")
 			.overlay("plate/plate_overlay")
-			.tags("forge:plates", "forge:plates/%s")
+			.commonTags("forge:plates")
+			.specificTags("forge:plates/%s")
 			.build();
 
 	public final IMaterialType NUGGET = item("nugget")
 			.namePattern("%s_nugget")
 			.layers("nugget/nugget", "nugget/nugget_secondary")
 			.overlay("nugget/nugget_overlay")
-			.tags("forge:nuggets", "forge:nuggets/%s")
+			.commonTags("forge:nuggets")
+			.specificTags("forge:nuggets/%s")
 			.build();
 
 	public final IMaterialType DUST = item("dust")
 			.namePattern("%s_dust")
 			.layers("dust/dust", "dust/dust_secondary")
 			.overlay("dust/dust_overlay")
-			.tags("forge:dusts", "forge:dusts/%s")
+			.commonTags("forge:dusts")
+			.specificTags("forge:dusts/%s")
 			.build();
 
 	public final IMaterialType ROD = item("rod")
 			.namePattern("%s_rod")
 			.layers("rod/rod", "rod/rod_secondary")
 			.overlay("rod/rod_overlay")
-			.tags("forge:rods", "forge:rods/%s")
+			.commonTags("forge:rods")
+			.specificTags("forge:rods/%s")
 			.build();
 
 	public final IMaterialType GEAR = item("gear")
 			.namePattern("%s_gear")
 			.layers("gear/gear", "gear/gear_secondary")
 			.overlay("gear/gear_overlay")
-			.tags("forge:gears", "forge:gears/%s")
+			.commonTags("forge:gears")
+			.specificTags("forge:gears/%s")
 			.build();
 
 	public final IMaterialType WIRE = item("wire")
 			.namePattern("%s_wire")
 			.layers("wire/wire", "wire/wire_secondary")
 			.overlay("wire/wire_overlay")
-			.tags("forge:wires", "forge:wires/%s")
+			.commonTags("forge:wires")
+			.specificTags("forge:wires/%s")
 			.build();
 
 	public final IMaterialType PRISM = item("prism")
 			.namePattern("%s_prism")
 			.layers("prism/prism", "prism/prism_secondary")
 			.overlay("prism/prism_overlay")
-			.tags("forge:prisms", "forge:prisms/%s")
+			.commonTags("forge:prisms")
+			.specificTags("forge:prisms/%s")
 			.build();
 
 	public final IMaterialType RAW_ORE = item("raw_ore")
 			.namePattern("raw_%s")
 			.layers("raw_ore")
-			.tags("forge:raw_materials", "forge:raw_materials/%s")
+			.commonTags("forge:raw_materials")
+			.specificTags("forge:raw_materials/%s")
 			.build();
 
 	public final IMaterialType DIRTY_DUST = item("dirty")
 			.namePattern("dirty_%s_dust")
 			.layers("dirty/0", "dirty/1")
 			.noSecondaryTint()
-			.tags("mekanism:dirty_dusts", "mekanism:dirty_dusts/%s")
+			.commonTags("mekanism:dirty_dusts")
+			.specificTags("mekanism:dirty_dusts/%s")
 			.build();
 
 	public final IMaterialType CLUMP = item("clump")
 			.namePattern("%s_clump")
 			.layers("clump")
-			.tags("mekanism:clumps", "mekanism:clumps/%s")
+			.commonTags("mekanism:clumps")
+			.specificTags("mekanism:clumps/%s")
 			.build();
 
 	public final IMaterialType SHARD = item("shard")
 			.namePattern("%s_shard")
 			.layers("shard")
-			.tags("mekanism:shards", "mekanism:shards/%s")
+			.commonTags("mekanism:shards")
+			.specificTags("mekanism:shards/%s")
 			.build();
 
 	public final IMaterialType CRYSTAL = item("crystal")
 			.namePattern("%s_crystal")
 			.layers("crystal")
-			.tags("mekanism:crystals", "mekanism:crystals/%s")
+			.commonTags("mekanism:crystals")
+			.specificTags("mekanism:crystals/%s")
 			.build();
 
 	public final IMaterialType BLOCK = block("block")
 			.namePattern("%s_block")
 			.texture("block/material/color/storage_blocks")
-			.tags("forge:storage_blocks", "forge:storage_blocks/%s")
+			.commonTags("forge:storage_blocks")
+			.specificTags("forge:storage_blocks/%s")
 			.build();
 
 	public final IMaterialType RAW_BLOCK = block("raw_block")
 			.namePattern("raw_%s_block")
 			.texture("block/material/color/storage_blocks")
-			.tags("forge:storage_blocks", "forge:storage_blocks/raw_%s")
+			.commonTags("forge:storage_blocks")
+			.specificTags("forge:storage_blocks/raw_%s")
 			.build();
 
 	public final IMaterialType MOLTEN = fluid("molten")
 			.namePattern("molten_%s")
-			.tags("forge:molten_materials", "forge:molten_%s", "tconstruct:molten_%s")
+			.commonTags("forge:molten_materials")
+			.specificTags("forge:molten_%s", "tconstruct:molten_%s")
 			.build();
 
 	public final IMaterialType SLURRY = slurry("slurry")
 			.namePattern("%s_slurry")
 			.slurryTexture("mekanism:slurry/clean")
-			.tags("mekanism:clean", "mekanism:clean/%s")
+			.commonTags("mekanism:clean")
+			.specificTags("mekanism:clean/%s")
 			.build();
 
 	public final IMaterialType DIRTY_SLURRY = slurry("dirty_slurry")
 			.namePattern("dirty_%s_slurry")
 			.slurryTexture("mekanism:slurry/dirty")
-			.tags("mekanism:dirty", "mekanism:dirty/%s")
+			.commonTags("mekanism:dirty")
+			.specificTags("mekanism:dirty/%s")
 			.build();
 
 	private final List<IMaterialType> VALUES;
@@ -276,7 +295,8 @@ public class MaterialTypes {
 		private final IMaterialKind kind;
 		private final String id;
 		private final List<String> layers = new ArrayList<>();
-		private final List<String> tags = new ArrayList<>();
+		private final List<String> commonTags = new ArrayList<>();
+		private final List<String> specificTags = new ArrayList<>();
 
 		private String namePattern;
 		private String overlay;
@@ -301,8 +321,43 @@ public class MaterialTypes {
 			return this;
 		}
 
+		/**
+		 * 添加标签, 按是否含 {@code %s} 自动分流到通用标签与专用标签
+		 *
+		 * @param tags 标签, 例如 {@code forge:ingots} 与 {@code forge:ingots/%s}
+		 * @return 当前构造器
+		 */
 		public Builder tags(String... tags) {
-			this.tags.addAll(Arrays.asList(tags));
+			for (String tag : tags) {
+				if (tag.contains(MaterialTags.MATERIAL_PLACEHOLDER)) {
+					specificTags.add(tag);
+				} else {
+					commonTags.add(tag);
+				}
+			}
+
+			return this;
+		}
+
+		/**
+		 * 添加通用标签
+		 *
+		 * @param tags 标签, 例如 {@code forge:ingots}
+		 * @return 当前构造器
+		 */
+		public Builder commonTags(String... tags) {
+			commonTags.addAll(Arrays.asList(tags));
+			return this;
+		}
+
+		/**
+		 * 添加专用标签
+		 *
+		 * @param tags 标签模板, {@code %s} 会被替换为材料名, 例如 {@code forge:ingots/%s}
+		 * @return 当前构造器
+		 */
+		public Builder specificTags(String... tags) {
+			specificTags.addAll(Arrays.asList(tags));
 			return this;
 		}
 
@@ -342,7 +397,8 @@ public class MaterialTypes {
 		private final IMaterialKind kind;
 		private final String namePattern;
 		private final List<String> layers;
-		private final List<String> tags;
+		private final List<String> commonTags;
+		private final List<String> specificTags;
 		private final String overlay;
 		private final String texture;
 		private final ResourceLocation slurryTexture;
@@ -356,7 +412,8 @@ public class MaterialTypes {
 			kind = builder.kind;
 			namePattern = builder.namePattern;
 			layers = List.copyOf(builder.layers);
-			tags = List.copyOf(builder.tags);
+			commonTags = List.copyOf(builder.commonTags);
+			specificTags = List.copyOf(builder.specificTags);
 			overlay = builder.overlay;
 			texture = builder.texture;
 			slurryTexture = builder.slurryTexture;

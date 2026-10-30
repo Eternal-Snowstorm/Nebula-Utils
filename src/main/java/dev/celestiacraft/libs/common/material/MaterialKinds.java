@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.experimental.UtilityClass;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ public class MaterialKinds {
 	 */
 	public final IMaterialKind ITEM = of("item")
 			.tagDirectories(MaterialAssets.ITEM_TAG_DIRECTORY)
+			.tagRegistry("minecraft:item")
 			.build();
 
 	/**
@@ -43,6 +45,7 @@ public class MaterialKinds {
 	 */
 	public final IMaterialKind BLOCK = of("block")
 			.tagDirectories(MaterialAssets.BLOCK_TAG_DIRECTORY, MaterialAssets.ITEM_TAG_DIRECTORY)
+			.tagRegistry("minecraft:item")
 			.build();
 
 	/**
@@ -50,6 +53,7 @@ public class MaterialKinds {
 	 */
 	public final IMaterialKind FLUID = of("fluid")
 			.tagDirectories(MaterialAssets.FLUID_TAG_DIRECTORY)
+			.tagRegistry("minecraft:fluid")
 			.build();
 
 	/**
@@ -57,6 +61,7 @@ public class MaterialKinds {
 	 */
 	public final IMaterialKind SLURRY = of("slurry")
 			.tagDirectories(MaterialAssets.SLURRY_TAG_DIRECTORY)
+			.tagRegistry("mekanism:slurry")
 			.build();
 
 	private final List<IMaterialKind> VALUES;
@@ -108,6 +113,7 @@ public class MaterialKinds {
 	public class Builder {
 		private final String id;
 		private final List<String> tagDirectories;
+		private ResourceLocation tagRegistry;
 
 		private Builder(String id) {
 			this.id = Objects.requireNonNull(id, "id");
@@ -125,6 +131,17 @@ public class MaterialKinds {
 			return this;
 		}
 
+		/**
+		 * 设置标签所属的注册表
+		 *
+		 * @param registry 注册表 ID, 例如 {@code minecraft:item}; 不设置时不提供 {@code TagKey}
+		 * @return 当前构造器
+		 */
+		public Builder tagRegistry(String registry) {
+			tagRegistry = ResourceLocation.parse(registry);
+			return this;
+		}
+
 		public IMaterialKind build() {
 			return new CustomKind(this);
 		}
@@ -137,10 +154,12 @@ public class MaterialKinds {
 		@EqualsAndHashCode.Include
 		private final String id;
 		private final List<String> tagDirectories;
+		private final ResourceLocation tagRegistry;
 
 		private CustomKind(Builder builder) {
 			id = builder.id;
 			tagDirectories = List.copyOf(builder.tagDirectories);
+			tagRegistry = builder.tagRegistry;
 		}
 
 		@Override

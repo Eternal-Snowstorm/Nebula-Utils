@@ -1,5 +1,8 @@
 package dev.celestiacraft.libs.common.material;
 
+import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 
 /**
@@ -45,5 +48,20 @@ public interface IMaterialKind {
 	 */
 	default List<String> tagDirectories() {
 		return List.of();
+	}
+
+	/**
+	 * 该分类的标签所属的注册表 ID
+	 *
+	 * <p>
+	 * 用于把标签 ID 包装成 {@link net.minecraft.tags.TagKey}. 方块分类的标签虽然同时写入
+	 * 方块与物品两个目录, 但配方里用到的是方块物品那一份, 所以这里给物品注册表.
+	 * </p>
+	 *
+	 * @return 注册表 ID, 例如 {@code minecraft:item}; 为 null 时不提供 {@code TagKey}
+	 */
+	@Nullable
+	default ResourceLocation tagRegistry() {
+		return null;
 	}
 }

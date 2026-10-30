@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -63,6 +64,7 @@ import java.util.*;
 @Accessors(fluent = true)
 @RequiredArgsConstructor
 public class NebulaMaterial {
+	@Getter
 	private final ResourceLocation id;
 	private final Map<String, IMaterialType> types = new LinkedHashMap<>();
 	private final Map<String, Boolean> overlays = new LinkedHashMap<>();
@@ -132,23 +134,16 @@ public class NebulaMaterial {
 	private ResourceLocation creativeTab;
 
 	/**
-	 * @return 材料的完整 ID, 例如 {@code cmi:chromium}
-	 */
-	public ResourceLocation id() {
-		return id;
-	}
-
-	/**
 	 * @return 材料的命名空间(mod id)
 	 */
-	public String namespace() {
+	public String getNamespace() {
 		return id.getNamespace();
 	}
 
 	/**
 	 * @return 材料名, 例如 {@code chromium}
 	 */
-	public String name() {
+	public String getPath() {
 		return id.getPath();
 	}
 
@@ -596,6 +591,68 @@ public class NebulaMaterial {
 
 	public ResourceLocation id(IMaterialType type) {
 		return type.id(this);
+	}
+
+	/**
+	 * 通用标签 —— 该类型的所有材料共用的标签
+	 *
+	 * <p>
+	 * 例如 {@code COPPER.getCommonTag(MaterialTypes.INGOT)} 得到 {@code forge:ingots}.
+	 * 返回的 {@link TagKey} 所属注册表由 {@link IMaterialKind#tagRegistry()} 决定,
+	 * 调用方需要按分类选择正确的泛型参数(物品与方块物品都是 {@code TagKey<Item>}).
+	 * </p>
+	 *
+	 * @param type 类型
+	 * @return 标签; 该类型没有通用标签, 或分类没有声明标签注册表时返回 null
+	 */
+	@Nullable
+	public <T> TagKey<T> getCommonTag(IMaterialType type) {
+		ResourceLocation tag = getCommonTagId(type);
+
+		return tag == null ? null : MaterialTags.key(type.kind().tagRegistry(), tag);
+	}
+
+	/**
+	 * 专用标签 —— 该类型下每种材料各自一份的标签
+	 *
+	 * <p>
+	 * 例如 {@code COPPER.getSpecificTag(MaterialTypes.INGOT)} 得到 {@code forge:ingots/copper}.
+	 * </p>
+	 *
+	 * @param type 类型
+	 * @return 标签; 该类型没有专用标签, 或分类没有声明标签注册表时返回 null
+	 */
+	@Nullable
+	public <T> TagKey<T> getSpecificTag(IMaterialType type) {
+		ResourceLocation tag = getSpecificTagId(type);
+
+		return tag == null ? null : MaterialTags.key(type.kind().tagRegistry(), tag);
+	}
+
+	/**
+	 * 通用标签的 ID
+	 *
+	 * @param type 类型
+	 * @return 标签 ID; 该类型没有通用标签时返回 null
+	 */
+	@Nullable
+	public ResourceLocation getCommonTagId(IMaterialType type) {
+		List<String> tags = type.commonTags();
+
+		return tags.isEmpty() ? null : MaterialTags.resolve(this, tags.get(0));
+	}
+
+	/**
+	 * 专用标签的 ID
+	 *
+	 * @param type 类型
+	 * @return 标签 ID; 该类型没有专用标签时返回 null
+	 */
+	@Nullable
+	public ResourceLocation getSpecificTagId(IMaterialType type) {
+		List<String> tags = type.specificTags();
+
+		return tags.isEmpty() ? null : MaterialTags.resolve(this, tags.get(0));
 	}
 
 	public boolean isMetallic() {

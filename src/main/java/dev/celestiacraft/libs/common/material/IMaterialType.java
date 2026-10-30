@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.fluids.FluidType;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -107,12 +108,32 @@ public interface IMaterialType {
 	}
 
 	/**
-	 * 需要写入的标签, {@code %s} 会被替换为材料名
+	 * 通用标签 —— 该类型的所有材料共用的标签, 不含材料名
 	 *
-	 * @return 例如 {@code forge:ingots} 与 {@code forge:ingots/%s}
+	 * @return 例如 {@code forge:ingots}
+	 */
+	default List<String> commonTags() {
+		return List.of();
+	}
+
+	/**
+	 * 专用标签 —— 每种材料各自一份的标签, {@code %s} 会被替换为材料名
+	 *
+	 * @return 例如 {@code forge:ingots/%s}
+	 */
+	default List<String> specificTags() {
+		return List.of();
+	}
+
+	/**
+	 * 需要写入的全部标签(通用 + 专用)
+	 *
+	 * @return 两类标签合并后的视图
 	 */
 	default List<String> tags() {
-		return List.of();
+		List<String> tags = new ArrayList<>(commonTags());
+		tags.addAll(specificTags());
+		return tags;
 	}
 
 	/**
@@ -131,7 +152,7 @@ public interface IMaterialType {
 	 * @return 注册 ID
 	 */
 	default ResourceLocation id(NebulaMaterial material) {
-		return ResourceLocation.fromNamespaceAndPath(material.namespace(), namePattern().formatted(material.name()));
+		return ResourceLocation.fromNamespaceAndPath(material.getNamespace(), namePattern().formatted(material.getPath()));
 	}
 
 	/**

@@ -206,7 +206,7 @@ public class MaterialManager {
 		List<NebulaMaterial> result = new ArrayList<>();
 
 		for (NebulaMaterial material : MATERIALS) {
-			if (material.namespace().equals(namespace)) {
+			if (material.getNamespace().equals(namespace)) {
 				result.add(material);
 			}
 		}
