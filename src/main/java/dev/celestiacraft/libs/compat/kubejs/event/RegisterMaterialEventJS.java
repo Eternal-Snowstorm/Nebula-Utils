@@ -5,6 +5,7 @@ import dev.celestiacraft.libs.common.material.NebulaMaterial;
 import dev.celestiacraft.libs.common.material.event.RegisterMaterialEvent;
 import dev.latvian.mods.kubejs.event.StartupEventJS;
 import dev.latvian.mods.kubejs.typings.Info;
+import dev.latvian.mods.rhino.util.RemapForJS;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import net.minecraft.resources.ResourceKey;
@@ -147,6 +148,7 @@ public class RegisterMaterialEventJS extends StartupEventJS {
 	 * @return 当前事件
 	 */
 	@Info("设置本次材料默认放进的创造模式标签页(ResourceKey)")
+	@RemapForJS("setCreativeTabKey")
 	public RegisterMaterialEventJS setCreativeTab(ResourceKey<CreativeModeTab> tab) {
 		event.setCreativeTab(tab);
 		return this;

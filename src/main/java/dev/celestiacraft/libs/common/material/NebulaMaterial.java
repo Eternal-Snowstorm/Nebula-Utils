@@ -2,11 +2,14 @@ package dev.celestiacraft.libs.common.material;
 
 import dev.celestiacraft.libs.NebulaLibs;
 import dev.celestiacraft.libs.common.material.event.RegisterMaterialEvent;
+import dev.latvian.mods.rhino.util.RemapForJS;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -47,7 +50,7 @@ import java.util.*;
  * }
  *
  * // JS
- * NebulaEvents.registerMaterial(event => {
+ * NebulaEvents.registerMaterial((event) => {
  *     event.namespace("cmi")
  *     event.create("chromium", MiningLevels.IRON)
  *             .color(0xEBE3E4, 0xB2ACAD)
@@ -277,6 +280,12 @@ public class NebulaMaterial {
 	 */
 	public NebulaMaterial setCreativeTab(ResourceLocation tab) {
 		creativeTab = tab;
+		return this;
+	}
+
+	@RemapForJS("setCreativeTabKey")
+	public NebulaMaterial setCreativeTab(ResourceKey<CreativeModeTab> tab) {
+		setCreativeTab(tab.location());
 		return this;
 	}
 
